@@ -91,12 +91,28 @@ Router.get("/post/edit/:postId", authcheak.authcheak, async (req, res) => {
 Router.post("/post/edit/:tagtId", authcheak.authcheak, async (req, res) => {
 
     req.body.updated_at = Date.now()
+    const html = req.body.body;
+    const url = req.body.imgurl
+    const text = convert(html, {
+        wordwrap: 130
+    });
+    req.body['htmlBody'] = html;
+
+    const post = {
+        title: req.body.title,
+        description: req.body.description,
+        body: text,
+        link: url,
+        dropdown: req.body.dropdown,
+        htmlBody: html
+    }
+
     if (req.body.body == '') {
         req.flash('editmsg', 'post update failed')
         res.redirect(`/post/edit/${req.params.tagtId}`)
         return
     }
-    await Post.findOneAndUpdate({ _id: req.params.tagtId }, req.body, (err) => {
+    await Post.findOneAndUpdate({ _id: req.params.tagtId }, post, (err) => {
         if (!err) {
             req.flash('editmsg', 'post updated successfully')
             res.redirect(`/post/edit/${req.params.tagtId}`)
