@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE HIT TIMES</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdn.tiny.cloud/1/gy5pjthnlmq41tsazbhlnu4xqc53eu5ad8yk9a4y7i0a0kx6/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    
+    <script>
+      tinymce.init({
+        selector: '#mytextarea'
+      });
+    </script>
+
+</head>
+
+<style>
+    .roundbth{
+        border-radius: 25px;
+    }
+    body{
+    background:linear-gradient(rgba(50, 176, 226, 0.5), rgba(228, 102, 180, 0.5));
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+    }
+    .navbercolor{
+
+    }
+</style>
+
+<body >
+    <nav class="navbar navbar-expand-sm navbar-light  mb-3" style="color: rgb(16, 97, 247)">
+        <div class="container">
+            
+            <button class="navbar-toggler mr-auto" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand " href="/">THE HIT TIMES</a>
+            <% if(user) { %>
+                    <a class="nav-link ml-auto btn btn-danger text-white roundbth px-3" href="/logout">Logout</a>
+                <% } else{ %>
+                    <a class="nav-link ml-auto btn btn-primary text-white roundbth px-3" href="/login">Login</a>
+                <%}%>
+    
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><b>Home</b></a>
+                    </li>
+
+                    <li class="nav-item">
+                      <a class="nav-link" href="/posts"><b>Create Post</b></a>
+                  </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="/display"><b>Display</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/api/posts"><b>JSON</b></a>
+                    </li>
+                    
+                </ul>
+            </div>
+            
+        </div>
+    </nav>
+
+
+    <div class="container mb-5" >
+        
+        <div class="card p-5" style="background:linear-gradient(rgba(13, 178, 243, 0.5), rgba(228, 102, 180, 0.5)); border-radius: 0px;">
+            <div class="card-body shadow-lg">
+                <% if(editResponse=='post updated successfully'){%>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong><%= editResponse%></strong> 
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                <%} else if(editResponse=='post update failed') {%>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong><%= editResponse%></strong> 
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                 <%}%>
+
+                <h3 class="text-white">EDIT POST</h3>
+
+                <form class="form-group" action="/post/edit/<%=postData._id%>" method="post">
+                    <h5 class="text-white">Title</h5>
+                    <input class="form-control " required style="border-radius: 0px;" value="<%=postData.title%>" type="text" name="title">
+                    <h5 class="text-white mt-1">Description</h5>
+                    <input class="form-control mb-3" required style="border-radius: 0px;" value="<%=postData.description%>" type="text" name="description">
+                    <h3 class="text-white">Body</h3>
+
+                    <textarea  id="mytextarea"  name="body"   rows="10" cols="5" value=<%-(postData.body)%></textarea>
+
+                    <h5 class="text-white mt-2">Image URL</h5>
+                    <input class="form-control " required  style="border-radius: 0px;" value="<%=postData.imgurl%>" type="text" name="imgurl">
+                    <select  class="form-control mt-3" name="dropdown" >
+                        <option value="00">Monday Hues</option><option value="01">Campus Raid</option><option value="02">Thursday Article</option><option value="03">Funny Friday</option><option value="04">Viral Corner</option><option value="05">Word Worth Millions</option><option value="06">College Heracles</option><option value="07">Nanotips</option><option value="08">Vernacular</option>
+                      </select><br>
+                    <button type="submit" class="btn text-white btn-primary roundbth  ">Submit</button>                
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script>
+    
+</script>
+</html>
