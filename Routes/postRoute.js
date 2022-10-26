@@ -48,7 +48,8 @@ Router.get('/api/posts', async (req, res) => {
     const page = req.query.page
     const limit = req.query.limit;
     const start = (page - 1) * limit;
-    const last = start + limit;
+    const last = Number(start) + Number( limit)
+    console.log(start, last);
     var allposts = await Post.find()
     if (page != null) {
         res.send(allposts.slice(start, last))
