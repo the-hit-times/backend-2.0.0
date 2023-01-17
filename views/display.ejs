@@ -33,9 +33,9 @@
             </button>
             <a class="navbar-brand " href="/">THE HIT TIMES</a>
             <% if(user) { %>
-                    <a class="nav-link ml-auto btn btn-danger text-white roundbth px-3" href="/logout">Logout</a>
+                    <a class="nav-link ml-auto btn btn-danger text-white roundbth px-3" href="/auth/logout">Logout</a>
                 <% } else{ %>
-                    <a class="nav-link ml-auto btn btn-primary text-white roundbth px-3" href="/login">Login</a>
+                    <a class="nav-link ml-auto btn btn-primary text-white roundbth px-3" href="/auth/login">Login</a>
                 <%}%>
     
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -45,11 +45,11 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/posts"><b>Create Post</b></a>
+                        <a class="nav-link" href="/pages/createpost"><b>Create Post</b></a>
                     </li>
                     
                     <li class="nav-item">
-                        <a class="nav-link" href="/display"><b>Display</b></a>
+                        <a class="nav-link" href="/pages/display"><b>Display</b></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/api/posts"><b>JSON</b></a>
@@ -92,8 +92,8 @@
                         <h4><strong><%=post.title%></strong></h4>
                          <h5><%=post.description%></h5>
                          <p><%=post.body%></p>
-                    <a class="btn btn-success  btn-sm" href="/post/edit/<%=post._id%>" role="button">Edit</a> 
-                    <a class="btn btn-danger btn-sm" href="/post/del/<%=post._id%>" role="button">Delete</a>
+                    <a class="btn btn-success  btn-sm" href="/pages/post/edit/<%=post._id%>" role="button">Edit</a> 
+                    <a class="btn btn-danger btn-sm" href="/api/post/del/<%=post._id%>" role="button">Delete</a>
                     </div>
                 </div>
             </div>

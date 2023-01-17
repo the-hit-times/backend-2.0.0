@@ -6,6 +6,7 @@ const bodyParser=require("body-parser")
 var flash = require('connect-flash');
 var session = require('express-session')
 const dotenv=require("dotenv").config()
+const routes = require('./routes/index')
 const PORT=process.env.PORT
 
 const app=express()
@@ -35,9 +36,7 @@ app.use(flash());
 
 //routes:
 app.get("*",getUser)
-app.use(require("./Routes/authRoute"))
-app.use(require("./Routes/homeRoute"))
-app.use(require("./Routes/postRoute"))
+app.use(routes);
 
 
 app.listen(PORT,()=>{

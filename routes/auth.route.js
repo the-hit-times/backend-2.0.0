@@ -1,18 +1,16 @@
 const express = require('express');
 const mongoose = require("mongoose");
-const authcheak = require("../middleware/authcheak")
+const {authcheak,authcheakForsignin} = require("../middleware/authcheak")
 const User = require("../mongoSchema/userSchema");
 const jwt = require("jsonwebtoken")
 
 const bcrypt = require("bcrypt")
-const Router = express.Router();
+const router = express.Router();
 
-/* ------------------------------ register routes ------------------------------ */
 
-Router.post("/register", (req, res) => {
+router.post("/register", (req, res) => {
     req.body.password = bcrypt.hashSync(req.body.password, 10);
     const new_user = new User(req.body)
-    // console.log(req.body)
     User.findOne({ email: req.body.email }).then(result => {
         if (result) {
             res.json({ msg: "user already exist" })
@@ -34,33 +32,26 @@ Router.post("/register", (req, res) => {
 })
 
 
-/* ------------------------------ login routes ------------------------------ */
-
-Router.get("/login", authcheak.authcheakForsignin, (req, res) => {
-    res.render("signin", { loginResponse: req.flash('loginmsg') })
-})
-
-Router.post("/api/signin", authcheak.authcheakForsignin, async (req, res) => {
+router.post("/signin", authcheakForsignin, async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });
         if (user) {
             if (bcrypt.compareSync(req.body.password, user.password)) {
                 //jwt token creation
                 const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY);
-                // console.log(token)
                 //save jwt in cookies
                 res.cookie('jwtoken', token, { expires: false, httpOnly: true });
                 req.flash('postmsg', 'you logged in succesfully')
-                res.redirect('/posts')
+                res.redirect('/pages/createpost')
             }
             else {
                 req.flash('loginmsg', 'invalid credentials')
-                res.redirect('/login')
+                res.redirect('/pages/login')
             }
         }
         else {
             req.flash('loginmsg', 'invalid credentials')
-            res.redirect('/login')
+            res.redirect('/pages/login')
         }
     }
     catch (err) {
@@ -68,12 +59,10 @@ Router.post("/api/signin", authcheak.authcheakForsignin, async (req, res) => {
     }
 })
 
-/* ------------------------------ logout user ------------------------------ */
-
-Router.get("/logout", (req, res) => {
+router.get("/logout", (req, res) => {
     res.clearCookie("jwtoken");
-    res.redirect('/login')
+    res.redirect('/pages/login')
 })
 
 
-module.exports = Router
+module.exports = router

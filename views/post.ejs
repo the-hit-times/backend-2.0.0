@@ -40,9 +40,9 @@
             </button>
             <a class="navbar-brand " href="/">THE HIT TIMES</a>
             <% if(user) { %>
-                    <a class="nav-link ml-auto btn btn-danger text-white roundbth px-3" href="/logout">Logout</a>
+                    <a class="nav-link ml-auto btn btn-danger text-white roundbth px-3" href="/auth/logout">Logout</a>
                 <% } else{ %>
-                    <a class="nav-link ml-auto btn btn-primary text-white roundbth px-3" href="/login">Login</a>
+                    <a class="nav-link ml-auto btn btn-primary text-white roundbth px-3" href="/pages/login">Login</a>
                 <%}%>
     
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -52,11 +52,11 @@
                     </li>
 
                     <li class="nav-item">
-                      <a class="nav-link" href="/posts"><b>Create Post</b></a>
+                      <a class="nav-link" href="/pages/createpost"><b>Create Post</b></a>
                   </li>
                     
                     <li class="nav-item">
-                        <a class="nav-link" href="/display"><b>Display</b></a>
+                        <a class="nav-link" href="/pages/display"><b>Display</b></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/api/posts"><b>JSON</b></a>
@@ -100,7 +100,7 @@
 
                 <h3 class="text-white">CREATE POST</h3>
 
-                <form class="form-group" action="/createpost" method="post">
+                <form class="form-group" action="/api/createpost" method="post">
                     <h5 class="text-white">Title</h5>
                     <input class="form-control " required style="border-radius: 0px;" placeholder="Title" type="text" name="title">
                     <h5 class="text-white mt-1">Description</h5>
