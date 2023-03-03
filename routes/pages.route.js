@@ -14,7 +14,7 @@ router.get("/createpost", authcheak, (req, res) => {
 })
 
 router.get("/display", async (req, res) => {
-    var allposts = await Post.find()
+    var allposts = await Post.find().sort({createdAt:-1})
     res.render("display", { posts: allposts, delResponse: req.flash('delmsg') })
 })
 

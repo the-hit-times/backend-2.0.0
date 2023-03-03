@@ -1,106 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>THE HIT TIMES</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    
-</head>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+  </head>
 
-<style>
-    .roundbth{
-        border-radius: 25px;
+  <style>
+    .roundbth {
+      border-radius: 25px;
     }
-    body{
-    background:linear-gradient(rgba(50, 176, 226, 0.5), rgba(228, 102, 180, 0.5));
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+    body {
+      background: linear-gradient(
+        rgba(50, 176, 226, 0.5),
+        rgba(228, 102, 180, 0.5)
+      );
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
     }
-    .navbercolor{
-
+    .navbercolor {
     }
-</style>
+  </style>
 
-<body >
-    <nav class="navbar navbar-expand-sm navbar-light  mb-3" style="color: rgb(16, 97, 247)">
-        <div class="container">
-            
-            <button class="navbar-toggler mr-auto" data-toggle="collapse" data-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a class="navbar-brand " href="/">THE HIT TIMES</a>
-            <% if(user) { %>
-                    <a class="nav-link ml-auto btn btn-danger text-white roundbth px-3" href="/auth/logout">Logout</a>
-                <% } else{ %>
-                    <a class="nav-link ml-auto btn btn-primary text-white roundbth px-3" href="/auth/login">Login</a>
-                <%}%>
-    
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/"><b>Home</b></a>
-                    </li>
+  <body>
+    <nav
+      class="navbar navbar-expand-sm navbar-light mb-3"
+      style="color: rgb(16, 97, 247)"
+    >
+      <div class="container">
+        <button
+          class="navbar-toggler mr-auto"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="/">THE HIT TIMES</a>
+        <% if(user) { %>
+        <a
+          class="nav-link ml-auto btn btn-danger text-white roundbth px-3"
+          href="/auth/logout"
+          >Logout</a
+        >
+        <% } else{ %>
+        <a
+          class="nav-link ml-auto btn btn-primary text-white roundbth px-3"
+          href="/auth/login"
+          >Login</a
+        >
+        <%}%>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="/pages/createpost"><b>Create Post</b></a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link" href="/pages/display"><b>Display</b></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/api/posts"><b>JSON</b></a>
-                    </li>
-                    
-                </ul>
-            </div>
-            
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/"><b>Home</b></a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/createpost"
+                ><b>Create Post</b></a
+              >
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/display"><b>Display</b></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/api/posts"><b>JSON</b></a>
+            </li>
+          </ul>
         </div>
+      </div>
     </nav>
 
-    <div class="container mb-5" >
-        <% if(delResponse=='post deleted successfully') {%>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong><%= delResponse%></strong> 
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-        <%} else if(delResponse=='post delete failed') {%>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong><%= delResponse%></strong> 
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-            
-            <%}%>
-    <% posts.forEach((post) => {%>
+    <div class="container mb-5">
+      <% if(delResponse=='post deleted successfully') {%>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong><%= delResponse%></strong>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <%} else if(delResponse=='post delete failed') {%>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong><%= delResponse%></strong>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
 
-    
-        <div class="card p-5 m-3" style="background:linear-gradient(rgba(13, 178, 243, 0.5), rgba(228, 102, 180, 0.5)); border-radius: 0px;">
-            <div class="card-body shadow-lg">
-                <div class="row">
-                  <div class="col-lg-4 col-sm-4">
-                    <img style="width:100%;height:170px;" src="<%=post.link%>">
-                  </div>
-    
-                    <div class="col-md-8 col-sm-8">
-                        <h4><strong><%=post.title%></strong></h4>
-                         <h5><%=post.description%></h5>
-                         <p><%=post.body%></p>
-                    <a class="btn btn-success  btn-sm" href="/pages/post/edit/<%=post._id%>" role="button">Edit</a> 
-                    <a class="btn btn-danger btn-sm" href="/api/post/del/<%=post._id%>" role="button">Delete</a>
-                    </div>
-                </div>
+      <%}%> <% posts.forEach((post) => {%>
+
+      <div
+        class="card p-5 m-3"
+        style="
+          background: linear-gradient(
+            rgba(13, 178, 243, 0.5),
+            rgba(228, 102, 180, 0.5)
+          );
+          border-radius: 0px;
+        "
+      >
+        <div class="card-body shadow-lg">
+          <div class="row">
+            <div class="col-lg-4 col-sm-4">
+              <img style="width: 100%; height: 170px" src="<%=post.link%>" />
             </div>
-        </div>
-        <%})%>
 
+            <div class="col-md-8 col-sm-8">
+              <h4><strong><%=post.title%></strong></h4>
+              <h5><%=post.description%></h5>
+              <p><%=post.body%></p>
+              <a
+                class="btn btn-success btn-sm"
+                href="/pages/post/edit/<%=post._id%>"
+                role="button"
+                >Edit</a
+              >
+              <a
+                class="btn btn-danger btn-sm"
+                href="/api/post/del/<%=post._id%>"
+                role="button"
+                >Delete</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <%})%>
     </div>
 
-
     <%-include("footer")-%>
+  </body>
+</html>

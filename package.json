@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "SET NODE_ENV=PROD&node app.js",
+    "dev": "SET NODE_ENV=DEV&nodemon app.js "
   },
   "author": "ankan",
   "license": "ISC",
