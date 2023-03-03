@@ -50,7 +50,7 @@ Router.get('/api/posts', async (req, res) => {
     const start = (page - 1) * limit;
     const last = Number(start) + Number( limit)
     console.log(start, last);
-    var allposts = await Post.find()
+    var allposts = await Post.find().sort({"createdAt": -1})
     if (page != null) {
         res.send(allposts.slice(start, last))
     }
@@ -62,7 +62,7 @@ Router.get('/api/posts', async (req, res) => {
 
 //get all posts in display section/////////////////////////
 Router.get("/display", async (req, res) => {
-    var allposts = await Post.find()
+    var allposts = await Post.find().sort({$natural:-1})
     res.render("display", { posts: allposts, delResponse: req.flash('delmsg') })
 })
 

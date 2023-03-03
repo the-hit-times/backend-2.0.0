@@ -10,7 +10,7 @@ const postSchema = new mongoose.Schema({
     created_at: { type: Date, default: Date.now },
     updated_at: { type: Date, default: Date.now },
     c_image: { type: String, default: "noimage.jpg" }
-})
+}, { timestamps: true })
 
 const Post = mongoose.model("post", postSchema)
 
