@@ -9,6 +9,7 @@ var session = require('express-session');
 const dotenv = require("dotenv").config();
 const admin = require("firebase-admin");
 const NotificationManager = require("./Routes/notiyRoute");
+const PostManager = require("./Routes/postRoute");
 const PORT = process.env.PORT;
 const serviceAccount = process.env.GOOGLE_APPLICATION_CREDENTIALS
 
@@ -43,7 +44,7 @@ app.use(flash());
 app.get("*", getUser)
 app.use(require("./Routes/authRoute"))
 app.use(require("./Routes/homeRoute"))
-app.use(require("./Routes/postRoute"))
+app.use(PostManager(admin))
 app.use(NotificationManager(admin))
 
 
