@@ -33,8 +33,6 @@ const PostManager = (admin) => {
         })
         new_post.save().then((result) => {
             if (result) {
-                req.flash('postmsg', 'post added successfully')
-
                 const payload = {
                     notification: {
                         title: req.body.title.toString(),
@@ -46,11 +44,14 @@ const PostManager = (admin) => {
                 admin.messaging().sendToTopic(
                     NOTIFICATION_TOPIC, payload
                 ).then((response) => {
-                    req.flash('postmsg', "notification_send")
+                   console.log("Notification Send")
                 }).catch((error) => {
-                    req.flash('postmsg', "notification_error")
+                   console.log(error)
                 })
+
+                req.flash('postmsg', 'post added successfully')
                 res.redirect("/posts")
+
             } else {
                 req.flash('postmsg', 'post creation failed')
                 res.redirect("/posts")
