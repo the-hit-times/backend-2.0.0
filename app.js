@@ -7,7 +7,7 @@ var flash = require("connect-flash");
 var session = require("express-session");
 const dotenv = require("dotenv").config();
 const routes = require("./routes/index");
-const Post = require("./mongoSchema/postSchema");
+const cors = require("cors");
 const { ENV, PORT, MONGO_URI } = require("./config");
 
 const app = express();
@@ -28,6 +28,7 @@ mongoose
 //app.set('views', path.join(__dirname, 'views'))
 app.set("view engine", "ejs");
 
+app.use(cors());
 app.use(bodyParser.urlencoded({ encoding: false }));
 app.use(bodyParser.json());
 app.use(cookiParser());
@@ -45,12 +46,6 @@ app.use(flash());
 app.get("*", getUser);
 app.use(routes);
 
-/*const change= async()=>{
-  db.posts.updateMany({},{$rename:{"created_at":"createdAt","updated_at":"updatedAt"}})
-  await Post.updateMany({},{$rename:{"created_at":"createdAt","updated_at":"updatedAt"}})
-}*/
-
 app.listen(PORT, () => {
-  //change()
   console.log(`server is running on port ${PORT} in ${ENV} mode`);
 });
