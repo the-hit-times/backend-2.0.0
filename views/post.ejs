@@ -235,7 +235,17 @@
           "Content-type": "application/json; charset=UTF-8",
         },
       });
-      if (res.ok) window.location.reload();
+      if (res.ok) {
+        const notifyRes = await fetch("/api/sendnotification", {
+          method: "POST",
+          redirect: "follow",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        });
+        if (notifyRes.ok) window.location.reload();
+      }
     };
   </script>
 
