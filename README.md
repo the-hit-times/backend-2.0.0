@@ -16,11 +16,11 @@
 ```http
    /login
 ```
-## 2.create post 
+## 2. Create post 
 ```http
    /createpost
 ```
-## 3.Get json data of posts
+## 3. Get json data of posts
 
 ```http
    /api/posts
@@ -31,15 +31,15 @@
    /api/posts?limit={no. of post }&page={page no.}
 
 ```
-## 4.get all posts in display section
+## 4. Get all posts in display section
 ```http
    /display
 ```
-## 5.edit post
+## 5. Edit post
 ```http
    /post/edit/:id of post
 ```
-## 6.delete post  
+## 6. Delete post  
 ```http
    /post/del/:id of post
 ```
