@@ -40,7 +40,6 @@ router.post("/sendnotification", authcheak, async (req, res) => {
     res.status(200).send({msg: "success"});
 
   } catch (err) {
-    console.log(err);
     req.flash("notifymsg", "sent notification failed");
     res.status(200).send({ msg: err.message });
   }
