@@ -13,6 +13,10 @@ router.get("/createpost", authcheak, (req, res) => {
     res.render("post", { postResponse: req.flash('postmsg') })
 })
 
+router.get("/sendnotification", authcheak, (req, res) => {
+    res.render("notification", { notificationResponse: req.flash('notifymsg') })
+})
+
 router.get("/display", async (req, res) => {
     var allposts = await Post.find().sort({createdAt:-1})
     res.render("display", { posts: allposts, delResponse: req.flash('delmsg') })
