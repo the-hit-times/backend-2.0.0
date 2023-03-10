@@ -52,4 +52,34 @@ router.get("/posts", async (req, res) => {
   }
 });
 
+router.get("/posts/weeklies", async (req, res) => {
+  try {
+    const page =
+      Number(req.query.page) - 1 <= 0 ? 0 : Number(req.query.page) - 1;
+    const limit = Number(req.query.limit);
+    const posts = await Post.find({ dropdown: { $in: ["06", "07", "08"] } })
+      .sort({ createdAt: -1 })
+      .skip(page * limit)
+      .limit(limit);
+    res.send(posts);
+  } catch (err) {
+    res.send({ success: false, err: err.message });
+  }
+});
+
+router.get("/posts/appx", async (req, res) => {
+  try {
+    const page =
+      Number(req.query.page) - 1 <= 0 ? 0 : Number(req.query.page) - 1;
+    const limit = Number(req.query.limit);
+    const posts = await Post.find({ dropdown: { $nin: ["06", "07", "08"] } })
+      .sort({ createdAt: -1 })
+      .skip(page * limit)
+      .limit(limit);
+    res.send(posts);
+  } catch (err) {
+    res.send({ success: false, err: err.message });
+  }
+});
+
 module.exports = router;
