@@ -109,12 +109,12 @@
         "
       >
         <div class="card-body shadow-lg">
-          <% if(postResponse=='post added successfully'){%>
+          <% if(notificationResponse=='sent notification successfully'){%>
           <div
             class="alert alert-success alert-dismissible fade show"
             role="alert"
           >
-            <strong><%= postResponse%></strong>
+            <strong><%= notificationResponse %></strong>
             <button
               type="button"
               class="close"
@@ -124,12 +124,12 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <%} else if(postResponse=='post creation failed') {%>
+          <%} else if(notificationResponse=='sent notification failed') {%>
           <div
             class="alert alert-danger alert-dismissible fade show"
             role="alert"
           >
-            <strong><%= postResponse%></strong>
+            <strong><%= notificationResponse %></strong>
             <button
               type="button"
               class="close"
@@ -139,12 +139,12 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <%}else if(postResponse=='you logged in succesfully'){%>
+          <%}else if(notificationResponse=='you logged in succesfully'){%>
           <div
             class="alert alert-success alert-dismissible fade show"
             role="alert"
           >
-            <strong><%= postResponse%></strong>
+            <strong><%= notificationResponse%></strong>
             <button
               type="button"
               class="close"
@@ -157,7 +157,7 @@
 
           <%} %>
 
-          <h3 class="text-white">CREATE POST</h3>
+          <h3 class="text-white">SEND NOTIFICATION</h3>
 
           <form class="form-group" action="javascript:postData()" method="post">
             <h5 class="text-white">Title</h5>
@@ -180,14 +180,6 @@
               id="description"
               name="description"
             />
-            <h3 class="text-white">Body</h3>
-            <textarea
-              id="mytextarea"
-              name="body"
-              rows="10"
-              cols="5"
-              placeholder="Body"
-            ></textarea>
             <h5 class="text-white mt-2">Link</h5>
             <input
               class="form-control"
@@ -198,22 +190,7 @@
               id="link"
               name="imgurl"
             />
-            <select
-              class="form-control mt-3"
-              id="dropdown"
-              name="dropdown"
-              aria-label="Default select example"
-            >
-              <option value="00">Monday Hues</option>
-              <option value="01">Campus Raid</option>
-              <option value="02">Thursday Article</option>
-              <option value="03">Funny Friday</option>
-              <option value="04">Viral Corner</option>
-              <option value="05">Word Worth Millions</option>
-              <option value="06">College Heracles</option>
-              <option value="07">Nanotips</option>
-              <option value="08">Vernacular</option></select
-            ><br />
+            <br />
             <button type="submit" class="btn text-white btn-primary roundbth">
               Submit
             </button>
@@ -227,13 +204,10 @@
     const postData = async () => {
       const title = document.getElementById("title").value.trim();
       const description = document.getElementById("description").value.trim();
-      const body = window.tinymce.activeEditor.getBody().textContent.trim();
       const link = document.getElementById("link").value.trim();
-      const dropdown = document.getElementById("dropdown").value;
-      const htmlBody = window.tinymce.activeEditor.getContent();
-      const data = { title, description, body, link, dropdown, htmlBody };
+      const data = { title, description, link };
 
-      const res = await fetch("/api/createpost", {
+      const res = await fetch("/api/sendnotification", {
         method: "POST",
         redirect: "follow",
         body: JSON.stringify(data),
@@ -241,17 +215,7 @@
           "Content-type": "application/json; charset=UTF-8",
         },
       });
-      if (res.ok) {
-        const notifyRes = await fetch("/api/sendnotification", {
-          method: "POST",
-          redirect: "follow",
-          body: JSON.stringify(data),
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        });
-        if (notifyRes.ok) window.location.reload();
-      }
+      if (res.ok) window.location.reload();
     };
   </script>
 

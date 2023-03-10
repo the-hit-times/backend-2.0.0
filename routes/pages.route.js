@@ -10,7 +10,11 @@ router.get("/login", authcheakForsignin, (req, res) => {
 })
 
 router.get("/createpost", authcheak, (req, res) => {
-    res.render("post", { postResponse: req.flash('postmsg') })
+    res.render("post", { postResponse: req.flash('postmsg'), notificationResponse: req.flash('notifymsg')  })
+})
+
+router.get("/sendnotification", authcheak, (req, res) => {
+    res.render("notification", { notificationResponse: req.flash('notifymsg') })
 })
 
 router.get("/display", async (req, res) => {

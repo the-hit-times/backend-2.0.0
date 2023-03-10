@@ -54,3 +54,9 @@
 ```http
    /post/del/:id of post
 ```
+
+## 7. Send Notification 
+
+```http 
+    /api/sendnotification
+```

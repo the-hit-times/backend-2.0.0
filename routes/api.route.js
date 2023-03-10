@@ -3,6 +3,9 @@ var flash = require("connect-flash");
 const { authcheak } = require("../middleware/authcheak");
 const Post = require("../mongoSchema/postSchema");
 const router = express.Router();
+const admin = require("firebase-admin");
+
+const NOTIFICATION_TOPIC = "posts_notification";
 
 router.post("/createpost", authcheak, async (req, res) => {
   try {
@@ -11,6 +14,33 @@ router.post("/createpost", authcheak, async (req, res) => {
     res.status(200).send({ msg: "success" });
   } catch (err) {
     req.flash("postmsg", "post creation failed");
+    res.status(200).send({ msg: err.message });
+  }
+});
+
+router.post("/sendnotification", authcheak, async (req, res) => {
+  try {
+    const title = req.body.title.toString();
+    const description = req.body.description.toString();
+    const imageURL = req.body.link.toString();
+
+    const payload = {
+      notification: {
+        title: title,
+        body: description,
+        image: imageURL,
+      },
+    };
+
+    await admin.messaging().sendToTopic(
+        NOTIFICATION_TOPIC, payload
+    )
+
+    req.flash("notifymsg", "sent notification successfully");
+    res.status(200).send({msg: "success"});
+
+  } catch (err) {
+    req.flash("notifymsg", "sent notification failed");
     res.status(200).send({ msg: err.message });
   }
 });
