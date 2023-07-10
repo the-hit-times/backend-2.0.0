@@ -34,6 +34,7 @@ app.set("view engine", "ejs");
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ encoding: false }));
+app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(cookiParser());
 app.use(

@@ -112,4 +112,34 @@ router.get("/posts/appx", async (req, res) => {
   }
 });
 
+router.get("/posts/gazette", async (req, res) => {
+  try {
+    const page =
+      Number(req.query.page) - 1 <= 0 ? 0 : Number(req.query.page) - 1;
+    const limit = Number(req.query.limit);
+    const posts = await Post.find({ dropdown: { $in: ["09"] } })
+      .sort({ createdAt: -1 })
+      .skip(page * limit)
+      .limit(limit);
+    res.send(posts);
+  } catch (err) {
+    res.send({ success: false, err: err.message });
+  }
+});
+
+router.get("/posts/reportopolis", async (req, res) => {
+  try {
+    const page =
+      Number(req.query.page) - 1 <= 0 ? 0 : Number(req.query.page) - 1;
+    const limit = Number(req.query.limit);
+    const posts = await Post.find({ dropdown: { $in: ["10"] } })
+      .sort({ createdAt: -1 })
+      .skip(page * limit)
+      .limit(limit);
+    res.send(posts);
+  } catch (err) {
+    res.send({ success: false, err: err.message });
+  }
+});
+
 module.exports = router;

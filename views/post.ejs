@@ -198,6 +198,15 @@
               id="link"
               name="imgurl"
             />
+            <input 
+              type="file" 
+              id="imageInput" 
+              accept="image/*"
+            />
+            <button 
+              type="button" 
+              onclick="uploadImage()"
+            >Upload</button>
             <select
               class="form-control mt-3"
               id="dropdown"
@@ -212,7 +221,9 @@
               <option value="05">Word Worth Millions</option>
               <option value="06">College Heracles</option>
               <option value="07">Nanotips</option>
-              <option value="08">Vernacular</option></select
+              <option value="08">Vernacular</option>
+              <option value="09">Gazette</option>
+              <option value="10">Reportopolis</option></select
             ><br />
             <button type="submit" class="btn text-white btn-primary roundbth">
               Submit
@@ -222,7 +233,8 @@
       </div>
     </div>
   </body>
-
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/imageUpload.js"></script>
   <script>
     const postData = async () => {
       const title = document.getElementById("title").value.trim();

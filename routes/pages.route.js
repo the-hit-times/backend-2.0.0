@@ -30,4 +30,3 @@ router.get("/post/edit/:postId", authcheak, async (req, res) => {
 })
 
 module.exports =router;
-

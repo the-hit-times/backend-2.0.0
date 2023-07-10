@@ -182,16 +182,71 @@
               type="text"
               name="imgurl"
             />
+            <input 
+              type="file" 
+              id="imageInput" 
+              accept="image/*"
+            />
+            <button 
+              type="button" 
+              onclick="uploadImage()"
+            >Upload</button>
             <select class="form-control mt-3" id="dropdown" name="dropdown">
-              <option value="00">Monday Hues</option>
-              <option value="01">Campus Raid</option>
-              <option value="02">Thursday Article</option>
-              <option value="03">Funny Friday</option>
-              <option value="04">Viral Corner</option>
-              <option value="05">Word Worth Millions</option>
-              <option value="06">College Heracles</option>
-              <option value="07">Nanotips</option>
-              <option value="08">Vernacular</option></select
+              <% if(postData.dropdown == '00'){%>
+                <option value="00" selected>Monday Hues</option>
+              <%}else{%>
+                <option value="00">Monday Hues</option>
+              <%}%>
+              <% if(postData.dropdown == '01'){%>
+                <option value="01" selected>Campus Raid</option>
+              <%}else{%>
+                <option value="01">Campus Raid</option>
+              <%}%>
+              <% if(postData.dropdown == '02'){%>
+                <option value="02" selected>Thursday Article</option>
+              <%}else{%>
+                <option value="02">Thursday Article</option>
+              <%}%>
+              <% if(postData.dropdown == '03'){%>
+                <option value="03" selected>Funny Friday</option>
+              <%}else{%>
+                <option value="03">Funny Friday</option>
+              <%}%>
+              <% if(postData.dropdown == '04'){%>
+                <option value="04" selected>Viral Corner</option>
+              <%}else{%>
+                <option value="04">Viral Corner</option>
+              <%}%>
+              <% if(postData.dropdown == '05'){%>
+                <option value="05" selected>Word Worth Millions</option>
+              <%}else{%>
+                <option value="05">Word Worth Millions</option>
+              <%}%>
+              <% if(postData.dropdown == '06'){%>
+                <option value="06" selected>College Heracles</option>
+              <%}else{%>
+                <option value="06">College Heracles</option>
+              <%}%>
+              <% if(postData.dropdown == '07'){%>
+                <option value="07" selected>Nanotips</option>
+              <%}else{%>
+                <option value="07">Nanotips</option>
+              <%}%>
+              <% if(postData.dropdown == '08'){%>
+                <option value="08" selected>Vernacular</option>
+              <%}else{%>
+                <option value="08">Vernacular</option>
+              <%}%>
+              <% if(postData.dropdown == '09'){%>
+                <option value="09" selected>Gazette</option>
+              <%}else{%>
+                <option value="09">Gazette</option>
+              <%}%>
+              <% if(postData.dropdown == '10'){%>
+                <option value="10" selected>Reportopolis</option></select
+              <%}else{%>
+                <option value="10">Reportopolis</option></select
+              <%}%>
             ><br />
             <button type="submit" class="btn text-white btn-primary roundbth">
               Submit
@@ -202,6 +257,8 @@
     </div>
   </body>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/imageUpload.js"></script>
   <script>
     const updateData = async () => {
       const id = "<%- postData._id %>";
