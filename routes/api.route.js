@@ -23,6 +23,9 @@ router.post("/sendnotification", authcheak, async (req, res) => {
     const title = req.body.title.toString();
     const description = req.body.description.toString();
     const imageURL = req.body.link.toString();
+    const body = req.body.body;
+    const htmlBody = req.body.htmlBody;
+    const category = req.body.dropdown.toString();
 
     const payload = {
       notification: {
@@ -30,6 +33,11 @@ router.post("/sendnotification", authcheak, async (req, res) => {
         body: description,
         image: imageURL,
       },
+      data: {
+        body: body,
+        htmlBody: htmlBody,
+        category: category
+      }
     };
 
     await admin.messaging().sendToTopic(
