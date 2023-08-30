@@ -21,7 +21,7 @@ router.post("/createpost", authcheak, async (req, res) => {
 router.post("/sendnotification", authcheak, async (req, res) => {
   try {
     const title = req.body.title.toString();
-    const description = req.body.description.toString();
+    const description = req.body.body.toString();
     const imageURL = req.body.link.toString();
     const body = req.body.body;
     const htmlBody = req.body.htmlBody;
@@ -48,6 +48,7 @@ router.post("/sendnotification", authcheak, async (req, res) => {
     res.status(200).send({msg: "success"});
 
   } catch (err) {
+    console.log(err);
     req.flash("notifymsg", "sent notification failed");
     res.status(200).send({ msg: err.message });
   }
