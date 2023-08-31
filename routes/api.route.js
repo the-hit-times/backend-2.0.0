@@ -27,7 +27,7 @@ router.post("/sendnotification", authcheak, async (req, res) => {
     const payload = {
       notification: {
         title: title,
-        body: req.body.description.toString(),
+        body: req.body.body.toString(),
         image: imageURL,
       },
       data: {
