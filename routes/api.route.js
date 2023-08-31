@@ -9,9 +9,9 @@ const NOTIFICATION_TOPIC = "posts_notification";
 
 router.post("/createpost", authcheak, async (req, res) => {
   try {
-    await Post.create(req.body);
+    const post = await Post.create(req.body);
     req.flash("postmsg", "post added successfully");
-    res.status(200).send({ msg: "success" });
+    res.status(200).send({ msg: "success", post:post});
   } catch (err) {
     req.flash("postmsg", "post creation failed");
     res.status(200).send({ msg: err.message });
