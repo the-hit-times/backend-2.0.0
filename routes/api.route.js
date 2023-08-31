@@ -21,22 +21,20 @@ router.post("/createpost", authcheak, async (req, res) => {
 router.post("/sendnotification", authcheak, async (req, res) => {
   try {
     const title = req.body.title.toString();
-    const description = req.body.body.toString();
+    const body = req.body.body.toString();
     const imageURL = req.body.link.toString();
-    const body = req.body.body;
-    const htmlBody = req.body.htmlBody;
-    const category = req.body.dropdown.toString();
 
     const payload = {
       notification: {
         title: title,
-        body: description,
+        body: req.body.description.toString(),
         image: imageURL,
       },
       data: {
+        description: req.body.description.toString(),
         body: body,
-        htmlBody: htmlBody,
-        category: category
+        htmlBody: req.body.htmlBody,
+        category: req.body.dropdown.toString()
       }
     };
 
