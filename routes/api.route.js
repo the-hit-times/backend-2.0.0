@@ -5,7 +5,8 @@ const Post = require("../mongoSchema/postSchema");
 const router = express.Router();
 const admin = require("firebase-admin");
 
-const NOTIFICATION_TOPIC = "posts_notification";
+const NOTIFICATION_POST = "posts_notification";
+const NOTIFICATION_LIVE = "live_notification"
 
 router.post("/createpost", authcheak, async (req, res) => {
   try {
@@ -33,7 +34,7 @@ router.post("/sendnotification", authcheak, async (req, res) => {
     };
 
     await admin.messaging().sendToTopic(
-        NOTIFICATION_TOPIC, payload
+        NOTIFICATION_POST, payload
     )
 
     req.flash("notifymsg", "sent notification successfully");
@@ -139,6 +140,38 @@ router.get("/posts/reportopolis", async (req, res) => {
     res.send(posts);
   } catch (err) {
     res.send({ success: false, err: err.message });
+  }
+});
+
+router.post("/live/notification/send", authcheak, async (req, res) => {
+  try {
+    const dept = "DEPT1 VS DEPT2"
+    const left = Math.floor(Math.random() * 11);
+    const right = Math.floor(Math.random() * 11);
+    const score = `${left}-${right}`;
+    const comment = `Manu from CSE scored!`
+
+    const notificationType = "LIVE";
+
+    const payload = {
+      data: {
+        type:notificationType,
+        dept:dept,
+        team:team,
+        score:score
+      },
+    };
+
+    await admin.messaging().sendToTopic(
+        NOTIFICATION_LIVE, payload
+    )
+
+    // req.flash("notifymsg", "sent notification successfully");
+    res.status(200).send({msg: "success"});
+
+  } catch (err) {
+    // req.flash("notifymsg", "sent notification failed");
+    res.status(200).send({ msg: err.message });
   }
 });
 
