@@ -1,9 +1,9 @@
 const mongoose = require("mongoose")
 
-const timelineSchema = new mongoose.Schema(
+const matchPostSchema = new mongoose.Schema(
     {
 
-        firbase_match_id: {
+        firebase_match_id: {
             type: String,
             required:true
         }, 
@@ -21,7 +21,6 @@ const timelineSchema = new mongoose.Schema(
 },{timestamps:true})
 
 
+const MatchPost = mongoose.model("matchpost", matchPostSchema)
 
-const timelinepost = mongoose.model("timelinepost", timelineSchema)
-
-module.exports = timelinepost;
+module.exports = MatchPost;

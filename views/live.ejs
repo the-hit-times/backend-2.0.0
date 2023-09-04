@@ -119,14 +119,13 @@
         <div class="card-body shadow-lg">
           <h3 class="text-white">CREATE LIVE POST</h3>
 
-          <form class="form-group" action="javascript:postData()" method="post">
-            
+          <form class="form-group" action="javascript:matchPostData()" method="post">
             <h4 class="text-white"><u>Team 1</u></h4>
-            
+
             <select
             class="form-control mt-3"
-            id="Team1"
-            name="Team1"
+            id="team1_code"
+            name="team1_code"
             aria-label="Default select example"
           >
             <option value="100">CSE</option>
@@ -149,17 +148,17 @@
               required
               style="border-radius: 0px"
               placeholder="Team 1 Score"
-              id="T1score"
+              id="team1_score"
               type="text"
-              name="T1score"
+              name="team1_score"
             />
             <br>
 
             <h4 class="text-white"><u>Team 2</u></h4>
             <select
             class="form-control mt-3"
-            id="Team2"
-            name="Team2"
+            id="team2_code"
+            name="team2_code"
             aria-label="Default select example"
           >
             <option value="100">CSE</option>
@@ -182,13 +181,13 @@
               required
               style="border-radius: 0px"
               placeholder="Team 2 Score"
-              id="T2score"
+              id="team2_score"
               type="text"
-              name="T2score"
+              name="team1_score"
             />
         <br>
-            <h5 class="text-white">Match Date:</h5>
-            <input type="date" id="mdate" name="mdate">
+            <h5 class="text-white">Match Date and Time:</h5>
+            <input type="datetime-local" id="mdatetime" name="mdatetime">
         <br>
         <br>
             <h3 class="text-white">Timeline</h3>
@@ -209,18 +208,57 @@
     </div>
   </body>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="/imageUpload.js"></script>
   <script>
-    const postData = async () => {
-      const title = document.getElementById("title").value.trim();
-      const description = document.getElementById("description").value.trim();
-      const body = window.tinymce.activeEditor.getBody().textContent.trim();
-      const link = document.getElementById("link").value.trim();
-      const dropdown = document.getElementById("dropdown").value;
-      const htmlBody = window.tinymce.activeEditor.getContent();
-      const data = { title, description, body, link, dropdown, htmlBody };
+    const matchPostData = async () => {
+      const team1Code = document.getElementById("team1_code").value;
+      const team1Score = document.getElementById("team1_score").value.trim();
+      const team2Code = document.getElementById("team2_code").value;
+      const team2Score = document.getElementById("team2_score").value.trim();
+      const match_date = document.getElementById("mdatetime").value;
+      const is_live = true;
+      const match_status = "Match Started";
+      const data = {
+        team1: {
+          team_score: team1Score,
+          team_code: team1Code
+        },
+        team2: {
+          team_score: team2Score,
+          team_code: team2Code
+        },
+        match_date,
+        is_live,
+        match_status
+      }
+      const res = await fetch("/api/live/create", {
+        method: "POST",
+        redirect: "follow",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
 
-      const res = await fetch("/api/createpost", {
+      if (res.ok) {
+        const result = res.json();
+
+          const notifyRes = await fetch("/api/live/notification/send", {
+            method: "POST",
+            redirect: "follow",
+            body: JSON.stringify({
+              ...data,
+              matchId: result.matchId
+            }),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          });
+
+
+      }
+    };
+
+     /* const res = await fetch("/api/createpost", {
         method: "POST",
         redirect: "follow",
         body: JSON.stringify(data),
@@ -239,7 +277,7 @@
         });
         if (notifyRes.ok) window.location.reload();
       }
-    };
+    };*/
   </script>
 
   <script

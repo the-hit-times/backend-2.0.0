@@ -9,12 +9,8 @@ const dotenv = require("dotenv").config();
 const routes = require("./routes/index");
 const cors = require("cors");
 const { ENV, PORT, MONGO_URI, GOOGLE_APPLICATION_CREDENTIALS } = require("./config");
-const admin = require("firebase-admin");
 
 const app = express();
-admin.initializeApp({
-    credential: admin.credential.cert(GOOGLE_APPLICATION_CREDENTIALS),
-})
 
 mongoose
   .connect(MONGO_URI, {

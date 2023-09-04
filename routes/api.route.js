@@ -3,11 +3,21 @@ var flash = require("connect-flash");
 const { authcheak } = require("../middleware/authcheak");
 const Post = require("../mongoSchema/postSchema");
 const router = express.Router();
-const admin = require("firebase-admin");
-const timelinepost = require("../mongoSchema/timelineSchema");
+const MatchPost = require("../mongoSchema/matchPostSchema");
+
+const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
+const { getMessaging } = require('firebase-admin/messaging');
+const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
+const {GOOGLE_APPLICATION_CREDENTIALS} = require("../config");
+initializeApp({
+  credential: cert(GOOGLE_APPLICATION_CREDENTIALS),
+})
+const db = getFirestore();
+
 
 const NOTIFICATION_POST = "posts_notification";
 const NOTIFICATION_LIVE = "live_notification"
+const matchPostFirebaseRef = db.collection("live_sessions");
 
 router.post("/createpost", authcheak, async (req, res) => {
   try {
@@ -20,18 +30,6 @@ router.post("/createpost", authcheak, async (req, res) => {
   }
 });
 
-
-//creating live post
-router.post("/createlivepost", authcheak, async (req, res) => {
-  try {
-    await timelinepost.create(req.body);
-    req.flash("postmsg", "post added successfully");
-    res.status(200).send({ msg: "success" });
-  } catch (err) {
-    req.flash("postmsg", "post creation failed");
-    res.status(200).send({ msg: err.message });
-  }
-});
 
 
 router.post("/sendnotification", authcheak, async (req, res) => {
@@ -48,7 +46,7 @@ router.post("/sendnotification", authcheak, async (req, res) => {
       },
     };
 
-    await admin.messaging().sendToTopic(
+    await getMessaging().sendToTopic(
         NOTIFICATION_POST, payload
     )
 
@@ -72,22 +70,11 @@ router.put("/post/edit/:tagtId", authcheak, async (req, res) => {
   }
 });
 
-//edit live post
 
-router.put("/managelive/edit/:matchId", authcheak, async (req, res) => {
-  try {
-    await timelinepost.findByIdAndUpdate({ firbase_match_id: req.params.matchId}, req.body);
-    req.flash("editmsg", "post updated successfully");
-    res.status(200).send({ msg: "success" });
-  } catch (err) {
-    req.flash("editmsg", "post update failed");
-    res.status(200).send({ msg: err.message });
-  }
-});
 
 router.get("/post/del/:postId", authcheak, async (req, res) => {
   try {
-    await timelinepost.findByIdAndRemove({ _id: req.params.postId });
+    await MatchPost.findByIdAndRemove({ _id: req.params.postId });
     req.flash("delmsg", "post deleted successfully");
     res.redirect("/pages/display");
   } catch (err) {
@@ -96,19 +83,6 @@ router.get("/post/del/:postId", authcheak, async (req, res) => {
   }
 });
 
-
-//delete live post
-
-router.get("/managelive/del/:matchId", authcheak, async (req, res) => {
-  try {
-    await timelinepost.findByIdAndRemove({ firbase_match_id: req.params.matchId });
-    req.flash("delmsg", "post deleted successfully");
-    res.redirect("/pages/mangelive");
-  } catch (err) {
-    req.flash("delmsg", "post delete failed");
-    res.redirect("/pages/managelive");
-  }
-});
 
 router.get("/posts", async (req, res) => {
   try {
@@ -204,33 +178,78 @@ router.get("/managelive", async (req, res) => {
 
 router.post("/live/notification/send", authcheak, async (req, res) => {
   try {
-    const dept = "DEPT1 VS DEPT2"
-    const left = Math.floor(Math.random() * 11);
-    const right = Math.floor(Math.random() * 11);
-    const score = `${left}-${right}`;
-    const comment = `Manu from CSE scored!`
-
     const notificationType = "LIVE";
-
+    const match_date = new Date(req.body.match_date);
+    const notificationContent =  {
+      ...req.body,
+      match_date:match_date
+    }
     const payload = {
       data: {
         type:notificationType,
-        dept:dept,
-        team:team,
-        score:score
+        data: JSON.stringify(notificationContent)
       },
     };
-
-    await admin.messaging().sendToTopic(
+    await getMessaging().sendToTopic(
         NOTIFICATION_LIVE, payload
     )
-
     // req.flash("notifymsg", "sent notification successfully");
+  console.log("Sending a notification!");
     res.status(200).send({msg: "success"});
+
 
   } catch (err) {
     // req.flash("notifymsg", "sent notification failed");
+    console.log(err);
     res.status(200).send({ msg: err.message });
+  }
+
+});
+
+
+
+//creating live post
+router.post("/live/create", authcheak, async (req, res) => {
+  try {
+    const data = req.body;
+    const match_date = new Date(data.match_date);
+    const matchDocument = await matchPostFirebaseRef.add({
+      ...data,
+      match_date: match_date
+    });
+
+    await MatchPost.create({
+      firebase_match_id: matchDocument.id,
+      timeline: []
+    });
+    res.status(200).send({ msg: "success", matchId: matchDocument.id });
+  } catch (err) {
+    req.flash("postmsg", "post creation failed");
+    res.status(200).send({ msg: err.message });
+  }
+});
+
+//edit live post
+router.put("/live/edit/:matchId", authcheak, async (req, res) => {
+  try {
+    await MatchPost.findByIdAndUpdate({ firbase_match_id: req.params.matchId}, req.body);
+    req.flash("editmsg", "post updated successfully");
+    res.status(200).send({ msg: "success" });
+  } catch (err) {
+    req.flash("editmsg", "post update failed");
+    res.status(200).send({ msg: err.message });
+  }
+});
+
+//delete live post
+router.get("/live/del/:matchId", authcheak, async (req, res) => {
+  try {
+    await MatchPost.findByIdAndRemove({ firbase_match_id: req.params.matchId });
+    req.flash("delmsg", "post deleted successfully");
+    res.redirect("/pages/mangelive");
+  } catch (err) {
+    req.flash("delmsg", "post delete failed");
+    res.redirect("/pages/managelive");
   }
 });
 
