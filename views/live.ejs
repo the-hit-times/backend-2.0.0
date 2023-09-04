@@ -95,8 +95,8 @@
               <a class="nav-link" href="/pages/live"><b>Go Live</b></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/pages/managelive"><b>Manage Live</b></a>
-            </li>
+                <a class="nav-link" href="/pages/managelive"><b>Manage Live</b></a>
+              </li>
             <li class="nav-item">
               <a class="nav-link" href="/api/posts"><b>JSON</b></a>
             </li>
@@ -117,78 +117,81 @@
         "
       >
         <div class="card-body shadow-lg">
-          <% if(postResponse=='post added successfully'){%>
-          <div
-            class="alert alert-success alert-dismissible fade show"
-            role="alert"
-          >
-            <strong><%= postResponse%></strong>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="alert"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <%} else if(postResponse=='post creation failed') {%>
-          <div
-            class="alert alert-danger alert-dismissible fade show"
-            role="alert"
-          >
-            <strong><%= postResponse%></strong>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="alert"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <%}else if(postResponse=='you logged in succesfully'){%>
-          <div
-            class="alert alert-success alert-dismissible fade show"
-            role="alert"
-          >
-            <strong><%= postResponse%></strong>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="alert"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-
-          <%} %>
-
-          <h3 class="text-white">CREATE POST</h3>
+          <h3 class="text-white">CREATE LIVE POST</h3>
 
           <form class="form-group" action="javascript:postData()" method="post">
-            <h5 class="text-white">Title</h5>
+            
+            <h4 class="text-white"><u>Team 1</u></h4>
+            
+            <select
+            class="form-control mt-3"
+            id="Team1"
+            name="Team1"
+            aria-label="Default select example"
+          >
+            <option value="100">CSE</option>
+            <option value="101">IT</option>
+            <option value="102">ECE</option>
+            <option value="103">AEIE</option>
+            <option value="104">EE</option>
+            <option value="105">MECH</option>
+            <option value="106">CIVIL</option>
+            <option value="107">CHEMICAL</option>
+            <option value="108">BT/FT</option>
+            <option value="109">CSE CS</option>
+            <option value="110">CSE DS</option>
+            <option value="111">CSE AIML</option>
+            <option value="112">MASTERS</option>
+        </select>
+        <h5 class="text-white">T1 Score</h5>
             <input
               class="form-control"
               required
               style="border-radius: 0px"
-              placeholder="Title"
-              id="title"
+              placeholder="Team 1 Score"
+              id="T1score"
               type="text"
-              name="title"
+              name="T1score"
             />
-            <h5 class="text-white mt-1">Description</h5>
+            <br>
+
+            <h4 class="text-white"><u>Team 2</u></h4>
+            <select
+            class="form-control mt-3"
+            id="Team2"
+            name="Team2"
+            aria-label="Default select example"
+          >
+            <option value="100">CSE</option>
+            <option value="101">IT</option>
+            <option value="102">ECE</option>
+            <option value="103">AEIE</option>
+            <option value="104">EE</option>
+            <option value="105">MECH</option>
+            <option value="106">CIVIL</option>
+            <option value="107">CHEMICAL</option>
+            <option value="108">BT/FT</option>
+            <option value="109">CSE CS</option>
+            <option value="110">CSE DS</option>
+            <option value="111">CSE AIML</option>
+            <option value="112">MASTERS</option>
+        </select>
+        <h5 class="text-white">T2 Score</h5>
             <input
-              class="form-control mb-3"
+              class="form-control"
               required
               style="border-radius: 0px"
-              placeholder="Description"
+              placeholder="Team 2 Score"
+              id="T2score"
               type="text"
-              id="description"
-              name="description"
+              name="T2score"
             />
-            <h3 class="text-white">Body</h3>
+        <br>
+            <h5 class="text-white">Match Date:</h5>
+            <input type="date" id="mdate" name="mdate">
+        <br>
+        <br>
+            <h3 class="text-white">Timeline</h3>
             <textarea
               id="mytextarea"
               name="body"
@@ -196,43 +199,7 @@
               cols="5"
               placeholder="Body"
             ></textarea>
-            <h5 class="text-white mt-2">Link</h5>
-            <input
-              class="form-control"
-              required
-              style="border-radius: 0px"
-              placeholder="Link"
-              type="text"
-              id="link"
-              name="imgurl"
-            />
-            <input 
-              type="file" 
-              id="imageInput" 
-              accept="image/*"
-            />
-            <button 
-              type="button" 
-              onclick="uploadImage()"
-            >Upload</button>
-            <select
-              class="form-control mt-3"
-              id="dropdown"
-              name="dropdown"
-              aria-label="Default select example"
-            >
-              <option value="00">Monday Hues</option>
-              <option value="01">Campus Raid</option>
-              <option value="02">Thursday Article</option>
-              <option value="03">Funny Friday</option>
-              <option value="04">Viral Corner</option>
-              <option value="05">Word Worth Millions</option>
-              <option value="06">College Heracles</option>
-              <option value="07">Nanotips</option>
-              <option value="08">Vernacular</option>
-              <option value="09">Gazette</option>
-              <option value="10">Reportopolis</option></select
-            ><br />
+            <br />
             <button type="submit" class="btn text-white btn-primary roundbth">
               Submit
             </button>

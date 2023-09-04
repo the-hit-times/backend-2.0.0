@@ -11,16 +11,6 @@
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
       crossorigin="anonymous"
     />
-    <script
-      src="https://cdn.tiny.cloud/1/gy5pjthnlmq41tsazbhlnu4xqc53eu5ad8yk9a4y7i0a0kx6/tinymce/5/tinymce.min.js"
-      referrerpolicy="origin"
-    ></script>
-
-    <script>
-      tinymce.init({
-        selector: "#mytextarea",
-      });
-    </script>
   </head>
 
   <style>
@@ -32,7 +22,6 @@
         rgba(50, 176, 226, 0.5),
         rgba(228, 102, 180, 0.5)
       );
-      height: 100vh;
       background-position: center;
       background-repeat: no-repeat;
       background-size: cover;
@@ -74,6 +63,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/"><b>Home</b></a>
             </li>
+
             <li class="nav-item">
               <a class="nav-link" href="/pages/createpost"
                 ><b>Create Post</b></a
@@ -102,5 +92,70 @@
         </div>
       </div>
     </nav>
+
+    <div class="container mb-5">
+      <% if(delResponse=='post deleted successfully') {%>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong><%= delResponse%></strong>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <%} else if(delResponse=='post delete failed') {%>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong><%= delResponse%></strong>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <%}%> <% timelinepost.forEach((timelinepost) => {%>
+
+      <div
+        class="card p-5 m-3"
+        style="
+          background: linear-gradient(
+            rgba(13, 178, 243, 0.5),
+            rgba(228, 102, 180, 0.5)
+          );
+          border-radius: 0px;
+        "
+      >
+        <div class="card-body shadow-lg">
+          <div class="row">
+            <div class="col-md-8 col-sm-8">
+              <!-- <h4><strong><%=timelinepost.firbase_match_id.%></strong></h4> -->
+              <!-- <h5><%=post.description%></h5> -->
+              <!-- <p><%=post.body%></p> -->
+              <a
+                class="btn btn-success btn-sm"
+                href="/pages/editlive/<%=timelinepost.firbase_match_id%>"
+                role="button"
+                >Edit</a
+              >
+              <a
+                class="btn btn-danger btn-sm"
+                href="/api/managelive/del/<%=timelinepost.firbase_match_id%>"
+                role="button"
+                >Delete</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <%})%>
+    </div>
+
+    <%-include("footer")-%>
   </body>
 </html>
