@@ -4,6 +4,7 @@ const { authcheak } = require("../middleware/authcheak");
 const Post = require("../mongoSchema/postSchema");
 const router = express.Router();
 const admin = require("firebase-admin");
+const timelinepost = require("../mongoSchema/timelineSchema");
 
 const NOTIFICATION_POST = "posts_notification";
 const NOTIFICATION_LIVE = "live_notification"
@@ -18,6 +19,20 @@ router.post("/createpost", authcheak, async (req, res) => {
     res.status(200).send({ msg: err.message });
   }
 });
+
+
+//creating live post
+router.post("/createlivepost", authcheak, async (req, res) => {
+  try {
+    await timelinepost.create(req.body);
+    req.flash("postmsg", "post added successfully");
+    res.status(200).send({ msg: "success" });
+  } catch (err) {
+    req.flash("postmsg", "post creation failed");
+    res.status(200).send({ msg: err.message });
+  }
+});
+
 
 router.post("/sendnotification", authcheak, async (req, res) => {
   try {
@@ -57,14 +72,41 @@ router.put("/post/edit/:tagtId", authcheak, async (req, res) => {
   }
 });
 
+//edit live post
+
+router.put("/managelive/edit/:matchId", authcheak, async (req, res) => {
+  try {
+    await timelinepost.findByIdAndUpdate({ firbase_match_id: req.params.matchId}, req.body);
+    req.flash("editmsg", "post updated successfully");
+    res.status(200).send({ msg: "success" });
+  } catch (err) {
+    req.flash("editmsg", "post update failed");
+    res.status(200).send({ msg: err.message });
+  }
+});
+
 router.get("/post/del/:postId", authcheak, async (req, res) => {
   try {
-    await Post.findByIdAndRemove({ _id: req.params.postId });
+    await timelinepost.findByIdAndRemove({ _id: req.params.postId });
     req.flash("delmsg", "post deleted successfully");
     res.redirect("/pages/display");
   } catch (err) {
     req.flash("delmsg", "post delete failed");
     res.redirect("/pages/display");
+  }
+});
+
+
+//delete live post
+
+router.get("/managelive/del/:matchId", authcheak, async (req, res) => {
+  try {
+    await timelinepost.findByIdAndRemove({ firbase_match_id: req.params.matchId });
+    req.flash("delmsg", "post deleted successfully");
+    res.redirect("/pages/mangelive");
+  } catch (err) {
+    req.flash("delmsg", "post delete failed");
+    res.redirect("/pages/managelive");
   }
 });
 
@@ -143,6 +185,23 @@ router.get("/posts/reportopolis", async (req, res) => {
   }
 });
 
+
+//read live post
+router.get("/managelive", async (req, res) => {
+  try {
+    const page =
+      Number(req.query.page) - 1 <= 0 ? 0 : Number(req.query.page) - 1;
+    const limit = Number(req.query.limit);
+    const timelinepost = await timelinepost.find()
+      .sort({ createdAt: -1 })
+      .skip(page * limit)
+      .limit(limit);
+    res.send(timelinepost);
+  } catch (err) {
+    res.send({ success: false, err: err.message });
+  }
+});
+
 router.post("/live/notification/send", authcheak, async (req, res) => {
   try {
     const dept = "DEPT1 VS DEPT2"
@@ -174,5 +233,6 @@ router.post("/live/notification/send", authcheak, async (req, res) => {
     res.status(200).send({ msg: err.message });
   }
 });
+
 
 module.exports = router;

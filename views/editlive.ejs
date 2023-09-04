@@ -111,7 +111,7 @@
         "
       >
         <div class="card-body shadow-lg">
-          <% if(editResponse=='post updated successfully'){%>
+          <!-- <% if(editResponse=='post updated successfully'){%>
           <div
             class="alert alert-success alert-dismissible fade show"
             role="alert"
@@ -141,121 +141,94 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <%}%>
+          <%}%> -->
 
-          <h3 class="text-white">EDIT POST</h3>
+          <h3 class="text-white">CREATE LIVE POST</h3>
 
-          <form
-            class="form-group"
-            action="javascript:updateData()"
-            method="post"
+          <form class="form-group" action="javascript:postData()" method="post">
+            
+            <h4 class="text-white"><u>Team 1</u></h4>
+            
+            <select
+            class="form-control mt-3"
+            id="Team1"
+            name="Team1"
+            aria-label="Default select example"
           >
-            <h5 class="text-white">Title</h5>
+            <option value="100">CSE</option>
+            <option value="101">IT</option>
+            <option value="102">ECE</option>
+            <option value="103">AEIE</option>
+            <option value="104">EE</option>
+            <option value="105">MECH</option>
+            <option value="106">CIVIL</option>
+            <option value="107">CHEMICAL</option>
+            <option value="108">BT/FT</option>
+            <option value="109">CSE CS</option>
+            <option value="110">CSE DS</option>
+            <option value="111">CSE AIML</option>
+            <option value="112">MASTERS</option>
+        </select>
+        <h5 class="text-white">T1 Score</h5>
             <input
               class="form-control"
               required
               style="border-radius: 0px"
-              id="title"
-              value="<%=postData.title%>"
+              placeholder="Team 1 Score"
+              id="T1score"
               type="text"
-              name="title"
+              value="<%=%>"
+              name="T1score"
             />
-            <h5 class="text-white mt-1">Description</h5>
-            <input
-              class="form-control mb-3"
-              required
-              style="border-radius: 0px"
-              id="description"
-              value="<%=postData.description%>"
-              type="text"
-              name="description"
-            />
-            <h3 class="text-white">Body</h3>
+            <br>
 
-            <textarea id="mytextarea" name="body" rows="10" cols="5">
-<% if(postData.htmlBody){%>
-                        <%-(postData.htmlBody)%>
-                    <%}else{%>
-                        <%=postData.body%>
-                    <%}%></textarea
-            >
-
-            <h5 class="text-white mt-2">Image URL</h5>
+            <h4 class="text-white"><u>Team 2</u></h4>
+            <select
+            class="form-control mt-3"
+            id="Team2"
+            name="Team2"
+            aria-label="Default select example"
+          >
+            <option value="100">CSE</option>
+            <option value="101">IT</option>
+            <option value="102">ECE</option>
+            <option value="103">AEIE</option>
+            <option value="104">EE</option>
+            <option value="105">MECH</option>
+            <option value="106">CIVIL</option>
+            <option value="107">CHEMICAL</option>
+            <option value="108">BT/FT</option>
+            <option value="109">CSE CS</option>
+            <option value="110">CSE DS</option>
+            <option value="111">CSE AIML</option>
+            <option value="112">MASTERS</option>
+        </select>
+        <h5 class="text-white">T2 Score</h5>
             <input
               class="form-control"
               required
-              id="link"
               style="border-radius: 0px"
-              value="<%=postData.link%>"
+              placeholder="Team 2 Score"
+              id="T2score"
               type="text"
-              name="imgurl"
+              value="<%=%>"
+              name="T2score"
             />
-            <input 
-              type="file" 
-              id="imageInput" 
-              accept="image/*"
-            />
-            <button 
-              type="button" 
-              onclick="uploadImage()"
-            >Upload</button>
-            <select class="form-control mt-3" id="dropdown" name="dropdown">
-              <% if(postData.dropdown == '00'){%>
-                <option value="00" selected>Monday Hues</option>
-              <%}else{%>
-                <option value="00">Monday Hues</option>
-              <%}%>
-              <% if(postData.dropdown == '01'){%>
-                <option value="01" selected>Campus Raid</option>
-              <%}else{%>
-                <option value="01">Campus Raid</option>
-              <%}%>
-              <% if(postData.dropdown == '02'){%>
-                <option value="02" selected>Thursday Article</option>
-              <%}else{%>
-                <option value="02">Thursday Article</option>
-              <%}%>
-              <% if(postData.dropdown == '03'){%>
-                <option value="03" selected>Funny Friday</option>
-              <%}else{%>
-                <option value="03">Funny Friday</option>
-              <%}%>
-              <% if(postData.dropdown == '04'){%>
-                <option value="04" selected>Viral Corner</option>
-              <%}else{%>
-                <option value="04">Viral Corner</option>
-              <%}%>
-              <% if(postData.dropdown == '05'){%>
-                <option value="05" selected>Word Worth Millions</option>
-              <%}else{%>
-                <option value="05">Word Worth Millions</option>
-              <%}%>
-              <% if(postData.dropdown == '06'){%>
-                <option value="06" selected>College Heracles</option>
-              <%}else{%>
-                <option value="06">College Heracles</option>
-              <%}%>
-              <% if(postData.dropdown == '07'){%>
-                <option value="07" selected>Nanotips</option>
-              <%}else{%>
-                <option value="07">Nanotips</option>
-              <%}%>
-              <% if(postData.dropdown == '08'){%>
-                <option value="08" selected>Vernacular</option>
-              <%}else{%>
-                <option value="08">Vernacular</option>
-              <%}%>
-              <% if(postData.dropdown == '09'){%>
-                <option value="09" selected>Gazette</option>
-              <%}else{%>
-                <option value="09">Gazette</option>
-              <%}%>
-              <% if(postData.dropdown == '10'){%>
-                <option value="10" selected>Reportopolis</option></select
-              <%}else{%>
-                <option value="10">Reportopolis</option></select
-              <%}%>
-            ><br />
+        <br>
+            <h5 class="text-white">Match Date:</h5>
+            <input type="date" id="mdate" name="mdate">
+        <br>
+        <br>
+            <h3 class="text-white">Timeline</h3>
+            <textarea
+              id="mytextarea"
+              name="body"
+              rows="10"
+              cols="5"
+              value="<%=livepostData.timeline.msg%>" 
+              placeholder="Timeline"
+            ></textarea>
+            <br />
             <button type="submit" class="btn text-white btn-primary roundbth">
               Submit
             </button>
@@ -304,5 +277,4 @@
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"
   ></script>
-  <script></script>
-</html>
+  <script></s
