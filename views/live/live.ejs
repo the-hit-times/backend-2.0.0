@@ -17,11 +17,6 @@
     ></script>
 
     <script>
-      tinymce.init({
-        selector: "#mytextarea",
-        plugins: 'link',
-        default_link_target: '_blank'
-      });
     </script>
   </head>
 
@@ -119,11 +114,14 @@
         <div class="card-body shadow-lg">
           <h3 class="text-white">CREATE LIVE POST</h3>
 
-          <form class="form-group" action="javascript:matchPostData()" method="post">
-            <h4 class="text-white"><u>Team 1</u></h4>
+          <form action="javascript:matchPostData()" method="post">
 
-            <select
-            class="form-control mt-3"
+
+
+            <div class="form-group">
+              <label class="text-white" for="team1_code"><h4>Team 1</h4></label>
+              <select
+            class="form-control mt-1"
             id="team1_code"
             name="team1_code"
             aria-label="Default select example"
@@ -142,26 +140,27 @@
             <option value="111">CSE AIML</option>
             <option value="112">MASTERS</option>
         </select>
-        <h5 class="text-white">T1 Score</h5>
-            <input
-              class="form-control"
-              required
-              style="border-radius: 0px"
-              placeholder="Team 1 Score"
-              id="team1_score"
-              type="text"
-              name="team1_score"
-            />
-            <br>
+              <input
+                class="form-control mt-1"
+                required
+                placeholder="Score"
+                id="team1_score"
+                type="text"
+                name="team1_score"
+              />
+            </div>
 
-            <h4 class="text-white"><u>Team 2</u></h4>
+            <div class="form-group">
+              <label for="team2_code" class="text-white"><h4>Team 2</h4></label>
+
+
             <select
-            class="form-control mt-3"
+            class="form-control mt-1"
             id="team2_code"
             name="team2_code"
             aria-label="Default select example"
           >
-            <option value="100">CSE</option>
+            <option value="100" disabled>CSE</option>
             <option value="101">IT</option>
             <option value="102">ECE</option>
             <option value="103">AEIE</option>
@@ -175,30 +174,42 @@
             <option value="111">CSE AIML</option>
             <option value="112">MASTERS</option>
         </select>
-        <h5 class="text-white">T2 Score</h5>
             <input
-              class="form-control"
+              class="form-control mt-1"
               required
-              style="border-radius: 0px"
-              placeholder="Team 2 Score"
+              placeholder="Score"
               id="team2_score"
               type="text"
               name="team1_score"
             />
-        <br>
-            <h5 class="text-white">Match Date and Time:</h5>
-            <input type="datetime-local" id="mdatetime" name="mdatetime">
-        <br>
-        <br>
-            <h3 class="text-white">Timeline</h3>
-            <textarea
-              id="mytextarea"
-              name="body"
-              rows="10"
-              cols="5"
-              placeholder="Body"
-            ></textarea>
-            <br />
+            </div>
+            <div class="form-group">
+              <label class="text-white" for="mdatetime"><h4>Match Date and Time</h4></label>
+              <input class="form-control" type="datetime-local" id="mdatetime" name="mdatetime">
+            </div>
+
+            <div class="form-group">
+              <label class="text-white" for="match_live"><h4>Is Match Live?</h4></label>
+              <select
+                      class="form-control "
+                      id="match_live"
+                      name="match_live"
+              >
+                <option value="true">LIVE</option>
+                <option value="false">NOT LIVE</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="text-white" for="matchStatus"><h4>Match Status</h4></label>
+              <textarea
+                      class="form-control "
+                      id="matchStatus"
+                      placeholder="Match Started"
+                      maxlength="35"
+              ></textarea>
+            </div>
+
             <button type="submit" class="btn text-white btn-primary roundbth">
               Submit
             </button>
@@ -229,6 +240,15 @@
   </body>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
+
+    $("select[name='team1_code']").on('change', function() {
+      $(`select[name='team2_code'] option[value='${this.value}']`).attr("disabled", "disabled").siblings().removeAttr("disabled");;
+    });
+
+    $("select[name='team2_code']").on('change', function() {
+      $(`select[name='team1_code'] option[value='${this.value}']`).attr("disabled", "disabled").siblings().removeAttr("disabled");;
+    });
+
     const matchPostData = async () => {
 
       $('#processingModal').modal('show');
@@ -239,8 +259,8 @@
       const team2Code = document.getElementById("team2_code").value;
       const team2Score = document.getElementById("team2_score").value.trim();
       const match_date = document.getElementById("mdatetime").value;
-      const is_live = true;
-      const match_status = "Match Started";
+      const is_live = document.getElementById("match_live").valueAsString === "true";
+      const match_status = document.getElementById("matchStatus").value.trim();
       const data = {
         team1: {
           team_score: team1Score,
@@ -295,27 +315,6 @@
 
       }
     };
-
-     /* const res = await fetch("/api/createpost", {
-        method: "POST",
-        redirect: "follow",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      });
-      if (res.ok) {
-        const notifyRes = await fetch("/api/sendnotification", {
-          method: "POST",
-          redirect: "follow",
-          body: JSON.stringify({ title, description: body, link }),
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        });
-        if (notifyRes.ok) window.location.reload();
-      }
-    };*/
   </script>
 
   <script
