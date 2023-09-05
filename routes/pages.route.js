@@ -35,10 +35,7 @@ router.get("/live/edit/all", async (req, res) => {
 
 //path to editlive
 router.get("/live/edit/:matchId", authcheak, async (req, res) => {
-    let data = await MatchPost.findOne({firebase_match_id: req.params.matchId })
-    if (data) {
-        res.render("live/editlive", { postData: data, editResponse: req.flash('editmsg') })
-    }
+    res.render("live/editlive", { matchId:req.params.matchId } )
 })
 
 

@@ -105,10 +105,10 @@
       </div>
     </nav>
 
-    <div class="container mb-5">
+    <div class="container mb-1">
       <div
-        class="card p-5"
-        style="
+              class="card p-1"
+              style="
           background: linear-gradient(
             rgba(13, 178, 243, 0.5),
             rgba(228, 102, 180, 0.5)
@@ -117,98 +117,134 @@
         "
       >
         <div class="card-body shadow-lg">
+          <h3 class="text-white">UPDATE LIVE POST</h3>
+
+          <form action="javascript:matchPostData()" method="post">
+
+            <div class="row mt-4">
+              <div class="col">
+
+                <div class="form-group">
+                  <label class="text-white" for="team1_code"><h4>Team 1</h4></label>
+                  <select
+                          class="form-control mt-1"
+                          id="team1_code"
+                          name="team1_code"
+                          aria-label="Default select example"
+                  >
+                    <option value="100">CSE</option>
+                    <option value="101">IT</option>
+                    <option value="102">ECE</option>
+                    <option value="103">AEIE</option>
+                    <option value="104">EE</option>
+                    <option value="105">MECH</option>
+                    <option value="106">CIVIL</option>
+                    <option value="107">CHEMICAL</option>
+                    <option value="108">BT/FT</option>
+                    <option value="109">CSE CS</option>
+                    <option value="110">CSE DS</option>
+                    <option value="111">CSE AIML</option>
+                    <option value="112">MASTERS</option>
+                  </select>
+                  <input
+                          class="form-control mt-1"
+                          required
+                          placeholder="Score"
+                          id="team1_score"
+                          type="text"
+                          name="team1_score"
+                  />
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label for="team2_code" class="text-white"><h4>Team 2</h4></label>
 
 
-          <h3 class="text-white">CREATE LIVE POST</h3>
+                  <select
+                          class="form-control mt-1"
+                          id="team2_code"
+                          name="team2_code"
+                          aria-label="Default select example"
+                  >
+                    <option value="100" disabled>CSE</option>
+                    <option value="101">IT</option>
+                    <option value="102">ECE</option>
+                    <option value="103">AEIE</option>
+                    <option value="104">EE</option>
+                    <option value="105">MECH</option>
+                    <option value="106">CIVIL</option>
+                    <option value="107">CHEMICAL</option>
+                    <option value="108">BT/FT</option>
+                    <option value="109">CSE CS</option>
+                    <option value="110">CSE DS</option>
+                    <option value="111">CSE AIML</option>
+                    <option value="112">MASTERS</option>
+                  </select>
+                  <input
+                          class="form-control mt-1"
+                          required
+                          placeholder="Score"
+                          id="team2_score"
+                          type="text"
+                          name="team1_score"
+                  />
+                </div>
+              </div>
+            </div>
 
-          <form class="form-group" action="javascript:postData()" method="post">
-            
-            <h4 class="text-white"><u>Team 1</u></h4>
-            
-            <select
-            class="form-control mt-3"
-            id="Team1"
-            name="Team1"
-            aria-label="Default select example"
-          >
-            <option value="100">CSE</option>
-            <option value="101">IT</option>
-            <option value="102">ECE</option>
-            <option value="103">AEIE</option>
-            <option value="104">EE</option>
-            <option value="105">MECH</option>
-            <option value="106">CIVIL</option>
-            <option value="107">CHEMICAL</option>
-            <option value="108">BT/FT</option>
-            <option value="109">CSE CS</option>
-            <option value="110">CSE DS</option>
-            <option value="111">CSE AIML</option>
-            <option value="112">MASTERS</option>
-        </select>
-        <h5 class="text-white">T1 Score</h5>
-            <input
-              class="form-control"
-              required
-              style="border-radius: 0px"
-              placeholder="Team 1 Score"
-              id="T1score"
-              type="text"
-              value=""
-              name="T1score"
-            />
-            <br>
 
-            <h4 class="text-white"><u>Team 2</u></h4>
-            <select
-            class="form-control mt-3"
-            id="Team2"
-            name="Team2"
-            aria-label="Default select example"
-          >
-            <option value="100">CSE</option>
-            <option value="101">IT</option>
-            <option value="102">ECE</option>
-            <option value="103">AEIE</option>
-            <option value="104">EE</option>
-            <option value="105">MECH</option>
-            <option value="106">CIVIL</option>
-            <option value="107">CHEMICAL</option>
-            <option value="108">BT/FT</option>
-            <option value="109">CSE CS</option>
-            <option value="110">CSE DS</option>
-            <option value="111">CSE AIML</option>
-            <option value="112">MASTERS</option>
-        </select>
-        <h5 class="text-white">T2 Score</h5>
-            <input
-              class="form-control"
-              required
-              style="border-radius: 0px"
-              placeholder="Team 2 Score"
-              id="T2score"
-              type="text"
-              value=""
-              name="T2score"
-            />
-        <br>
-            <h5 class="text-white">Match Date:</h5>
-            <input type="date" id="mdate" name="mdate">
-        <br>
-        <br>
-            <h3 class="text-white">Timeline</h3>
-            <textarea
-              id="mytextarea"
-              name="body"
-              rows="10"
-              cols="5"
-              value=""
-              placeholder="Timeline"
-            ></textarea>
-            <br />
+
+
+            <div class="form-group">
+              <label class="text-white" for="mdatetime"><h4>Match Date and Time</h4></label>
+              <input class="form-control" type="datetime-local" id="mdatetime" name="mdatetime">
+            </div>
+
+            <div class="form-group">
+              <label class="text-white" for="match_live"><h4>Is Match Live?</h4></label>
+              <select
+                      class="form-control "
+                      id="match_live"
+                      name="match_live"
+              >
+                <option value="true">LIVE</option>
+                <option value="false">NOT LIVE</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="text-white" for="matchStatus"><h4>Match Status</h4></label>
+              <textarea
+                      class="form-control "
+                      id="matchStatus"
+                      placeholder="Match Started"
+                      maxlength="35"
+              ></textarea>
+            </div>
+
             <button type="submit" class="btn text-white btn-primary roundbth">
               Submit
             </button>
           </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="processingModal" tabindex="-1" role="dialog" aria-labelledby="processingModalTitleLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="processingModalTitleLabel">Creating a live Match</h5>
+          </div>
+          <div  class="modal-body">
+            <div id="replaceBody">
+              <center>
+                <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="64px" height="64px" viewBox="0 0 128 128" xml:space="preserve"><rect x="0" y="0" width="100%" height="100%" fill="#FFFFFF"/><g><circle cx="16" cy="64" r="16" fill="#000000"/><circle cx="16" cy="64" r="16" fill="#555555" transform="rotate(45,64,64)"/><circle cx="16" cy="64" r="16" fill="#949494" transform="rotate(90,64,64)"/><circle cx="16" cy="64" r="16" fill="#cccccc" transform="rotate(135,64,64)"/><animateTransform attributeName="transform" type="rotate" values="0 64 64;315 64 64;270 64 64;225 64 64;180 64 64;135 64 64;90 64 64;45 64 64" calcMode="discrete" dur="720ms" repeatCount="indefinite"/></g></svg>
+              </center>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -217,24 +253,52 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="/imageUpload.js"></script>
   <script>
-    const updateData = async () => {
-      const id = "";
-      const title = document.getElementById("title").value.trim();
-      const description = document.getElementById("description").value.trim();
-      const body = window.tinymce.activeEditor.getBody().textContent.trim();
-      const link = document.getElementById("link").value.trim();
-      const dropdown = document.getElementById("dropdown").value;
-      const htmlBody = window.tinymce.activeEditor.getContent();
-      const data = { title, description, body, link, dropdown, htmlBody };
 
-      const res = await fetch(`/api/post/edit/${id}`, {
-        method: "PUT",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      });
-      if (res.ok) window.location.reload();
+    $("select[name='team1_code']").on('change', function() {
+      $(`select[name='team2_code'] option[value='${this.value}']`).attr("disabled", "disabled").siblings().removeAttr("disabled");;
+    });
+
+    $("select[name='team2_code']").on('change', function() {
+      $(`select[name='team1_code'] option[value='${this.value}']`).attr("disabled", "disabled").siblings().removeAttr("disabled");;
+    });
+
+    // fetch the latest match info
+    async function loadData() {
+      const res = await fetch("/api/live/match/<%= matchId%>");
+      const result = await res.json();
+
+
+      const team1Code = document.getElementById("team1_code");
+      const team1Score = document.getElementById("team1_score");
+      const team2Code = document.getElementById("team2_code");
+      const team2Score = document.getElementById("team2_score");
+      const match_date = document.getElementById("mdatetime");
+      const is_live = document.getElementById("match_live");
+      const match_status = document.getElementById("matchStatus");
+
+      const data = result.data;
+
+      let today = new Date((data["match_date"]["_seconds"] * 1000) + data["match_date"]["_nanoseconds"]);
+
+      team1Code.value = data["team1"]["team_code"];
+      team1Score.value = data["team1"]["team_score"];
+      team2Code.value = data["team2"]["team_code"];
+      team2Score.value = data["team2"]["team_score"];
+      match_date.value = datetimeLocal(today);
+      match_status.value = data["match_status"];
+      is_live.value = data["is_live"];
+
+    }
+
+    function datetimeLocal(datetime) {
+      const dt = new Date(datetime);
+      dt.setMinutes(dt.getMinutes() - dt.getTimezoneOffset());
+      return dt.toISOString().slice(0, 16);
+    }
+
+    loadData();
+    const updateData = async () => {
+
     };
   </script>
 

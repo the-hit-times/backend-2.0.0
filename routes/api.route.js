@@ -241,6 +241,20 @@ router.put("/live/edit/:matchId", authcheak, async (req, res) => {
   }
 });
 
+router.get("/live/match/:matchId", authcheak, async (req, res) => {
+  try {
+    const doc = await matchPostFirebaseRef.doc(req.params.matchId).get();
+    if (!doc.exists) {
+      res.status(200).send({ msg: "No Such Match", code: "no_match" });
+    }
+
+    res.status(200).send({ data:doc.data() , code: "success" });
+
+  } catch (err) {
+    res.status(200).send({ msg: err.message });
+  }
+});
+
 //delete live post
 router.get("/live/del/:matchId", authcheak, async (req, res) => {
   try {
