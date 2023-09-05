@@ -259,7 +259,7 @@
       const team2Code = document.getElementById("team2_code").value;
       const team2Score = document.getElementById("team2_score").value.trim();
       const match_date = document.getElementById("mdatetime").value;
-      const is_live = document.getElementById("match_live").valueAsString === "true";
+      const is_live = document.getElementById("match_live").value == "true";
       const match_status = document.getElementById("matchStatus").value.trim();
       const data = {
         team1: {

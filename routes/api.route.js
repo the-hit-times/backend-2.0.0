@@ -247,9 +247,22 @@ router.get("/live/match/:matchId", authcheak, async (req, res) => {
     if (!doc.exists) {
       res.status(200).send({ msg: "No Such Match", code: "no_match" });
     }
-
     res.status(200).send({ data:doc.data() , code: "success" });
 
+  } catch (err) {
+    res.status(200).send({ msg: err.message });
+  }
+});
+
+router.put("/live/match/:matchId", authcheak, async (req, res) => {
+  try {
+    const data = req.body;
+    const match_date = new Date(data.match_date);
+    const matchDocument = await matchPostFirebaseRef.doc(req.params.matchId).set({
+      ...data,
+      match_date: match_date
+    });
+    res.status(200).send({ msg: "success", updateData: matchDocument });
   } catch (err) {
     res.status(200).send({ msg: err.message });
   }

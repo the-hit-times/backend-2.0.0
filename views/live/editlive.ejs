@@ -119,7 +119,7 @@
         <div class="card-body shadow-lg">
           <h3 class="text-white">UPDATE LIVE POST</h3>
 
-          <form action="javascript:matchPostData()" method="post">
+          <form action="javascript:updateData()" method="post">
 
             <div class="row mt-4">
               <div class="col">
@@ -264,6 +264,10 @@
 
     // fetch the latest match info
     async function loadData() {
+
+      $('#processingModal').modal('show');
+      $("#processingModalTitleLabel").text("Loading...")
+
       const res = await fetch("/api/live/match/<%= matchId%>");
       const result = await res.json();
 
@@ -288,6 +292,8 @@
       match_status.value = data["match_status"];
       is_live.value = data["is_live"];
 
+      $('#processingModal').modal('hide');
+
     }
 
     function datetimeLocal(datetime) {
@@ -296,10 +302,73 @@
       return dt.toISOString().slice(0, 16);
     }
 
-    loadData();
+    $(document).ready(function () {
+      loadData();
+    });
     const updateData = async () => {
+      $('#processingModal').modal('show');
 
-    };
+
+      const team1Code = document.getElementById("team1_code").value;
+      const team1Score = document.getElementById("team1_score").value.trim();
+      const team2Code = document.getElementById("team2_code").value;
+      const team2Score = document.getElementById("team2_score").value.trim();
+      const match_date = document.getElementById("mdatetime").value;
+      const is_live = document.getElementById("match_live").value == "true";
+      const match_status = document.getElementById("matchStatus").value.trim();
+      const data = {
+        team1: {
+          team_score: team1Score,
+          team_code: team1Code
+        },
+        team2: {
+          team_score: team2Score,
+          team_code: team2Code
+        },
+        match_date,
+        is_live,
+        match_status
+      }
+      const res = await fetch("/api/live/match/<%= matchId%>", {
+        method: "PUT",
+        redirect: "follow",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+
+      if (res.ok) {
+        const result = await res.json();
+
+        if (result.msg === 'success') {
+          const notifyRes = await fetch("/api/live/notification/send", {
+            method: "POST",
+            redirect: "follow",
+            body: JSON.stringify({
+              ...data,
+              matchId: result.matchId
+            }),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          });
+
+          const notifyResult =  await notifyRes.json();
+
+          if (notifyResult.msg === 'success') {
+            $('#processingModal').modal('hide');
+          } else {
+            $("#processingModalTitleLabel").text("Failed to send a live match notification");
+            $("#replaceBody").parent().html(`<div>${notifyResult.msg}</div>`);
+          }
+        } else {
+          $("#processingModalTitleLabel").text("Failed to create a live match");
+          $("#replaceBody").parent().html(`<div>${result.msg}</div>`);
+        }
+      }
+
+      };
   </script>
 
   <script
