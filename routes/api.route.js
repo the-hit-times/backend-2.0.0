@@ -273,6 +273,11 @@ router.get("/live/match/:matchId/timeline", authcheak, async (req, res) => {
     const data = await MatchPost.findOne(
         { firebase_match_id: req.params.matchId}
     )
+    data.timeline.sort(
+        (a,b)=> {
+          return -(new Date(a.timeline_date) - new Date(b.timeline_date))
+        }
+    );
     res.status(200).send(data);
   } catch (err) {
     console.log(err);
@@ -284,16 +289,12 @@ router.get("/live/match/:matchId/timeline", authcheak, async (req, res) => {
 // is stored in an MongoDB
 router.post("/live/match/:matchId/timeline", authcheak, async (req, res) => {
   try {
-    const data = {
-      timeline_date: Date.now(),
-      msgHtml: "hello"
-    }
 
     await MatchPost.updateOne(
         { firebase_match_id: req.params.matchId },
         {
           $push: {
-            timeline: data
+            timeline: req.body,
           }
         },
     )

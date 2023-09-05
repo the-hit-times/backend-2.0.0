@@ -233,32 +233,43 @@
 
 
     <div class="container mb-1">
-        <div
-                class="card p-1"
-                style="
+      <div
+              class="card p-1"
+              style="
           background: linear-gradient(
             rgba(13, 178, 243, 0.5),
             rgba(228, 102, 180, 0.5)
           );
           border-radius: 0px;
         "
-        >
-            <div class="card-body shadow-lg">
-                <div class="row ">
-                    <div class="col">
-                        <h3  class="text-white" >Match Timeline</h3>
-                    </div>
-                    <div class="col">
-                        <button type="submit" class="btn text-white btn-primary roundbth">
-                            Create a Timeline
-                        </button>
-                    </div>
-                </div>
-                <div id="insertTimeline">
-                </div>
+      >
+        <div class="card-body shadow-lg">
+          <form action="javascript:createTimeline()" method="post" >
+            <h3 class="text-white">Match Timeline</h3>
+            <div class="form-group mt-2">
+        <textarea
+                id="mytextarea"
+                name="body"
+                rows="10"
+                cols="5"
+                placeholder="Body"
+        ></textarea>
+              <button
+                      type="submit"
+                      class="btn text-white btn-primary roundbth mt-2"
+                      data-toggle="modal"
+                      data-target="#createTimelineModal"
+              >
+                Create a Timeline
+              </button>
             </div>
+          </form>
+          <h3 class="text-white">Match Timeline History</h3>
+          <div id="insertTimeline"></div>
         </div>
-    </div>
+      </div>
+    </div>;
+
 
 
 
@@ -343,8 +354,8 @@
                 $("#insertTimeline").append(
                     `<div class="card mt-3">
   <div class="card-body">
-    <h5 class="card-title">${element.timeline_date}</h5>
-    <p class="card-text">${element.msgHtml}</p>
+    <p class="card-text" >${element.msgHtml}</p>
+    <p class="card-title" style="font-size: 10px">${Date(element.timeline_date).toLocaleString()}</p>
     <a href="#" class="btn btn-primary">Edit</a>
     <button onclick="deleteTimeline('${element._id}')" class="btn btn-danger">Delete</butt>
   </div>
@@ -366,7 +377,7 @@
     }
 
     $(document).ready(function () {
-        // loadMatchData();
+        loadMatchData();
         loadTimeline();
     });
     const updateData = async () => {
@@ -431,6 +442,58 @@
           $("#replaceBody").parent().html(`<div>${result.msg}</div>`);
         }
       }
+
+      };
+    const createTimeline = async () => {
+
+
+      const msgHtml = window.tinymce.activeEditor.getContent();
+      const data = {
+        msgHtml,
+        timeline_date: Date.now()
+      }
+      const res = await fetch("/api/live/match/<%= matchId%>/timeline", {
+        method: "POST",
+        redirect: "follow",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+
+      if (res.ok) {
+        loadTimeline();
+      }
+
+      /* if (res.ok) {
+        const result = await res.json();
+
+        if (result.msg === 'success') {
+          const notifyRes = await fetch("/api/live/notification/send", {
+            method: "POST",
+            redirect: "follow",
+            body: JSON.stringify({
+              ...data,
+              matchId: result.matchId
+            }),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          });
+
+          const notifyResult =  await notifyRes.json();
+
+          if (notifyResult.msg === 'success') {
+            $('#processingModal').modal('hide');
+          } else {
+            $("#processingModalTitleLabel").text("Failed to send a live match notification");
+            $("#replaceBody").parent().html(`<div>${notifyResult.msg}</div>`);
+          }
+        } else {
+          $("#processingModalTitleLabel").text("Failed to create a live match");
+          $("#replaceBody").parent().html(`<div>${result.msg}</div>`);
+        }
+      }*/
 
       };
   </script>
