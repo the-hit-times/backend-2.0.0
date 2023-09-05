@@ -271,6 +271,10 @@
       const res = await fetch("/api/live/match/<%= matchId%>");
       const result = await res.json();
 
+      if (res.ok) {
+        $('#processingModal').modal('hide');
+      }
+
 
       const team1Code = document.getElementById("team1_code");
       const team1Score = document.getElementById("team1_score");
@@ -292,7 +296,7 @@
       match_status.value = data["match_status"];
       is_live.value = data["is_live"];
 
-      $('#processingModal').modal('hide');
+
 
     }
 
