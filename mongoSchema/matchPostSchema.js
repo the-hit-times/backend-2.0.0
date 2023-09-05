@@ -5,20 +5,21 @@ const matchPostSchema = new mongoose.Schema(
 
         firebase_match_id: {
             type: String,
-            required:true
-        }, 
-        
-        timeline: [{
-                timeline_date : {
+            required: true
+        },
+
+        timeline: [
+            {
+                timeline_date: {
+                    type: Date
+                },
+                msgHtml: {
                     type: String
-                }, 
-                msg:{
-                    type:String
                 }
             }
-            ]
-            
-},{timestamps:true})
+        ]
+
+    }, {timestamps: true})
 
 
 const MatchPost = mongoose.model("matchpost", matchPostSchema)

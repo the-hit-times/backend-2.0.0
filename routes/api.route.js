@@ -268,10 +268,66 @@ router.put("/live/match/:matchId", authcheak, async (req, res) => {
   }
 });
 
+router.get("/live/match/:matchId/timeline", authcheak, async (req, res) => {
+  try {
+    const data = await MatchPost.findOne(
+        { firebase_match_id: req.params.matchId}
+    )
+    res.status(200).send(data);
+  } catch (err) {
+    console.log(err);
+    res.status(200).send({ msg: err.message });
+  }
+});
+
+// insert a timeline in an MatchPost Object which
+// is stored in an MongoDB
+router.post("/live/match/:matchId/timeline", authcheak, async (req, res) => {
+  try {
+    const data = {
+      timeline_date: Date.now(),
+      msgHtml: "hello"
+    }
+
+    await MatchPost.updateOne(
+        { firebase_match_id: req.params.matchId },
+        {
+          $push: {
+            timeline: data
+          }
+        },
+    )
+
+    res.status(200).send({ msg: "success" });
+  } catch (err) {
+    console.log(err);
+    res.status(200).send({ msg: err.message });
+  }
+});
+
+router.delete("/live/match/:matchId/timeline/:msgId/del", authcheak, async (req, res) => {
+  try {
+    await MatchPost.updateOne(
+        { firebase_match_id: req.params.matchId },
+        {
+          $pull: {
+            timeline: {
+              _id: req.params.msgId
+            }
+          }
+        },
+    )
+    res.status(200).send({ msg: "success" });
+  } catch (err) {
+    console.log(err);
+    res.status(200).send({ msg: err.message });
+  }
+});
+
 //delete live post
 router.get("/live/del/:matchId", authcheak, async (req, res) => {
   try {
-    await MatchPost.findByIdAndRemove({ firbase_match_id: req.params.matchId });
+    await MatchPost.findOneAndDelete({ firbase_match_id: req.params.matchId });
     req.flash("delmsg", "post deleted successfully");
     res.redirect("/pages/mangelive");
   } catch (err) {
