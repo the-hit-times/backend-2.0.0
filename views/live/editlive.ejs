@@ -83,20 +83,14 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" href="/pages/sendnotification">
-                <b>Send Notification</b>
-              </a>
-            </li>
-
-            <li class="nav-item">
               <a class="nav-link" href="/pages/display"><b>Display</b></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/pages/live"><b>Go Live</b></a>
+              <a class="nav-link" href="/pages/live/create"><b>Go Live</b></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/pages/managelive"><b>Manage Live</b></a>
-              </li>
+              <a class="nav-link" href="/pages/managelive"><b>Manage Live</b></a>
+            </li>
             <li class="nav-item">
               <a class="nav-link" href="/api/posts"><b>JSON</b></a>
             </li>
@@ -117,15 +111,48 @@
         "
       >
         <div class="card-body shadow-lg">
+          <!-- <% if(editResponse=='post updated successfully'){%>
+          <div
+            class="alert alert-success alert-dismissible fade show"
+            role="alert"
+          >
+            <strong><%= editResponse%></strong>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="alert"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <%} else if(editResponse=='post update failed') {%>
+          <div
+            class="alert alert-danger alert-dismissible fade show"
+            role="alert"
+          >
+            <strong><%= editResponse%></strong>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="alert"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <%}%> -->
+
           <h3 class="text-white">CREATE LIVE POST</h3>
 
-          <form class="form-group" action="javascript:matchPostData()" method="post">
+          <form class="form-group" action="javascript:postData()" method="post">
+            
             <h4 class="text-white"><u>Team 1</u></h4>
-
+            
             <select
             class="form-control mt-3"
-            id="team1_code"
-            name="team1_code"
+            id="Team1"
+            name="Team1"
             aria-label="Default select example"
           >
             <option value="100">CSE</option>
@@ -148,17 +175,18 @@
               required
               style="border-radius: 0px"
               placeholder="Team 1 Score"
-              id="team1_score"
+              id="T1score"
               type="text"
-              name="team1_score"
+              value="<%=%>"
+              name="T1score"
             />
             <br>
 
             <h4 class="text-white"><u>Team 2</u></h4>
             <select
             class="form-control mt-3"
-            id="team2_code"
-            name="team2_code"
+            id="Team2"
+            name="Team2"
             aria-label="Default select example"
           >
             <option value="100">CSE</option>
@@ -181,13 +209,14 @@
               required
               style="border-radius: 0px"
               placeholder="Team 2 Score"
-              id="team2_score"
+              id="T2score"
               type="text"
-              name="team1_score"
+              value="<%=%>"
+              name="T2score"
             />
         <br>
-            <h5 class="text-white">Match Date and Time:</h5>
-            <input type="datetime-local" id="mdatetime" name="mdatetime">
+            <h5 class="text-white">Match Date:</h5>
+            <input type="date" id="mdate" name="mdate">
         <br>
         <br>
             <h3 class="text-white">Timeline</h3>
@@ -196,7 +225,8 @@
               name="body"
               rows="10"
               cols="5"
-              placeholder="Body"
+              value="<%=livepostData.timeline.msg%>" 
+              placeholder="Timeline"
             ></textarea>
             <br />
             <button type="submit" class="btn text-white btn-primary roundbth">
@@ -207,77 +237,29 @@
       </div>
     </div>
   </body>
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/imageUpload.js"></script>
   <script>
-    const matchPostData = async () => {
-      const team1Code = document.getElementById("team1_code").value;
-      const team1Score = document.getElementById("team1_score").value.trim();
-      const team2Code = document.getElementById("team2_code").value;
-      const team2Score = document.getElementById("team2_score").value.trim();
-      const match_date = document.getElementById("mdatetime").value;
-      const is_live = true;
-      const match_status = "Match Started";
-      const data = {
-        team1: {
-          team_score: team1Score,
-          team_code: team1Code
-        },
-        team2: {
-          team_score: team2Score,
-          team_code: team2Code
-        },
-        match_date,
-        is_live,
-        match_status
-      }
-      const res = await fetch("/api/live/create", {
-        method: "POST",
-        redirect: "follow",
+    const updateData = async () => {
+      const id = "<%- postData._id %>";
+      const title = document.getElementById("title").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const body = window.tinymce.activeEditor.getBody().textContent.trim();
+      const link = document.getElementById("link").value.trim();
+      const dropdown = document.getElementById("dropdown").value;
+      const htmlBody = window.tinymce.activeEditor.getContent();
+      const data = { title, description, body, link, dropdown, htmlBody };
+
+      const res = await fetch(`/api/post/edit/${id}`, {
+        method: "PUT",
         body: JSON.stringify(data),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
         },
       });
-
-      if (res.ok) {
-        const result = res.json();
-
-          const notifyRes = await fetch("/api/live/notification/send", {
-            method: "POST",
-            redirect: "follow",
-            body: JSON.stringify({
-              ...data,
-              matchId: result.matchId
-            }),
-            headers: {
-              "Content-type": "application/json; charset=UTF-8",
-            },
-          });
-
-
-      }
+      if (res.ok) window.location.reload();
     };
-
-     /* const res = await fetch("/api/createpost", {
-        method: "POST",
-        redirect: "follow",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      });
-      if (res.ok) {
-        const notifyRes = await fetch("/api/sendnotification", {
-          method: "POST",
-          redirect: "follow",
-          body: JSON.stringify({ title, description: body, link }),
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        });
-        if (notifyRes.ok) window.location.reload();
-      }
-    };*/
   </script>
 
   <script
@@ -295,4 +277,4 @@
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"
   ></script>
-</html>
+  <script></s

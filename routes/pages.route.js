@@ -3,6 +3,7 @@ const flash = require('connect-flash');
 const router = express.Router();
 const {authcheak,authcheakForsignin} = require("../middleware/authcheak")
 const Post = require('../mongoSchema/postSchema')
+const MatchPost = require('../mongoSchema/matchPostSchema')
 
 
 router.get("/login", authcheakForsignin, (req, res) => {
@@ -13,8 +14,8 @@ router.get("/createpost", authcheak, (req, res) => {
     res.render("post", { postResponse: req.flash('postmsg'), notificationResponse: req.flash('notifymsg')  })
 })
 
-router.get("/live", authcheak, (req, res) => {
-    res.render("live", { postResponse: req.flash('postmsg'), notificationResponse: req.flash('notifymsg')  })
+router.get("/live/create", authcheak, (req, res) => {
+    res.render("live/live", { postResponse: req.flash('postmsg'), notificationResponse: req.flash('notifymsg')  })
 })
 
 router.get("/sendnotification", authcheak, (req, res) => {
@@ -27,16 +28,16 @@ router.get("/display", async (req, res) => {
 })
 //to be updated
 
-router.get("/managelive", async (req, res) => {
+router.get("/live/edit/all", async (req, res) => {
     var allposts = await Post.find().sort({createdAt:-1})
-    res.render("managelive", { posts: allposts, delResponse: req.flash('delmsg') })
+    res.render("live/managelive", { posts: allposts, delResponse: req.flash('delmsg') })
 })
 
 //path to editlive
-router.get("editlive/:matchId", authcheak, async (req, res) => {
-    let data = await timelinepost.findById({firbase_match_id: req.params.matchId })
+router.get("/live/edit/:matchId", authcheak, async (req, res) => {
+    let data = await MatchPost.findOne({firebase_match_id: req.params.matchId })
     if (data) {
-        res.render("editlive", { postData: data, editResponse: req.flash('editmsg') })
+        res.render("live/editlive", { postData: data, editResponse: req.flash('editmsg') })
     }
 })
 

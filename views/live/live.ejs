@@ -83,14 +83,20 @@
             </li>
 
             <li class="nav-item">
+              <a class="nav-link" href="/pages/sendnotification">
+                <b>Send Notification</b>
+              </a>
+            </li>
+
+            <li class="nav-item">
               <a class="nav-link" href="/pages/display"><b>Display</b></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/pages/live"><b>Go Live</b></a>
+              <a class="nav-link" href="/pages/live/create"><b>Go Live</b></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/pages/managelive"><b>Manage Live</b></a>
-            </li>
+                <a class="nav-link" href="/pages/managelive"><b>Manage Live</b></a>
+              </li>
             <li class="nav-item">
               <a class="nav-link" href="/api/posts"><b>JSON</b></a>
             </li>
@@ -111,48 +117,15 @@
         "
       >
         <div class="card-body shadow-lg">
-          <!-- <% if(editResponse=='post updated successfully'){%>
-          <div
-            class="alert alert-success alert-dismissible fade show"
-            role="alert"
-          >
-            <strong><%= editResponse%></strong>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="alert"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <%} else if(editResponse=='post update failed') {%>
-          <div
-            class="alert alert-danger alert-dismissible fade show"
-            role="alert"
-          >
-            <strong><%= editResponse%></strong>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="alert"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <%}%> -->
-
           <h3 class="text-white">CREATE LIVE POST</h3>
 
-          <form class="form-group" action="javascript:postData()" method="post">
-            
+          <form class="form-group" action="javascript:matchPostData()" method="post">
             <h4 class="text-white"><u>Team 1</u></h4>
-            
+
             <select
             class="form-control mt-3"
-            id="Team1"
-            name="Team1"
+            id="team1_code"
+            name="team1_code"
             aria-label="Default select example"
           >
             <option value="100">CSE</option>
@@ -175,18 +148,17 @@
               required
               style="border-radius: 0px"
               placeholder="Team 1 Score"
-              id="T1score"
+              id="team1_score"
               type="text"
-              value="<%=%>"
-              name="T1score"
+              name="team1_score"
             />
             <br>
 
             <h4 class="text-white"><u>Team 2</u></h4>
             <select
             class="form-control mt-3"
-            id="Team2"
-            name="Team2"
+            id="team2_code"
+            name="team2_code"
             aria-label="Default select example"
           >
             <option value="100">CSE</option>
@@ -209,14 +181,13 @@
               required
               style="border-radius: 0px"
               placeholder="Team 2 Score"
-              id="T2score"
+              id="team2_score"
               type="text"
-              value="<%=%>"
-              name="T2score"
+              name="team1_score"
             />
         <br>
-            <h5 class="text-white">Match Date:</h5>
-            <input type="date" id="mdate" name="mdate">
+            <h5 class="text-white">Match Date and Time:</h5>
+            <input type="datetime-local" id="mdatetime" name="mdatetime">
         <br>
         <br>
             <h3 class="text-white">Timeline</h3>
@@ -225,8 +196,7 @@
               name="body"
               rows="10"
               cols="5"
-              value="<%=livepostData.timeline.msg%>" 
-              placeholder="Timeline"
+              placeholder="Body"
             ></textarea>
             <br />
             <button type="submit" class="btn text-white btn-primary roundbth">
@@ -236,30 +206,116 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="processingModal" tabindex="-1" role="dialog" aria-labelledby="processingModalTitleLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="processingModalTitleLabel">Creating a live Match</h5>
+          </div>
+          <div  class="modal-body">
+              <div id="replaceBody">
+                <center>
+                  <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="64px" height="64px" viewBox="0 0 128 128" xml:space="preserve"><rect x="0" y="0" width="100%" height="100%" fill="#FFFFFF"/><g><circle cx="16" cy="64" r="16" fill="#000000"/><circle cx="16" cy="64" r="16" fill="#555555" transform="rotate(45,64,64)"/><circle cx="16" cy="64" r="16" fill="#949494" transform="rotate(90,64,64)"/><circle cx="16" cy="64" r="16" fill="#cccccc" transform="rotate(135,64,64)"/><animateTransform attributeName="transform" type="rotate" values="0 64 64;315 64 64;270 64 64;225 64 64;180 64 64;135 64 64;90 64 64;45 64 64" calcMode="discrete" dur="720ms" repeatCount="indefinite"/></g></svg>
+                </center>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
   </body>
-
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="/imageUpload.js"></script>
   <script>
-    const updateData = async () => {
-      const id = "<%- postData._id %>";
-      const title = document.getElementById("title").value.trim();
-      const description = document.getElementById("description").value.trim();
-      const body = window.tinymce.activeEditor.getBody().textContent.trim();
-      const link = document.getElementById("link").value.trim();
-      const dropdown = document.getElementById("dropdown").value;
-      const htmlBody = window.tinymce.activeEditor.getContent();
-      const data = { title, description, body, link, dropdown, htmlBody };
+    const matchPostData = async () => {
 
-      const res = await fetch(`/api/post/edit/${id}`, {
-        method: "PUT",
+      $('#processingModal').modal('show');
+
+
+      const team1Code = document.getElementById("team1_code").value;
+      const team1Score = document.getElementById("team1_score").value.trim();
+      const team2Code = document.getElementById("team2_code").value;
+      const team2Score = document.getElementById("team2_score").value.trim();
+      const match_date = document.getElementById("mdatetime").value;
+      const is_live = true;
+      const match_status = "Match Started";
+      const data = {
+        team1: {
+          team_score: team1Score,
+          team_code: team1Code
+        },
+        team2: {
+          team_score: team2Score,
+          team_code: team2Code
+        },
+        match_date,
+        is_live,
+        match_status
+      }
+      const res = await fetch("/api/live/create", {
+        method: "POST",
+        redirect: "follow",
         body: JSON.stringify(data),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
         },
       });
-      if (res.ok) window.location.reload();
+
+      if (res.ok) {
+        const result = await res.json();
+
+          if (result.msg === 'success') {
+            const notifyRes = await fetch("/api/live/notification/send", {
+              method: "POST",
+              redirect: "follow",
+              body: JSON.stringify({
+                ...data,
+                matchId: result.matchId
+              }),
+              headers: {
+                "Content-type": "application/json; charset=UTF-8",
+              },
+            });
+
+            const notifyResult =  await notifyRes.json();
+
+            if (notifyResult.msg === 'success') {
+                window.location = `/pages/live/edit/${result.matchId}`
+            } else {
+              $("#processingModalTitleLabel").text("Failed to send a live match notification");
+              $("#replaceBody").parent().html(`<div>${notifyResult.msg}</div>`);
+            }
+          } else {
+            $("#processingModalTitleLabel").text("Failed to create a live match");
+            $("#replaceBody").parent().html(`<div>${result.msg}</div>`);
+          }
+
+
+      }
     };
+
+     /* const res = await fetch("/api/createpost", {
+        method: "POST",
+        redirect: "follow",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+      if (res.ok) {
+        const notifyRes = await fetch("/api/sendnotification", {
+          method: "POST",
+          redirect: "follow",
+          body: JSON.stringify({ title, description: body, link }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        });
+        if (notifyRes.ok) window.location.reload();
+      }
+    };*/
   </script>
 
   <script
@@ -277,4 +333,4 @@
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"
   ></script>
-  <script></s
+</html>
