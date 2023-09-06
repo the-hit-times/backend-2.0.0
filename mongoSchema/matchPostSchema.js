@@ -7,7 +7,18 @@ const matchPostSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-
+        team1Code: {
+            type: String,
+            required: true
+        },
+        team2Code: {
+            type: String,
+            required: true
+        },
+        match_date: {
+            type: Date,
+            required: true
+        },
         timeline: [
             {
                 timeline_date: {

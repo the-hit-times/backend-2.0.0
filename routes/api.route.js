@@ -219,8 +219,11 @@ router.post("/live/create", authcheak, async (req, res) => {
     });
 
     await MatchPost.create({
-      firebase_match_id: matchDocument.id,
-      timeline: []
+        firebase_match_id: matchDocument.id,
+        team1Code: data.team1.team_code,
+        team2Code: data.team2.team_code,
+        match_date: match_date,
+        timeline: []
     });
     res.status(200).send({ msg: "success", matchId: matchDocument.id });
   } catch (err) {
