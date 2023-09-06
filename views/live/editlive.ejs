@@ -106,6 +106,20 @@
     </nav>
 
     <div class="container mb-1">
+
+      <div class="alert alert-success alert-dismissible fade show" id="successAlert" role="alert" >
+        <span id="successAlertText">Successfully updated the live match</span>
+        <button type="button" class="close" onclick="$('#successAlert').hide();" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="alert alert-danger alert-dismissible fade show" id="failureAlert" role="alert">
+        <span id="failureAlertText">Failed to create a live match</span>
+        <button type="button" class="close" onclick="$('#failureAlert').hide();" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
       <div
               class="card p-1"
               style="
@@ -271,25 +285,6 @@
     </div>;
 
 
-
-
-    <!-- Modal -->
-    <div class="modal fade" id="processingModal" tabindex="-1" role="dialog" aria-labelledby="processingModalTitleLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="processingModalTitleLabel">Creating a live Match</h5>
-          </div>
-          <div  class="modal-body">
-            <div id="replaceBody">
-              <center>
-                <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="64px" height="64px" viewBox="0 0 128 128" xml:space="preserve"><rect x="0" y="0" width="100%" height="100%" fill="#FFFFFF"/><g><circle cx="16" cy="64" r="16" fill="#000000"/><circle cx="16" cy="64" r="16" fill="#555555" transform="rotate(45,64,64)"/><circle cx="16" cy="64" r="16" fill="#949494" transform="rotate(90,64,64)"/><circle cx="16" cy="64" r="16" fill="#cccccc" transform="rotate(135,64,64)"/><animateTransform attributeName="transform" type="rotate" values="0 64 64;315 64 64;270 64 64;225 64 64;180 64 64;135 64 64;90 64 64;45 64 64" calcMode="discrete" dur="720ms" repeatCount="indefinite"/></g></svg>
-              </center>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </body>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -393,13 +388,12 @@
     }
 
     $(document).ready(function () {
+        $('#successAlert').hide();
+        $('#failureAlert').hide();
         loadMatchData();
         loadTimeline();
     });
     const updateData = async () => {
-      $('#processingModal').modal('show');
-
-
       const team1Code = document.getElementById("team1_code").value;
       const team1Score = document.getElementById("team1_score").value.trim();
       const team2Code = document.getElementById("team2_code").value;
@@ -448,21 +442,26 @@
           const notifyResult =  await notifyRes.json();
 
           if (notifyResult.msg === 'success') {
-            $('#processingModal').modal('hide');
+
+            $('#successAlertText').text("Successfully updated and notified about the live match")
+            $('#successAlert').show()
+
           } else {
-            $("#processingModalTitleLabel").text("Failed to send a live match notification");
-            $("#replaceBody").parent().html(`<div>${notifyResult.msg}</div>`);
+
+            $('#failureAlertText').text("Failed to send a live match notification")
+            $('#failureAlert').show()
+
+
           }
         } else {
-          $("#processingModalTitleLabel").text("Failed to create a live match");
-          $("#replaceBody").parent().html(`<div>${result.msg}</div>`);
+          $('#failureAlertText').text("Failed to update a live match")
+          $('#failureAlert').show()
+
         }
       }
 
       };
     const createTimeline = async () => {
-
-
       const msgHtml = window.tinymce.activeEditor.getContent();
       const data = {
         msgHtml,
@@ -470,7 +469,6 @@
       }
       const res = await fetch("/api/live/match/<%= matchId%>/timeline", {
         method: "POST",
-        redirect: "follow",
         body: JSON.stringify(data),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
@@ -478,7 +476,11 @@
       });
 
       if (res.ok) {
+        updateData();
         loadTimeline();
+      } else {
+        $('#failureAlertText').text("Failed to create a timeline")
+        $('#failureAlert').show()
       }
 
       /* if (res.ok) {
