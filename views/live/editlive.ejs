@@ -95,7 +95,7 @@
               <a class="nav-link" href="/pages/live/create"><b>Go Live</b></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/pages/managelive"><b>Manage Live</b></a>
+              <a class="nav-link" href="/pages/live/all"><b>Manage Live</b></a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/api/posts"><b>JSON</b></a>
@@ -351,11 +351,27 @@
 
         if (res.ok) {
             result.timeline.forEach((element) => {
-                $("#insertTimeline").append(
-                    `<div class="card mt-3">
+
+              const weekday = new Date(element.timeline_date).toLocaleString("en-US", {
+                weekday: "long",
+              });
+              const date = new Date(element.timeline_date).toLocaleString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              });
+              const time = new Date(element.timeline_date).toLocaleString("en-US", {
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+              });
+              %>
+
+
+                $("#insertTimeline").append(`<div class="card mt-3">
   <div class="card-body">
     <p class="card-text" >${element.msgHtml}</p>
-    <p class="card-title" style="font-size: 10px">${Date(element.timeline_date).toLocaleString()}</p>
+    <p class="card-title" style="font-size: 10px">${weekday}<br>${date}, ${time}</p>
     <a href="#" class="btn btn-primary">Edit</a>
     <button onclick="deleteTimeline('${element._id}')" class="btn btn-danger">Delete</butt>
   </div>
@@ -377,7 +393,7 @@
     }
 
     $(document).ready(function () {
-        // loadMatchData();
+        loadMatchData();
         loadTimeline();
     });
     const updateData = async () => {

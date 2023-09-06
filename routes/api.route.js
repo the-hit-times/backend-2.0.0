@@ -331,12 +331,13 @@ router.delete("/live/match/:matchId/timeline/:msgId/del", authcheak, async (req,
 //delete live post
 router.get("/live/del/:matchId", authcheak, async (req, res) => {
   try {
-    await MatchPost.findOneAndDelete({ firbase_match_id: req.params.matchId });
+    await matchPostFirebaseRef.doc(req.params.matchId).delete();
+    await MatchPost.findOneAndDelete({ firebase_match_id: req.params.matchId });
     req.flash("delmsg", "post deleted successfully");
-    res.redirect("/pages/mangelive");
+    res.redirect("/pages/live/all");
   } catch (err) {
     req.flash("delmsg", "post delete failed");
-    res.redirect("/pages/managelive");
+    res.redirect("/pages/live/all");
   }
 });
 

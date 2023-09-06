@@ -28,9 +28,14 @@ router.get("/display", async (req, res) => {
 })
 //to be updated
 
-router.get("/live/edit/all", async (req, res) => {
-    var allposts = await Post.find().sort({createdAt:-1})
-    res.render("live/managelive", { posts: allposts, delResponse: req.flash('delmsg') })
+router.get("/live/all", async (req, res) => {
+    var allmatches = await MatchPost.find().sort({createdAt:-1});
+
+
+
+    if (allmatches) {
+        res.render("live/managelive", { matches: allmatches, delResponse: req.flash('delmsg') })
+    }
 })
 
 //path to editlive

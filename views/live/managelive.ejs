@@ -1,161 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>THE HIT TIMES</title>
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-      crossorigin="anonymous"
-    />
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>THE HIT TIMES</title>
+  <link
+          rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous"
+  />
+</head>
 
-  <style>
-    .roundbth {
-      border-radius: 25px;
-    }
-    body {
-      background: linear-gradient(
-        rgba(50, 176, 226, 0.5),
-        rgba(228, 102, 180, 0.5)
-      );
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
-    .navbercolor {
-    }
-  </style>
+<style>
+  .roundbth {
+    border-radius: 25px;
+  }
+  body {
+    background: linear-gradient(
+            rgba(50, 176, 226, 0.5),
+            rgba(228, 102, 180, 0.5)
+    );
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .navbercolor {
+  }
+</style>
 
-  <body>
-    <nav
-      class="navbar navbar-expand-sm navbar-light mb-3"
-      style="color: rgb(16, 97, 247)"
+<body>
+<nav
+        class="navbar navbar-expand-sm navbar-light mb-3"
+        style="color: rgb(16, 97, 247)"
+>
+  <div class="container">
+    <button
+            class="navbar-toggler mr-auto"
+            data-toggle="collapse"
+            data-target="#navbarNav"
     >
-      <div class="container">
-        <button
-          class="navbar-toggler mr-auto"
-          data-toggle="collapse"
-          data-target="#navbarNav"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand" href="/">THE HIT TIMES</a>
-        <% if(user) { %>
-        <a
-          class="nav-link ml-auto btn btn-danger text-white roundbth px-3"
-          href="/auth/logout"
-          >Logout</a
-        >
-        <% } else{ %>
-        <a
-          class="nav-link ml-auto btn btn-primary text-white roundbth px-3"
-          href="/pages/login"
-          >Login</a
-        >
-        <%}%>
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="/">THE HIT TIMES</a>
+    <% if(user) { %>
+      <a
+              class="nav-link ml-auto btn btn-danger text-white roundbth px-3"
+              href="/auth/logout"
+      >Logout</a
+      >
+    <% } else{ %>
+      <a
+              class="nav-link ml-auto btn btn-primary text-white roundbth px-3"
+              href="/pages/login"
+      >Login</a
+      >
+    <%}%>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="/"><b>Home</b></a>
-            </li>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/"><b>Home</b></a>
+        </li>
 
-            <li class="nav-item">
-              <a class="nav-link" href="/pages/createpost"
-                ><b>Create Post</b></a
-              >
-            </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/pages/createpost"
+          ><b>Create Post</b></a
+          >
+        </li>
 
-            <li class="nav-item">
-              <a class="nav-link" href="/pages/sendnotification">
-                <b>Send Notification</b>
-              </a>
-            </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/pages/sendnotification">
+            <b>Send Notification</b>
+          </a>
+        </li>
 
-            <li class="nav-item">
-              <a class="nav-link" href="/pages/display"><b>Display</b></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/pages/live/create"><b>Go Live</b></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/pages/managelive"><b>Manage Live</b></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/api/posts"><b>JSON</b></a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+        <li class="nav-item">
+          <a class="nav-link" href="/pages/display"><b>Display</b></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/pages/live/create"><b>Go Live</b></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/pages/live/all"><b>Manage Live</b></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/api/posts"><b>JSON</b></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
 
-    <div class="container mb-5">
-      <% if(delResponse=='post deleted successfully') {%>
-      <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong><%= delResponse%></strong>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="alert"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <%} else if(delResponse=='post delete failed') {%>
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <strong><%= delResponse%></strong>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="alert"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
+<div class="container mb-5">
+  <% if(delResponse=='post deleted successfully') {%>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong><%= delResponse%></strong>
+      <button
+              type="button"
+              class="close"
+              data-dismiss="alert"
+              aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  <%} else if(delResponse=='post delete failed') {%>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <strong><%= delResponse%></strong>
+      <button
+              type="button"
+              class="close"
+              data-dismiss="alert"
+              aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
 
-      <%}%> <% timelinepost.forEach((timelinepost) => {%>
+  <%}%> <% matches.forEach((post) => {%>
 
-      <div
-        class="card p-5 m-3"
-        style="
+  <div
+          class="card p-2 m-3"
+          style="
           background: linear-gradient(
             rgba(13, 178, 243, 0.5),
             rgba(228, 102, 180, 0.5)
           );
           border-radius: 0px;
         "
-      >
-        <div class="card-body shadow-lg">
-          <div class="row">
-            <div class="col-md-8 col-sm-8">
-              <!-- <h4><strong><%=timelinepost.firbase_match_id.%></strong></h4> -->
-              <!-- <h5><%=post.description%></h5> -->
-              <!-- <p><%=post.body%></p> -->
-              <a
-                class="btn btn-success btn-sm"
-                href="/pages/editlive/<%=timelinepost.firbase_match_id%>"
-                role="button"
-                >Edit</a
-              >
-              <a
-                class="btn btn-danger btn-sm"
-                href="/api/managelive/del/<%=timelinepost.firbase_match_id%>"
-                role="button"
-                >Delete</a
-              >
-            </div>
-          </div>
+  >
+    <div class="card-body shadow-lg">
+      <div class="row">
+        <div class="col-md-8 col-sm-8">
+          <h4>
+            <%
+              const convert = {
+                "100": "CSE",
+                "101": "IT",
+                "102": "ECE",
+                "103": "AEIE",
+                "104": "EE",
+                "105": "MECH",
+                "106": "CIVIL",
+                "107": "CHEMICAL",
+                "108": "BT/FT",
+                "109": "CSE CS",
+                "110": "CSE DS",
+                "111": "CSE AIML",
+                "112": "MASTERS",
+              }
+              const team1 = convert[post.team1Code]
+              const team2 = convert[post.team2Code]
+              // format date to MONDAY, \nSeptember 23, 2023 10:00 AM
+              const weekday = new Date(post.match_date).toLocaleString("en-US", {
+                weekday: "long",
+              });
+              const date = new Date(post.match_date).toLocaleString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              });
+              const time = new Date(post.match_date).toLocaleString("en-US", {
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+              });
+            %>
+            <%= team1%> vs <%=team2%>
+          </h4>
+          <p style="font-size: 13px"><%=weekday%><br>
+          <%=date%>, <%=time%>
+          </p>
+          <a
+                  class="btn btn-success btn-sm"
+                  href="/pages/live/edit/<%=post.firebase_match_id%>"
+                  role="button"
+          >Edit</a>
+          <a
+                  class="btn btn-danger btn-sm"
+                  href="/api/live/del/<%=post.firebase_match_id%>"
+                  role="button"
+          >Delete</a>
         </div>
       </div>
-      <%})%>
     </div>
+  </div>
+  <%})%>
+</div>
 
-    <%-include("footer")-%>
-  </body>
+<%-include("../footer")-%>
+</body>
 </html>
