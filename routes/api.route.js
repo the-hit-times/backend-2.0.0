@@ -194,7 +194,6 @@ router.post("/live/notification/send", authcheak, async (req, res) => {
         NOTIFICATION_LIVE, payload
     )
     // req.flash("notifymsg", "sent notification successfully");
-  console.log("Sending a notification!");
     res.status(200).send({msg: "success"});
 
 
@@ -271,7 +270,7 @@ router.put("/live/match/:matchId", authcheak, async (req, res) => {
   }
 });
 
-router.get("/live/match/:matchId/timeline", authcheak, async (req, res) => {
+router.get("/live/match/:matchId/timeline", async (req, res) => {
   try {
     const data = await MatchPost.findOne(
         { firebase_match_id: req.params.matchId}

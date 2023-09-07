@@ -292,7 +292,8 @@
               redirect: "follow",
               body: JSON.stringify({
                 ...data,
-                matchId: result.matchId
+                matchId: result.matchId,
+                timeline_message: "Going Live!",
               }),
               headers: {
                 "Content-type": "application/json; charset=UTF-8",

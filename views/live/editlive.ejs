@@ -367,7 +367,7 @@
   <div class="card-body">
     <p class="card-text" >${element.msgHtml}</p>
     <p class="card-title" style="font-size: 10px">${weekday}<br>${date}, ${time}</p>
-    <a href="#" class="btn btn-primary">Edit</a>
+    
     <button onclick="deleteTimeline('${element._id}')" class="btn btn-danger">Delete</butt>
   </div>
 </div>`);
@@ -393,7 +393,7 @@
         loadMatchData();
         loadTimeline();
     });
-    const updateData = async () => {
+    const updateData = async (timelineMessage) => {
       const team1Code = document.getElementById("team1_code").value;
       const team1Score = document.getElementById("team1_score").value.trim();
       const team2Code = document.getElementById("team2_code").value;
@@ -412,7 +412,8 @@
         },
         match_date,
         is_live,
-        match_status
+        match_status,
+        timeline_message: timelineMessage,
       }
       const res = await fetch("/api/live/match/<%= matchId%>", {
         method: "PUT",
@@ -463,6 +464,7 @@
       };
     const createTimeline = async () => {
       const msgHtml = window.tinymce.activeEditor.getContent();
+      const msg = window.tinymce.activeEditor.getContent({ format: 'text' });
       const data = {
         msgHtml,
         timeline_date: Date.now()
@@ -476,7 +478,7 @@
       });
 
       if (res.ok) {
-        updateData();
+        updateData(msg);
         loadTimeline();
       } else {
         $('#failureAlertText').text("Failed to create a timeline")
