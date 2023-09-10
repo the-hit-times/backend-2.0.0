@@ -37,6 +37,11 @@ router.post("/sendnotification", authcheak, async (req, res) => {
     const title = req.body.title.toString();
     const description = req.body.description.toString();
     const imageURL = req.body.link.toString();
+    var postId = req.body.postId;
+
+    if (postId == undefined) {
+      postId = "";
+    }
 
     const payload = {
       notification: {
@@ -45,7 +50,7 @@ router.post("/sendnotification", authcheak, async (req, res) => {
         image: imageURL,
       },
       data: {
-        postId: req.body.postId.toString(),
+        postId: postId.toString(),
       }
     };
 
