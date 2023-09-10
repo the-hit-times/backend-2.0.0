@@ -1,3 +1,31 @@
+<%
+function datetimeLocal(datetime) {
+  const dt = new Date(datetime);
+  dt.setMinutes(dt.getMinutes() - dt.getTimezoneOffset());
+  return dt.toISOString().slice(0, 16);
+}
+const match_date = datetimeLocal(matchData.match_date);
+
+const teamToCode = {
+  "100": "CSE",
+  "101": "IT",
+  "102": "ECE",
+  "103": "AEIE",
+  "104": "EE",
+  "105": "MECH",
+  "106": "CIVIL",
+  "107": "CHEMICAL",
+  "108": "BT/FT",
+  "109": "CSE CS",
+  "110": "CSE DS",
+  "111": "CSE AIML",
+  "112": "MASTERS",
+}
+%>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -107,18 +135,34 @@
 
     <div class="container mb-1">
 
-      <div class="alert alert-success alert-dismissible fade show" id="successAlert" role="alert" >
-        <span id="successAlertText">Successfully updated the live match</span>
-        <button type="button" class="close" onclick="$('#successAlert').hide();" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="alert alert-danger alert-dismissible fade show" id="failureAlert" role="alert">
-        <span id="failureAlertText">Failed to create a live match</span>
-        <button type="button" class="close" onclick="$('#failureAlert').hide();" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
+    <%
+        if (notificationResponse == "success") {
+        %>
+        <div class="alert alert-success alert-dismissible fade show" id="successAlert" role="alert">
+          <span id="successAlertText">Successfully notified updated live match</span>
+          <button type="button"
+                  class="close"
+                  data-dismiss="alert"
+                  aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <%
+        } else if (notificationResponse == "failed") {
+        %>
+        <div class="alert alert-danger alert-dismissible fade show" id="errorAlert" role="alert">
+          <span id="errorAlertText">Error while notifying updated live match</span>
+          <button type="button"
+                  class="close"
+                  data-dismiss="alert"
+                  aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <%
+        }
+      %>
+
 
       <div
               class="card p-1"
@@ -146,19 +190,15 @@
                           name="team1_code"
                           aria-label="Default select example"
                   >
-                    <option value="100">CSE</option>
-                    <option value="101">IT</option>
-                    <option value="102">ECE</option>
-                    <option value="103">AEIE</option>
-                    <option value="104">EE</option>
-                    <option value="105">MECH</option>
-                    <option value="106">CIVIL</option>
-                    <option value="107">CHEMICAL</option>
-                    <option value="108">BT/FT</option>
-                    <option value="109">CSE CS</option>
-                    <option value="110">CSE DS</option>
-                    <option value="111">CSE AIML</option>
-                    <option value="112">MASTERS</option>
+                    <%
+                    const team1Entries = Object.entries(teamToCode);
+                    for ( var i = 0; i < team1Entries.length; i++ ) {
+                      const [key, value] = team1Entries[i];
+                      var selected = ( matchData.team1.team_code === key) ? "selected" : "";
+                    %>
+                      <option value="<%=key %>" <%= selected %>><%= value %></option><%
+                    }
+                    %>
                   </select>
                   <input
                           class="form-control mt-1"
@@ -166,6 +206,7 @@
                           placeholder="Score"
                           id="team1_score"
                           type="text"
+                          value="<%= matchData.team1.team_score %>"
                           name="team1_score"
                   />
                 </div>
@@ -181,19 +222,15 @@
                           name="team2_code"
                           aria-label="Default select example"
                   >
-                    <option value="100" disabled>CSE</option>
-                    <option value="101">IT</option>
-                    <option value="102">ECE</option>
-                    <option value="103">AEIE</option>
-                    <option value="104">EE</option>
-                    <option value="105">MECH</option>
-                    <option value="106">CIVIL</option>
-                    <option value="107">CHEMICAL</option>
-                    <option value="108">BT/FT</option>
-                    <option value="109">CSE CS</option>
-                    <option value="110">CSE DS</option>
-                    <option value="111">CSE AIML</option>
-                    <option value="112">MASTERS</option>
+                    <%
+                    const team2Entries = Object.entries(teamToCode);
+                    for ( var i = 0; i < team2Entries.length; i++ ) {
+                      const [key, value] = team2Entries[i];
+                      var selected = ( matchData.team2.team_code === key) ? "selected" : "";
+                    %>
+                    <option value="<%=key %>" <%= selected %>><%= value %></option><%
+                    }
+                    %>
                   </select>
                   <input
                           class="form-control mt-1"
@@ -201,6 +238,7 @@
                           placeholder="Score"
                           id="team2_score"
                           type="text"
+                          value="<%= matchData.team2.team_score %>"
                           name="team1_score"
                   />
                 </div>
@@ -212,7 +250,9 @@
 
             <div class="form-group">
               <label class="text-white" for="mdatetime"><h4>Match Date and Time</h4></label>
-              <input class="form-control" type="datetime-local" id="mdatetime" name="mdatetime">
+              <input class="form-control" type="datetime-local" id="mdatetime" name="mdatetime"
+                value="<%= match_date %>"
+              >
             </div>
 
             <div class="form-group">
@@ -234,7 +274,7 @@
                       id="matchStatus"
                       placeholder="Match Started"
                       maxlength="35"
-              ></textarea>
+              ><%= matchData.match_status %></textarea>
             </div>
 
             <button type="submit" class="btn text-white btn-primary roundbth">
@@ -258,7 +298,7 @@
         "
       >
         <div class="card-body shadow-lg">
-          <form action="javascript:createTimeline()" method="post" >
+          <form action="javascript:createTimeline(null)" method="post" >
             <h3 class="text-white">Match Timeline</h3>
             <div class="form-group mt-2">
         <textarea
@@ -279,7 +319,31 @@
             </div>
           </form>
           <h3 class="text-white">Match Timeline History</h3>
-          <div id="insertTimeline"></div>
+          <div id="insertTimeline">
+            <%
+            for (var i = 0; i < matchData.timeline.length; i++) {
+              const timeline = matchData.timeline[i];
+            %>
+            <div class="card mt-2">
+              <div class="card-body">
+                  <div class="col-10">
+                    <%- timeline.msgHtml %>
+                  </div>
+                  <div class="col-2">
+                    <button
+                            type="button"
+                            class="btn btn-danger roundbth"
+                            onclick="deleteTimeline('<%= timeline.firebase_timeline_id %>')"
+                    >
+                      Delete
+                    </button>
+                </div>
+              </div>
+            </div>
+            <%
+            }
+            %>
+          </div>
         </div>
       </div>
     </div>;
@@ -291,108 +355,6 @@
   <script src="/imageUpload.js"></script>
   <script>
 
-    $("select[name='team1_code']").on('change', function() {
-      $(`select[name='team2_code'] option[value='${this.value}']`).attr("disabled", "disabled").siblings().removeAttr("disabled");;
-    });
-
-    $("select[name='team2_code']").on('change', function() {
-      $(`select[name='team1_code'] option[value='${this.value}']`).attr("disabled", "disabled").siblings().removeAttr("disabled");;
-    });
-
-    // fetch the latest match info
-    async function loadMatchData() {
-
-      $('#processingModal').modal('show');
-      $("#processingModalTitleLabel").text("Loading Match Info")
-
-      const res = await fetch("/api/live/match/<%= matchId%>");
-      const result = await res.json();
-
-      if (res.ok) {
-        $('#processingModal').modal('hide');
-      }
-
-
-      const team1Code = document.getElementById("team1_code");
-      const team1Score = document.getElementById("team1_score");
-      const team2Code = document.getElementById("team2_code");
-      const team2Score = document.getElementById("team2_score");
-      const match_date = document.getElementById("mdatetime");
-      const is_live = document.getElementById("match_live");
-      const match_status = document.getElementById("matchStatus");
-
-      const data = result.data;
-
-      let today = new Date((data["match_date"]["_seconds"] * 1000) + data["match_date"]["_nanoseconds"]);
-
-      team1Code.value = data["team1"]["team_code"];
-      team1Score.value = data["team1"]["team_score"];
-      team2Code.value = data["team2"]["team_code"];
-      team2Score.value = data["team2"]["team_score"];
-      match_date.value = datetimeLocal(today);
-      match_status.value = data["match_status"];
-      is_live.value = data["is_live"];
-
-
-
-    }
-    // fetch the latest timeline info
-    async function loadTimeline() {
-
-      $("#insertTimeline").html("<div></div>");
-
-        const res = await fetch("/api/live/match/<%= matchId%>/timeline");
-        const result = await res.json();
-
-        if (res.ok) {
-            result.timeline.forEach((element) => {
-
-              const weekday = new Date(element.timeline_date).toLocaleString("en-US", {
-                weekday: "long",
-              });
-              const date = new Date(element.timeline_date).toLocaleString("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              });
-              const time = new Date(element.timeline_date).toLocaleString("en-US", {
-                hour: "numeric",
-                minute: "numeric",
-                hour12: true,
-              });
-              %>
-
-
-                $("#insertTimeline").append(`<div class="card mt-3">
-  <div class="card-body">
-    <p class="card-text" >${element.msgHtml}</p>
-    <p class="card-title" style="font-size: 10px">${weekday}<br>${date}, ${time}</p>
-    
-    <button onclick="deleteTimeline('${element._id}')" class="btn btn-danger">Delete</butt>
-  </div>
-</div>`);
-            });
-        }
-
-    }
-
-    function datetimeLocal(datetime) {
-      const dt = new Date(datetime);
-      dt.setMinutes(dt.getMinutes() - dt.getTimezoneOffset());
-      return dt.toISOString().slice(0, 16);
-    }
-
-    async function deleteTimeline(msgId) {
-      await fetch(`/api/live/match/<%= matchId%>/timeline/${msgId}/del`, { method: 'DELETE'});
-      loadTimeline();
-    }
-
-    $(document).ready(function () {
-        $('#successAlert').hide();
-        $('#failureAlert').hide();
-        loadMatchData();
-        loadTimeline();
-    });
     const updateData = async (timelineMessage) => {
       const team1Code = document.getElementById("team1_code").value;
       const team1Score = document.getElementById("team1_score").value.trim();
@@ -401,6 +363,7 @@
       const match_date = document.getElementById("mdatetime").value;
       const is_live = document.getElementById("match_live").value == "true";
       const match_status = document.getElementById("matchStatus").value.trim();
+      const match_type = "football";
       const data = {
         team1: {
           team_score: team1Score,
@@ -412,10 +375,10 @@
         },
         match_date,
         is_live,
-        match_status,
-        timeline_message: timelineMessage,
+        match_type,
+        match_status
       }
-      const res = await fetch("/api/live/match/<%= matchId%>", {
+      const res = await fetch("/api/live/match/<%= matchData.firebase_match_id %>", {
         method: "PUT",
         redirect: "follow",
         body: JSON.stringify(data),
@@ -433,89 +396,54 @@
             redirect: "follow",
             body: JSON.stringify({
               ...data,
-              matchId: result.matchId
+              id: "<%= matchData.firebase_match_id %>",
+              timeline_message: timelineMessage,
             }),
             headers: {
               "Content-type": "application/json; charset=UTF-8",
             },
           });
 
-          const notifyResult =  await notifyRes.json();
-
-          if (notifyResult.msg === 'success') {
-
-            $('#successAlertText').text("Successfully updated and notified about the live match")
-            $('#successAlert').show()
-
-          } else {
-
-            $('#failureAlertText').text("Failed to send a live match notification")
-            $('#failureAlert').show()
-
-
+          if (notifyRes.ok) {
+            window.location.reload();
           }
-        } else {
-          $('#failureAlertText').text("Failed to update a live match")
-          $('#failureAlert').show()
-
         }
+
       }
+    };
 
-      };
-    const createTimeline = async () => {
-      const msgHtml = window.tinymce.activeEditor.getContent();
-      const msg = window.tinymce.activeEditor.getContent({ format: 'text' });
-      const data = {
-        msgHtml,
-        timeline_date: Date.now()
-      }
-      const res = await fetch("/api/live/match/<%= matchId%>/timeline", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-        },
-      });
-
-      if (res.ok) {
-        updateData(msg);
-        loadTimeline();
-      } else {
-        $('#failureAlertText').text("Failed to create a timeline")
-        $('#failureAlert').show()
-      }
-
-      /* if (res.ok) {
-        const result = await res.json();
-
-        if (result.msg === 'success') {
-          const notifyRes = await fetch("/api/live/notification/send", {
+    const createTimeline = ()=> {
+        const msgHtml = tinymce.get('mytextarea').getContent();
+        const msgBody = tinymce.get('mytextarea').getContent({format: 'text'});
+        const data = {
+          msgHtml,
+          timeline_date: new Date(),
+        }
+        fetch("/api/live/match/<%= matchData.firebase_match_id %>/timeline", {
             method: "POST",
             redirect: "follow",
-            body: JSON.stringify({
-              ...data,
-              matchId: result.matchId
-            }),
+            body: JSON.stringify(data),
             headers: {
-              "Content-type": "application/json; charset=UTF-8",
+            "Content-type": "application/json; charset=UTF-8",
             },
+        }).then(res => res.json())
+            .then(async result => {
+                if (result.msg === 'success') {
+                    await updateData(msgBody);
+                    window.location.reload();
+                }
+            })
+    }
+
+    async function deleteTimeline(msgId) {
+      fetch(`/api/live/match/<%= matchData.firebase_match_id %>/timeline/${msgId}/del`, { method: 'DELETE'}).then(res => res.json())
+          .then(result => {
+            if (result.msg === 'success') {
+              window.location.reload();
+            }
           });
+    }
 
-          const notifyResult =  await notifyRes.json();
-
-          if (notifyResult.msg === 'success') {
-            $('#processingModal').modal('hide');
-          } else {
-            $("#processingModalTitleLabel").text("Failed to send a live match notification");
-            $("#replaceBody").parent().html(`<div>${notifyResult.msg}</div>`);
-          }
-        } else {
-          $("#processingModalTitleLabel").text("Failed to create a live match");
-          $("#replaceBody").parent().html(`<div>${result.msg}</div>`);
-        }
-      }*/
-
-      };
   </script>
 
   <script

@@ -203,6 +203,7 @@
             <div class="form-group">
               <label class="text-white" for="matchStatus"><h4>Match Status</h4></label>
               <textarea
+                      required
                       class="form-control "
                       id="matchStatus"
                       placeholder="Match Started"
@@ -261,6 +262,7 @@
       const match_date = document.getElementById("mdatetime").value;
       const is_live = document.getElementById("match_live").value == "true";
       const match_status = document.getElementById("matchStatus").value.trim();
+      const match_type = "football";
       const data = {
         team1: {
           team_score: team1Score,
@@ -272,6 +274,7 @@
         },
         match_date,
         is_live,
+        match_type,
         match_status
       }
       const res = await fetch("/api/live/create", {

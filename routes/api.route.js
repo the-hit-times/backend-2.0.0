@@ -21,9 +21,9 @@ const matchPostFirebaseRef = db.collection("live_sessions");
 
 router.post("/createpost", authcheak, async (req, res) => {
   try {
-    await Post.create(req.body);
+    const post = await Post.create(req.body);
     req.flash("postmsg", "post added successfully");
-    res.status(200).send({ msg: "success" });
+    res.status(200).send({ msg: "success", postId: post._id });
   } catch (err) {
     req.flash("postmsg", "post creation failed");
     res.status(200).send({ msg: err.message });
@@ -44,6 +44,9 @@ router.post("/sendnotification", authcheak, async (req, res) => {
         body: description,
         image: imageURL,
       },
+      data: {
+        postId: req.body.postId.toString(),
+      }
     };
 
     await getMessaging().sendToTopic(
@@ -80,6 +83,16 @@ router.get("/post/del/:postId", authcheak, async (req, res) => {
   } catch (err) {
     req.flash("delmsg", "post delete failed");
     res.redirect("/pages/display");
+  }
+});
+
+router.get("/post/:tagtId", async (req, res) => {
+  try {
+    const post = await Post.findOne({ _id: req.params.tagtId });
+    res.status(200).send({ code: "success", data: post });
+  } catch (err) {
+    req.flash("editmsg", "post update failed");
+    res.status(200).send({ msg: err.message });
   }
 });
 
@@ -161,16 +174,19 @@ router.get("/posts/reportopolis", async (req, res) => {
 
 
 //read live post
-router.get("/managelive", async (req, res) => {
+router.get("/live/match", async (req, res) => {
   try {
     const page =
       Number(req.query.page) - 1 <= 0 ? 0 : Number(req.query.page) - 1;
     const limit = Number(req.query.limit);
-    const timelinepost = await timelinepost.find()
-      .sort({ createdAt: -1 })
+    const matchPost = await MatchPost.find()
+      .sort({
+        is_live: -1,
+        match_date: -1,
+      })
       .skip(page * limit)
       .limit(limit);
-    res.send(timelinepost);
+    res.send(matchPost);
   } catch (err) {
     res.send({ success: false, err: err.message });
   }
@@ -193,13 +209,12 @@ router.post("/live/notification/send", authcheak, async (req, res) => {
     await getMessaging().sendToTopic(
         NOTIFICATION_LIVE, payload
     )
-    // req.flash("notifymsg", "sent notification successfully");
+    req.flash("notifymsg", "success");
     res.status(200).send({msg: "success"});
 
 
   } catch (err) {
-    // req.flash("notifymsg", "sent notification failed");
-    console.log(err);
+    req.flash("notifymsg", "failed");
     res.status(200).send({ msg: err.message });
   }
 
@@ -218,9 +233,8 @@ router.post("/live/create", authcheak, async (req, res) => {
     });
 
     await MatchPost.create({
+        ...data,
         firebase_match_id: matchDocument.id,
-        team1Code: data.team1.team_code,
-        team2Code: data.team2.team_code,
         match_date: match_date,
         timeline: []
     });
@@ -235,10 +249,13 @@ router.post("/live/create", authcheak, async (req, res) => {
 router.put("/live/edit/:matchId", authcheak, async (req, res) => {
   try {
     await MatchPost.findByIdAndUpdate({ firbase_match_id: req.params.matchId}, req.body);
-    req.flash("editmsg", "post updated successfully");
+
+
+
+    req.flash("editmsg", "success" );
     res.status(200).send({ msg: "success" });
   } catch (err) {
-    req.flash("editmsg", "post update failed");
+    req.flash("editmsg", "failed");
     res.status(200).send({ msg: err.message });
   }
 });
@@ -264,6 +281,13 @@ router.put("/live/match/:matchId", authcheak, async (req, res) => {
       ...data,
       match_date: match_date
     });
+    await MatchPost.findOneAndUpdate(
+        { firebase_match_id: req.params.matchId },
+        {
+            ...data,
+            match_date: match_date
+        }
+    );
     res.status(200).send({ msg: "success", updateData: matchDocument });
   } catch (err) {
     res.status(200).send({ msg: err.message });
@@ -291,16 +315,27 @@ router.get("/live/match/:matchId/timeline", async (req, res) => {
 // is stored in an MongoDB
 router.post("/live/match/:matchId/timeline", authcheak, async (req, res) => {
   try {
+    const data = req.body;
+    const match_date = new Date(data.timeline_date);
+    const timelineFirebaseRef = await matchPostFirebaseRef.doc(req.params.matchId).collection("timeline");
+
+    const timelineDocument = await timelineFirebaseRef.add({
+        ...data,
+        timeline_date: match_date
+    });
 
     await MatchPost.updateOne(
         { firebase_match_id: req.params.matchId },
         {
           $push: {
-            timeline: req.body,
+            timeline: {
+                ...data,
+                timeline_date: match_date,
+                firebase_timeline_id: timelineDocument.id
+            },
           }
         },
-    )
-
+    );
     res.status(200).send({ msg: "success" });
   } catch (err) {
     console.log(err);
@@ -310,12 +345,16 @@ router.post("/live/match/:matchId/timeline", authcheak, async (req, res) => {
 
 router.delete("/live/match/:matchId/timeline/:msgId/del", authcheak, async (req, res) => {
   try {
+
+    const timelineFirebaseRef = await matchPostFirebaseRef.doc(req.params.matchId).collection("timeline");
+    await timelineFirebaseRef.doc(req.params.msgId).delete();
+
     await MatchPost.updateOne(
         { firebase_match_id: req.params.matchId },
         {
           $pull: {
             timeline: {
-              _id: req.params.msgId
+              firebase_timeline_id: req.params.msgId
             }
           }
         },

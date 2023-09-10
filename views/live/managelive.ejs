@@ -119,7 +119,9 @@
       </button>
     </div>
 
-  <%}%> <% matches.forEach((post) => {%>
+  <%}%>
+
+    <% matches.forEach((post) => {%>
 
   <div
           class="card p-2 m-3"
@@ -131,48 +133,61 @@
           border-radius: 0px;
         "
   >
-    <div class="card-body shadow-lg">
-      <div class="row">
-        <div class="col-md-8 col-sm-8">
-          <h4>
-            <%
-              const convert = {
-                "100": "CSE",
-                "101": "IT",
-                "102": "ECE",
-                "103": "AEIE",
-                "104": "EE",
-                "105": "MECH",
-                "106": "CIVIL",
-                "107": "CHEMICAL",
-                "108": "BT/FT",
-                "109": "CSE CS",
-                "110": "CSE DS",
-                "111": "CSE AIML",
-                "112": "MASTERS",
-              }
-              const team1 = convert[post.team1Code]
-              const team2 = convert[post.team2Code]
-              // format date to MONDAY, \nSeptember 23, 2023 10:00 AM
-              const weekday = new Date(post.match_date).toLocaleString("en-US", {
-                weekday: "long",
-              });
-              const date = new Date(post.match_date).toLocaleString("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              });
-              const time = new Date(post.match_date).toLocaleString("en-US", {
-                hour: "numeric",
-                minute: "numeric",
-                hour12: true,
-              });
-            %>
-            <%= team1%> vs <%=team2%>
-          </h4>
-          <p style="font-size: 13px"><%=weekday%><br>
-          <%=date%>, <%=time%>
-          </p>
+      <div class="card-body shadow-lg">
+        <div class="row">
+          <div class="col">
+            <h4>
+              <%
+                const convert = {
+                  "100": "CSE",
+                  "101": "IT",
+                  "102": "ECE",
+                  "103": "AEIE",
+                  "104": "EE",
+                  "105": "MECH",
+                  "106": "CIVIL",
+                  "107": "CHEMICAL",
+                  "108": "BT/FT",
+                  "109": "CSE CS",
+                  "110": "CSE DS",
+                  "111": "CSE AIML",
+                  "112": "MASTERS",
+                }
+                const team1 = convert[post.team1.team_code]
+                const team2 = convert[post.team2.team_code]
+                // format date to MONDAY, \nSeptember 23, 2023 10:00 AM
+                const weekday = new Date(post.match_date).toLocaleString("en-US", {
+                  weekday: "long",
+                });
+                const date = new Date(post.match_date).toLocaleString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                });
+                const time = new Date(post.match_date).toLocaleString("en-US", {
+                  hour: "numeric",
+                  minute: "numeric",
+                  hour12: true,
+                });
+              %>
+              <%= team1%> vs <%=team2%>
+            </h4>
+            <h5><%= post.team1.team_score%> vs <%= post.team2.team_score%> </h5>
+
+            <p style="font-size: 1.1rem; font-weight: bold"><%=post.match_status%> · <%= post.match_type%></p>
+            <p style="font-size: 13px"><%=weekday%><br>
+            <%=date%> · <%=time%>
+            </p>
+          </div>
+          <div class="col-md-2 " style="background: red; width: fit-content; border-radius: 20px; color: wheat; height: fit-content" >
+            <% if(post.is_live)  {%>
+              LIVE
+            <% } else { %>
+              NOT LIVE
+            <% } %>
+          </div>
+        </div>
+        <div>
           <a
                   class="btn btn-success btn-sm"
                   href="/pages/live/edit/<%=post.firebase_match_id%>"
@@ -186,8 +201,9 @@
         </div>
       </div>
     </div>
-  </div>
   <%})%>
+
+</div>
 </div>
 
 <%-include("../footer")-%>

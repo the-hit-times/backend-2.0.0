@@ -29,10 +29,10 @@ router.get("/display", async (req, res) => {
 //to be updated
 
 router.get("/live/all", async (req, res) => {
-    var allmatches = await MatchPost.find().sort({createdAt:-1});
-
-
-
+    const allmatches = await MatchPost.find().sort({
+        is_live: -1,
+        match_date: -1,
+    });
     if (allmatches) {
         res.render("live/managelive", { matches: allmatches, delResponse: req.flash('delmsg') })
     }
@@ -40,7 +40,16 @@ router.get("/live/all", async (req, res) => {
 
 //path to editlive
 router.get("/live/edit/:matchId", authcheak, async (req, res) => {
-    res.render("live/editlive", { matchId:req.params.matchId } )
+
+    const match = await MatchPost.findOne({firebase_match_id:req.params.matchId});
+    match.timeline.sort(
+        (a,b)=> {
+            return (new Date(b.timeline_date) - new Date(a.timeline_date));
+        }
+    );
+    if (match) {
+        res.render("live/editlive", { matchData: match, editResponse: req.flash('editmsg') , notificationResponse: req.flash('notifymsg') })
+    }
 })
 
 
