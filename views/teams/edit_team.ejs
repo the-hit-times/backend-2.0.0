@@ -153,17 +153,17 @@
           <h3 class="text-white">Team <%= teamData.dept_name%></h3>
           <h6 class="text-white">FOOTBALL</h6>
 
-          <form action="" method="post">
+          <form action="javascript:updateData()" method="post">
 
             <div class="form-group mt-3">
-              <label class="text-white" for="mdatetime"><h4>Team Name</h4></label>
+              <label class="text-white" for="team_name"><h4>Team Name</h4></label>
               <input class="form-control" required type="text" id="team_name" name="team_name"
                 value="<%= teamData.football.team_name %>"
               >
             </div>
 
             <div class="form-group">
-              <label class="text-white" for="match_live"><h4>Team Logo (Drive only)</h4></label>
+              <label class="text-white" for="team_logo"><h4>Team Logo (Drive only)</h4></label>
                 <input class="form-control" required type="url" id="team_logo" name="team_logo"
                          value="<%= teamData.football.team_logo %>" />
             </div>
@@ -206,7 +206,7 @@
               </div>
 
               <div class="form-group mt-3">
-                <label class="text-white" for="player_name"><h5>Player Image (Drive only)</h5></label>
+                <label class="text-white" for="player_name"><h5>Player Image</h5></label>
                 <input class="form-control" required type="url" id="player_image" name="player_image"
                 >
               </div>
@@ -255,6 +255,33 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="/imageUpload.js"></script>
   <script>
+
+    const updateData = ()=> {
+            const teamName = $('#team_name').val();
+            const teamLogo = $('#team_logo').val();
+
+            fetch(`/api/team/edit/<%= teamData.team_code %>`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  football : {
+                    team_name: teamName,
+                    team_logo: teamLogo
+                  }
+                }),
+            })
+                .then((res) => res.json())
+                .then((data) => {
+
+                window.location.reload();
+
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+    }
 
     const addPlayer = ()=> {
         const playerName = $('#player_name').val();
