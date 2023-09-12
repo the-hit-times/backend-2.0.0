@@ -4,6 +4,7 @@ const { authcheak } = require("../middleware/authcheak");
 const Post = require("../mongoSchema/postSchema");
 const router = express.Router();
 const MatchPost = require("../mongoSchema/matchPostSchema");
+const Team = require("../mongoSchema/teamSchema");
 
 const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
 const { getMessaging } = require('firebase-admin/messaging');
@@ -177,6 +178,10 @@ router.get("/posts/reportopolis", async (req, res) => {
   }
 });
 
+
+/**
+ * APIs route for managing live matches.
+ * */
 
 //read live post
 router.get("/live/match", async (req, res) => {
@@ -383,6 +388,58 @@ router.get("/live/del/:matchId", authcheak, async (req, res) => {
     res.redirect("/pages/live/all");
   }
 });
+
+
+/**
+ * APIs route for managing team information such as
+ * player name, player logo, etc. for specific games.
+*/
+
+router.post("/team/create", authcheak, async (req, res) => {
+    try {
+        const data = req.body;
+        const teamDocument = await Team.create(data);
+        res.status(200).send({ msg: "success", teamId: teamDocument.id });
+    } catch (err) {
+        req.flash("postmsg", "post creation failed");
+        res.status(200).send({ msg: err.message });
+    }
+});
+
+router.get("/team/:teamCode", async (req, res) => {
+    try {
+        const team = await Team.findOne({ team_code: req.params.teamCode });
+        res.status(200).send({ code: "success", data: team });
+    } catch (err) {
+        req.flash("editmsg", "post update failed");
+        res.status(200).send({ msg: err.message });
+    }
+});
+
+router.put("/team/edit/:teamCode", authcheak, async (req, res) => {
+    try {
+        await Team.findOneAndUpdate({ team_code: req.params.teamCode }, req.body);
+        req.flash("editmsg", "post updated successfully");
+        res.status(200).send({ msg: "success" });
+    } catch (err) {
+        req.flash("editmsg", "post update failed");
+        res.status(200).send({ msg: err.message });
+    }
+});
+
+router.get("/team/del/:teamCode", authcheak, async (req, res) => {
+    try {
+        await Team.findOneAndDelete({ team_code: req.params.teamCode });
+        req.flash("delmsg", "post deleted successfully");
+        res.redirect("/pages/team");
+    } catch (err) {
+        req.flash("delmsg", "post delete failed");
+        res.redirect("/pages/team");
+    }
+});
+
+
+
 
 
 module.exports = router;
