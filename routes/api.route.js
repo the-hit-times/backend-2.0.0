@@ -419,12 +419,51 @@ router.get("/team/:teamCode", async (req, res) => {
 router.put("/team/edit/:teamCode", authcheak, async (req, res) => {
     try {
         await Team.findOneAndUpdate({ team_code: req.params.teamCode }, req.body);
-        req.flash("editmsg", "post updated successfully");
+        req.flash("editmsg", "success");
         res.status(200).send({ msg: "success" });
     } catch (err) {
-        req.flash("editmsg", "post update failed");
+        req.flash("editmsg", "failed");
         res.status(200).send({ msg: err.message });
     }
+});
+
+router.post("/team/edit/:teamCode/football/player/add", authcheak, async (req, res) => {
+  try {
+    const data = req.body;
+    const teamDocument = await Team.findOneAndUpdate(
+        { team_code: req.params.teamCode },
+        {
+            $push: {
+                "football.players": {
+                    ...data
+                }
+            }
+        },
+    );
+    res.status(200).send({ msg: "success", updateData: teamDocument });
+  } catch (err) {
+    console.log(err);
+    res.status(200).send({ msg: err.message });
+  }
+});
+
+router.delete('/teams/:teamCode/football/player/:playerId/del', authcheak, async (req, res) => {
+   try {
+         await Team.findOneAndUpdate(
+              { team_code: req.params.teamCode },
+              {
+                $pull: {
+                     "football.players": {
+                          _id: req.params.playerId
+                     }
+                }
+              },
+         )
+         res.status(200).send({ msg: "success" });
+   } catch (e) {
+       console.log(e);
+         res.status(200).send({ msg: e.message });
+   }
 });
 
 router.get("/team/del/:teamCode", authcheak, async (req, res) => {

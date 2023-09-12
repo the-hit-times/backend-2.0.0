@@ -6,6 +6,10 @@ const teamSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        dept_name: {
+            type: String,
+            required: true,
+        },
         football: {
             team_name: {
                 type: String,

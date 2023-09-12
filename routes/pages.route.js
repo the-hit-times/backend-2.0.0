@@ -4,6 +4,7 @@ const router = express.Router();
 const {authcheak,authcheakForsignin} = require("../middleware/authcheak")
 const Post = require('../mongoSchema/postSchema')
 const MatchPost = require('../mongoSchema/matchPostSchema')
+const Team = require('../mongoSchema/teamSchema')
 
 
 router.get("/login", authcheakForsignin, (req, res) => {
@@ -59,5 +60,21 @@ router.get("/post/edit/:postId", authcheak, async (req, res) => {
         res.render("Edit", { postData: data, editResponse: req.flash('editmsg') })
     }
 })
+
+
+/** Pages Routes for Teams */
+router.get("/teams/manage", async (req, res) => {
+    const allteams = await Team.find().sort({team_code:1});
+    if (allteams) {
+        res.render("teams/manage_teams", { teams: allteams, delResponse: req.flash('delmsg') })
+    }
+});
+
+router.get("/teams/edit/:teamId/football", authcheak, async (req, res) => {
+    const team = await Team.findOne({ team_code: req.params.teamId });
+    if (team) {
+        res.render("teams/edit_team", { teamData: team, editResponse: req.flash('editmsg') })
+    }
+});
 
 module.exports =router;
