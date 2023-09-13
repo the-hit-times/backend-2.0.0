@@ -83,7 +83,7 @@ router.put("/post/edit/:tagtId", authcheak, async (req, res) => {
 
 router.get("/post/del/:postId", authcheak, async (req, res) => {
   try {
-    await MatchPost.findByIdAndRemove({ _id: req.params.postId });
+    await Post.findByIdAndRemove({ _id: req.params.postId });
     req.flash("delmsg", "post deleted successfully");
     res.redirect("/pages/display");
   } catch (err) {
