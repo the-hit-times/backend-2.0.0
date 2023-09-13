@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>THE HIT TIMES</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.tiny.cloud/1/gy5pjthnlmq41tsazbhlnu4xqc53eu5ad8yk9a4y7i0a0kx6/tinymce/5/tinymce.min.js"
+      referrerpolicy="origin"
+    ></script>
+
+    <script>
+    </script>
+  </head>
+
+  <style>
+    .roundbth {
+      border-radius: 25px;
+    }
+    body {
+      background: linear-gradient(
+        rgba(50, 176, 226, 0.5),
+        rgba(228, 102, 180, 0.5)
+      );
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    .navbercolor {
+    }
+  </style>
+
+  <body>
+    <nav
+      class="navbar navbar-expand-sm navbar-light mb-3"
+      style="color: rgb(16, 97, 247)"
+    >
+      <div class="container">
+        <button
+          class="navbar-toggler mr-auto"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="/">THE HIT TIMES</a>
+        <% if(user) { %>
+        <a
+          class="nav-link ml-auto btn btn-danger text-white roundbth px-3"
+          href="/auth/logout"
+          >Logout</a
+        >
+        <% } else{ %>
+        <a
+          class="nav-link ml-auto btn btn-primary text-white roundbth px-3"
+          href="/pages/login"
+          >Login</a
+        >
+        <%}%>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/"><b>Home</b></a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/createpost"
+                ><b>Create Post</b></a
+              >
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/sendnotification">
+                <b>Send Notification</b>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/display"><b>Display</b></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/live/create"><b>Go Live</b></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/live/all"><b>Manage Live</b></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/teams/manage"><b>Manage Teams</b></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/api/posts"><b>JSON</b></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mb-5">
+      <div
+        class="card p-1"
+        style="
+          background: linear-gradient(
+            rgba(13, 178, 243, 0.5),
+            rgba(228, 102, 180, 0.5)
+          );
+          border-radius: 0px;
+        "
+      >
+        <div class="card-body shadow-lg">
+          <h3 class="text-white">CREATE LIVE POST</h3>
+
+          <form action="javascript:matchPostData()" method="post">
+
+
+
+            <div class="form-group">
+              <label class="text-white" for="team1_code"><h4>Team 1</h4></label>
+              <select
+            class="form-control mt-1"
+            id="team1_code"
+            name="team1_code"
+            aria-label="Default select example"
+          >
+            <option value="100">CSE</option>
+            <option value="101">IT</option>
+            <option value="102">ECE</option>
+            <option value="103">AEIE</option>
+            <option value="104">EE</option>
+            <option value="105">MECH</option>
+            <option value="106">CIVIL</option>
+            <option value="107">CHEMICAL</option>
+            <option value="108">BT/FT</option>
+            <option value="109">CSE CS</option>
+            <option value="110">CSE DS</option>
+            <option value="111">CSE AIML</option>
+            <option value="112">MASTERS</option>
+        </select>
+              <input
+                class="form-control mt-1"
+                required
+                placeholder="Score"
+                id="team1_score"
+                type="text"
+                name="team1_score"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="team2_code" class="text-white"><h4>Team 2</h4></label>
+
+
+            <select
+            class="form-control mt-1"
+            id="team2_code"
+            name="team2_code"
+            aria-label="Default select example"
+          >
+            <option value="100" disabled>CSE</option>
+            <option value="101">IT</option>
+            <option value="102">ECE</option>
+            <option value="103">AEIE</option>
+            <option value="104">EE</option>
+            <option value="105">MECH</option>
+            <option value="106">CIVIL</option>
+            <option value="107">CHEMICAL</option>
+            <option value="108">BT/FT</option>
+            <option value="109">CSE CS</option>
+            <option value="110">CSE DS</option>
+            <option value="111">CSE AIML</option>
+            <option value="112">MASTERS</option>
+        </select>
+            <input
+              class="form-control mt-1"
+              required
+              placeholder="Score"
+              id="team2_score"
+              type="text"
+              name="team1_score"
+            />
+            </div>
+            <div class="form-group">
+              <label class="text-white" for="mdatetime"><h4>Match Date and Time</h4></label>
+              <input class="form-control" type="datetime-local" id="mdatetime" name="mdatetime">
+            </div>
+
+            <div class="form-group">
+              <label class="text-white" for="match_live"><h4>Is Match Live?</h4></label>
+              <select
+                      class="form-control "
+                      id="match_live"
+                      name="match_live"
+              >
+                <option value="true">LIVE</option>
+                <option value="false">NOT LIVE</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="text-white" for="matchStatus"><h4>Match Status</h4></label>
+              <textarea
+                      required
+                      class="form-control "
+                      id="matchStatus"
+                      placeholder="Match Started"
+                      maxlength="35"
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn text-white btn-primary roundbth">
+              Submit
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="processingModal" tabindex="-1" role="dialog" aria-labelledby="processingModalTitleLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="processingModalTitleLabel">Creating a live Match</h5>
+          </div>
+          <div  class="modal-body">
+              <div id="replaceBody">
+                <center>
+                  <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="64px" height="64px" viewBox="0 0 128 128" xml:space="preserve"><rect x="0" y="0" width="100%" height="100%" fill="#FFFFFF"/><g><circle cx="16" cy="64" r="16" fill="#000000"/><circle cx="16" cy="64" r="16" fill="#555555" transform="rotate(45,64,64)"/><circle cx="16" cy="64" r="16" fill="#949494" transform="rotate(90,64,64)"/><circle cx="16" cy="64" r="16" fill="#cccccc" transform="rotate(135,64,64)"/><animateTransform attributeName="transform" type="rotate" values="0 64 64;315 64 64;270 64 64;225 64 64;180 64 64;135 64 64;90 64 64;45 64 64" calcMode="discrete" dur="720ms" repeatCount="indefinite"/></g></svg>
+                </center>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </body>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+
+    $("select[name='team1_code']").on('change', function() {
+      $(`select[name='team2_code'] option[value='${this.value}']`).attr("disabled", "disabled").siblings().removeAttr("disabled");;
+    });
+
+    $("select[name='team2_code']").on('change', function() {
+      $(`select[name='team1_code'] option[value='${this.value}']`).attr("disabled", "disabled").siblings().removeAttr("disabled");;
+    });
+
+    const matchPostData = async () => {
+
+      $('#processingModal').modal('show');
+
+
+      const team1Code = document.getElementById("team1_code").value;
+      const team1Score = document.getElementById("team1_score").value.trim();
+      const team2Code = document.getElementById("team2_code").value;
+      const team2Score = document.getElementById("team2_score").value.trim();
+      const match_date = document.getElementById("mdatetime").value;
+      const is_live = document.getElementById("match_live").value == "true";
+      const match_status = document.getElementById("matchStatus").value.trim();
+      const match_type = "football";
+      const data = {
+        team1: {
+          team_score: team1Score,
+          team_code: team1Code
+        },
+        team2: {
+          team_score: team2Score,
+          team_code: team2Code
+        },
+        match_date,
+        is_live,
+        match_type,
+        match_status
+      }
+      const res = await fetch("/api/live/create", {
+        method: "POST",
+        redirect: "follow",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+
+      if (res.ok) {
+        const result = await res.json();
+
+          if (result.msg === 'success') {
+            const notifyRes = await fetch("/api/live/notification/send", {
+              method: "POST",
+              redirect: "follow",
+              body: JSON.stringify({
+                ...data,
+                matchId: result.matchId,
+                timeline_message: "Going Live!",
+              }),
+              headers: {
+                "Content-type": "application/json; charset=UTF-8",
+              },
+            });
+
+            const notifyResult =  await notifyRes.json();
+
+            if (notifyResult.msg === 'success') {
+                window.location = `/pages/live/edit/${result.matchId}`
+            } else {
+              $("#processingModalTitleLabel").text("Failed to send a live match notification");
+              $("#replaceBody").parent().html(`<div>${notifyResult.msg}</div>`);
+            }
+          } else {
+            $("#processingModalTitleLabel").text("Failed to create a live match");
+            $("#replaceBody").parent().html(`<div>${result.msg}</div>`);
+          }
+
+
+      }
+    };
+  </script>
+
+  <script
+    src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"
+  ></script>
+</html>
