@@ -356,6 +356,16 @@ router.post("/live/match/:matchId/timeline", authcheak, async (req, res) => {
   }
 });
 
+
+router.get("/live/count", async (req, res) => {
+    try {
+        const count = await MatchPost.countDocuments();
+        res.status(200).send({ count: count });
+    } catch (err) {
+        res.status(200).send({ msg: err.message });
+    }
+});
+
 router.delete("/live/match/:matchId/timeline/:msgId/del", authcheak, async (req, res) => {
   try {
 
