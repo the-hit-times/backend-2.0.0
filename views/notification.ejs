@@ -212,7 +212,7 @@
       const title = document.getElementById("title").value.trim();
       const description = document.getElementById("description").value.trim();
       const link = document.getElementById("link").value.trim();
-      const data = { title, description, link };
+      const data = { title, description, link, body:description, htmlBody:description, dropdown:"0"};
 
       const res = await fetch("/api/sendnotification", {
         method: "POST",
