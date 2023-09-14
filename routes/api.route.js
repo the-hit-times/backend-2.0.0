@@ -39,6 +39,7 @@ router.post("/sendnotification", authcheak, async (req, res) => {
     const body = req.body.body.toString();
     const imageURL = req.body.link.toString();
     var postId = req.body.postId;
+    var notificationType = "POST";
 
     if (postId == undefined) {
       postId = "";
@@ -52,6 +53,7 @@ router.post("/sendnotification", authcheak, async (req, res) => {
       },
       data: {
         postId: postId.toString(),
+        type: notificationType,
       }
     };
 
@@ -354,6 +356,16 @@ router.post("/live/match/:matchId/timeline", authcheak, async (req, res) => {
   }
 });
 
+
+router.get("/live/count", async (req, res) => {
+    try {
+        const count = await MatchPost.countDocuments();
+        res.status(200).send({ count: count });
+    } catch (err) {
+        res.status(200).send({ msg: err.message });
+    }
+});
+
 router.delete("/live/match/:matchId/timeline/:msgId/del", authcheak, async (req, res) => {
   try {
 
@@ -380,7 +392,16 @@ router.delete("/live/match/:matchId/timeline/:msgId/del", authcheak, async (req,
 //delete live post
 router.get("/live/del/:matchId", authcheak, async (req, res) => {
   try {
-    await matchPostFirebaseRef.doc(req.params.matchId).delete();
+    // batch delete all documents inside the sub collection 'timeline'
+    const timelineFirebaseRef = await matchPostFirebaseRef.doc(req.params.matchId).collection("timeline");
+    const timelineDocs = await timelineFirebaseRef.get();
+    const batch = db.batch();
+
+    timelineDocs.forEach((doc) => {
+        batch.delete(doc.ref);
+    });
+    batch.delete(matchPostFirebaseRef.doc(req.params.matchId));
+    await batch.commit();
     await MatchPost.findOneAndDelete({ firebase_match_id: req.params.matchId });
     req.flash("delmsg", "post deleted successfully");
     res.redirect("/pages/live/all");
