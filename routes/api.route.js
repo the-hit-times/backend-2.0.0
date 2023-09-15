@@ -275,11 +275,8 @@ router.put("/live/edit/:matchId", authcheak, async (req, res) => {
 
 router.get("/live/match/:matchId", authcheak, async (req, res) => {
   try {
-    const doc = await matchPostFirebaseRef.doc(req.params.matchId).get();
-    if (!doc.exists) {
-      res.status(200).send({ msg: "No Such Match", code: "no_match" });
-    }
-    res.status(200).send({ data:doc.data() , code: "success" });
+    const doc = await MatchPost.findOne({ firebase_match_id: req.params.matchId })
+    res.status(200).send({ data:doc , code: "success" });
 
   } catch (err) {
     res.status(200).send({ msg: err.message });
@@ -317,7 +314,7 @@ router.get("/live/match/:matchId/timeline", async (req, res) => {
           return -(new Date(a.timeline_date) - new Date(b.timeline_date))
         }
     );
-    res.status(200).send(data);
+    res.status(200).send(data.timeline);
   } catch (err) {
     console.log(err);
     res.status(200).send({ msg: err.message });
