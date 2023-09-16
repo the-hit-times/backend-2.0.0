@@ -1,0 +1,713 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: "THT Admin API"
+  description: "A Internal API for The HIT Times."
+servers:
+  - url: https://tht-admin-portal.onrender.com/api
+    description: "URL to access the api"
+
+paths:
+  /post:
+    get:
+      summary: "Get all posts"
+      description: "Get all posts"
+      responses:
+        200:
+          description: "Post status"
+          content:
+            application/json:
+                schema:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/Post"
+
+    post:
+      summary: "Create a new post"
+      description: "Create a new post"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Post"
+      responses:
+        200:
+          description: "Post status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/responsePost"
+  /posts/weeklies:
+    get:
+      summary: "Get all weeklies"
+      description: "Get all weeklies"
+      responses:
+        200:
+          description: "Post status"
+          content:
+            application/json:
+                schema:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/Post"
+  /posts/appx:
+    get:
+      summary: "Get all appx"
+      description: "Get all appx"
+      responses:
+        200:
+          description: "Post status"
+          content:
+            application/json:
+                schema:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/Post"
+  /posts/gazette:
+    get:
+      summary: "Get all gazette"
+      description: "Get all gazette"
+      responses:
+        200:
+          description: "Post status"
+          content:
+            application/json:
+                schema:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/Post"
+  /posts/reportopolis:
+    get:
+      summary: "Get all reportopolis"
+      description: "Get all reportopolis"
+      responses:
+        200:
+          description: "Post status"
+          content:
+            application/json:
+                schema:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/Post"
+  /post/edit/:tagtId:
+    put:
+      summary: "Edit a post"
+      description: "Edit a post"
+      parameters:
+        - in: path
+          name: tagtId
+          required: true
+          description: "Id of the post"
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Post"
+      responses:
+        200:
+          description: "Post status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/responseStatus"
+  /post/del/:postId:
+    get:
+      summary: "Delete a post"
+      description: "Delete a post"
+      parameters:
+        - in: path
+          name: postId
+          required: true
+          description: "Id of the post"
+          schema:
+            type: string
+  /post/:tagtId:
+    get:
+      summary: "Get a post"
+      description: "Get a post"
+      parameters:
+        - in: path
+          name: tagtId
+          required: true
+          description: "Id of the post"
+          schema:
+            type: string
+      responses:
+        200:
+          description: "Post status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+  /sendnotification:
+    post:
+      summary: "Send a notification"
+      description: "Send a notification"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Notification"
+      responses:
+        200:
+          description: "Notification status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/responseStatus"
+  /live/match:
+    get:
+      summary: "Get all live matches"
+      description: "Get all live matches"
+      responses:
+        200:
+          description: "Match status"
+          content:
+            application/json:
+                schema:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/MatchPost"
+  /live/notification/send:
+    post:
+      summary: "Send a notification"
+      description: "Send a notification"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MatchPost"
+      responses:
+        200:
+          description: "Notification status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/responseStatus"
+  /live/create:
+    post:
+      summary: "Create a live match"
+      description: "Create a live match"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MatchPost"
+      responses:
+        200:
+          description: "Notification status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/responseMatchPost"
+  /live/match/:matchId:
+    get:
+      summary: "Get a live match"
+      description: "Get a live match"
+      parameters:
+        - in: path
+          name: matchId
+          required: true
+          description: "Id of the match"
+          schema:
+            type: string
+      responses:
+        200:
+          description: "Match status"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MatchPost"
+
+    put:
+      summary: "Update a live match"
+      description: "Update a live match"
+      parameters:
+          - in: path
+            name: matchId
+            required: true
+            description: "Id of the match"
+            schema:
+                type: string
+      requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MatchPost"
+      responses:
+          200:
+            description: "Match status"
+            content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/responseStatus"
+  /live/match/:matchId/timeline:
+    get:
+      summary: "Get timeline of a live match"
+      description: "Get timeline of a live match"
+      parameters:
+          - in: path
+            name: matchId
+            required: true
+            description: "Id of the match"
+            schema:
+                type: string
+      responses:
+          200:
+            description: "Match status"
+            content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Timeline"
+
+    post:
+      summary: "Add a timeline"
+      description: "Add a timeline"
+      parameters:
+          - in: path
+            name: matchId
+            required: true
+            description: "Id of the match"
+            schema:
+                type: string
+      requestBody:
+          required: true
+          content:
+              application/json:
+                schema:
+                    $ref: "#/components/schemas/Timeline"
+      responses:
+          200:
+              description: "Match status"
+              content:
+                  application/json:
+                    schema:
+                        $ref: "#/components/schemas/responseStatus"
+  /live/count:
+    get:
+      summary: "Get count of live matches"
+      description: "Get count of live matches"
+      responses:
+          200:
+            description: "Match status"
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                          count:
+                              type: number
+                              description: "Count of live matches"
+                              example: 1
+  /live/match/:matchId/timeline/:msgId/del:
+    delete:
+      summary: "Delete a timeline"
+      description: "Delete a timeline"
+      parameters:
+          - in: path
+            name: matchId
+            required: true
+            description: "Id of the match"
+            schema:
+                type: string
+          - in: path
+            name: msgId
+            required: true
+            description: "Id of the message"
+            schema:
+                type: string
+      responses:
+          200:
+              description: "Match status"
+              content:
+                  application/json:
+                    schema:
+                        $ref: "#/components/schemas/responseStatus"
+  /live/del/:matchId:
+    get:
+      summary: "Delete a live match"
+      description: "Delete a live match"
+      parameters:
+          - in: path
+            name: matchId
+            required: true
+            description: "Id of the match"
+            schema:
+                type: string
+      responses:
+        200:
+            description: "Match status"
+
+  /team/create:
+    post:
+      summary: "Create a team"
+      description: "Create a team"
+      requestBody:
+          required: true
+          content:
+            application/json:
+                schema:
+                  $ref: "#/components/schemas/Team"
+      responses:
+          200:
+            description: "Team status"
+            content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/responseTeam"
+  /team/:teamCode:
+    get:
+        summary: "Get a team"
+        description: "Get a team"
+        parameters:
+            - in: path
+              name: teamCode
+              required: true
+              description: "Id of the team"
+              schema:
+                  type: string
+        responses:
+            200:
+                description: "Team status"
+                content:
+                    application/json:
+                      schema:
+                          $ref: "#/components/schemas/Team"
+  /team/edit/:teamCode:
+    put:
+        summary: "Edit a team"
+        description: "Edit a team"
+        parameters:
+            - in: path
+              name: teamCode
+              required: true
+              description: "Id of the team"
+              schema:
+                  type: string
+        requestBody:
+            required: true
+            content:
+                application/json:
+                  schema:
+                      $ref: "#/components/schemas/Team"
+        responses:
+            200:
+                description: "Team status"
+                content:
+                    application/json:
+                      schema:
+                          $ref: "#/components/schemas/responseStatus"
+  /team/edit/:teamCode/football/player/add:
+    post:
+        summary: "Add a player"
+        description: "Add a player"
+        parameters:
+            - in: path
+              name: teamCode
+              required: true
+              description: "Id of the team"
+              schema:
+                  type: string
+        requestBody:
+            required: true
+            content:
+                application/json:
+                  schema:
+                      $ref: "#/components/schemas/Player"
+        responses:
+            200:
+                description: "Team status"
+                content:
+                    application/json:
+                      schema:
+                          $ref: "#/components/schemas/responseStatus"
+  /teams/:teamCode/football/player/:playerId/del:
+    delete:
+        summary: "Delete a player"
+        description: "Delete a player"
+        parameters:
+            - in: path
+              name: teamCode
+              required: true
+              description: "Id of the team"
+              schema:
+                  type: string
+            - in: path
+              name: playerId
+              required: true
+              description: "Id of the player"
+              schema:
+                  type: string
+        responses:
+            200:
+                description: "Team status"
+                content:
+                    application/json:
+                      schema:
+                          $ref: "#/components/schemas/responseStatus"
+  /team/del/:teamCode:
+    get:
+        summary: "Delete a team"
+        description: "Delete a team"
+        parameters:
+            - in: path
+              name: teamCode
+              required: true
+              description: "Id of the team"
+              schema:
+                  type: string
+        responses:
+            200:
+                description: "Team status"
+                content:
+                    application/json:
+                      schema:
+                          $ref: "#/components/schemas/responseStatus"
+
+components:
+    schemas:
+        Post:
+          type: object
+          required:
+              - title
+              - description
+              - body
+              - htmlBody
+              - link
+              - dropdown
+              - c_image
+          properties:
+              title:
+                type: string
+                description: "Title of the post"
+              description:
+                type: string
+                description: "Description of the post"
+              body:
+                type: string
+                description: "Body of the post"
+              htmlBody:
+                type: string
+                description: "HTML Body of the post"
+              link:
+                type: string
+                description: "Link of the image"
+              dropdown:
+                type: string
+                description: "Type of the post"
+              c_image:
+                type: string
+                description: "Optional(leave it empty)"
+        MatchPost:
+            type: object
+            required:
+              - firebase_match_id
+              - team1
+              - team2
+              - is_live
+              - match_date
+              - match_status
+              - match_type
+              - timeline
+            properties:
+              firebase_match_id:
+                type: string
+                description: "Firebase match id"
+                example: "123456789"
+              team1:
+                type: object
+                description: "Team 1"
+                properties:
+                  team_code:
+                    type: string
+                    description: "Team id"
+                    example: "100"
+                  team_score:
+                    type: string
+                    description: "Team score"
+                    example: "1"
+              team2:
+                type: object
+                description: "Team 2"
+                properties:
+                  team_code:
+                    type: string
+                    description: "Team id"
+                    example: "101"
+                  team_score:
+                    type: string
+                    description: "Team score"
+                    example: "2"
+              is_live:
+                type: boolean
+                description: "Is live"
+                example: true
+              match_date:
+                type: string
+                description: "Match date"
+                example: "2021-07-16T18:30:00.000Z"
+              match_status:
+                type: string
+                description: "Match status"
+                example: "In Progress"
+              match_type:
+                type: string
+                description: "Match type"
+                example: "football"
+              timeline:
+                type: array
+                description: "Timeline"
+                items:
+                    $ref: "#/components/schemas/Timeline"
+        Timeline:
+          type: object
+          required:
+            - firebase_timeline_id
+            - timeline_date
+            - msgHtml
+          properties:
+            firebase_timeline_id:
+              type: string
+              description: "Firebase timeline id"
+              example: "123456789"
+            timeline_date:
+              type: string
+              description: "Timeline date"
+              example: "2021-07-16T18:30:00.000Z"
+            msgHtml:
+              type: string
+              description: "Message"
+              example: "Goal"
+        Team:
+            type: object
+            required:
+                - team_code
+                - dept_name
+                - football
+            properties:
+                team_code:
+                    type: string
+                    description: "Team code"
+                    example: "100"
+                dept_name:
+                    type: string
+                    description: "Department name"
+                    example: "Computer Science"
+                football:
+                    type: object
+                    description: "Football"
+                    schema:
+                        $ref: "#/components/schemas/Football"
+        Football:
+            type: object
+            required:
+                - team_name
+                - team_logo
+                - players
+            properties:
+                team_name:
+                    type: string
+                    description: "Team name"
+                    example: "Team 1"
+                team_logo:
+                    type: string
+                    description: "Team logo"
+                    example: "https://i.imgur.com/mtHrSaP.png"
+                players:
+                  type: array
+                  description: "Players"
+                  items:
+                      $ref: "#/components/schemas/Player"
+        Player:
+          type: object
+          required:
+              - player_name
+              - player_image
+              - player_description
+          properties:
+                player_name:
+                    type: string
+                    description: "Player name"
+                    example: "Player 1"
+                player_image:
+                    type: string
+                    description: "Player image"
+                    example: "https://i.imgur.com/mtHrSaP.png"
+                player_description:
+                    type: string
+                    description: "Player description"
+                    example: "Player 1 description"
+
+        Notification:
+            type: object
+            required:
+                - title
+                - body
+                - link
+            properties:
+                title:
+                    type: string
+                    description: "Title of the notification"
+                    example: "New Post"
+                description:
+                    type: string
+                    description: "Description of the notification"
+                    example: "New Post has been published"
+                link:
+                    type: string
+                    description: "Link image for the notification"
+                postId:
+                    type: string
+                    description: "Id of the post"
+                    example: "60f0b1b3c9b0a40004f1b0b1"
+        responsePost:
+          type: object
+          properties:
+            msg:
+              type: string
+              description: "Message of the response"
+              example: "success"
+            postId:
+              type: string
+              description: "Id of the post"
+              example: "60f0b1b3c9b0a40004f1b0b1"
+        responseMatchPost:
+          type: object
+          properties:
+            msg:
+              type: string
+              description: "Message of the response"
+              example: "success"
+            matchId:
+              type: string
+              description: "Id of the post"
+              example: "60f0b1b3c9b0a40004f1b0b1"
+        responseTeam:
+          type: object
+          properties:
+              msg:
+                type: string
+                description: "Message of the response"
+                example: "success"
+              teamId:
+                type: string
+                description: "Id of the team"
+                example: "60f0b1b3c9b0a40004f1b0b1"
+        responseStatus:
+          type: object
+          properties:
+              msg:
+                type: string
+                description: "Message of the response"
+                example: "success"
+

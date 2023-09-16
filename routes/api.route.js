@@ -258,38 +258,6 @@ router.post("/live/create", authcheak, async (req, res) => {
   }
 });
 
-//edit live post
-router.put("/live/edit/:matchId", authcheak, async (req, res) => {
-  try {
-    await MatchPost.findByIdAndUpdate({ firbase_match_id: req.params.matchId}, req.body);
-
-
-
-    req.flash("editmsg", "success" );
-    res.status(200).send({ msg: "success" });
-  } catch (err) {
-    req.flash("editmsg", "failed");
-    res.status(200).send({ msg: err.message });
-  }
-});
-
-
-router.get('/live/match', async (req, res) => {
-    try {
-        const page =
-            Number(req.query.page) - 1 <= 0 ? 0 : Number(req.query.page) - 1;
-        const limit = Number(req.query.limit);
-        const docs = await MatchPost.find({  })
-            .sort({ is_live: -1, match_date: -1 })
-            .skip(page * limit)
-            .limit(limit);
-
-        res.status(200).send(docs);
-    } catch (err) {
-        res.status(200).send({ msg: err.message });
-    }
-});
-
 router.get("/live/match/:matchId", async (req, res) => {
   try {
     const doc = await MatchPost.findOne({ firebase_match_id: req.params.matchId })

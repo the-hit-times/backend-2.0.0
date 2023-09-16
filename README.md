@@ -10,6 +10,7 @@
 6. to run in development mode run -> npm run dev
 
 # API Reference
+For all the endpoints refers to For other endpoints, refer to  [API Documentation](/API_DOCs.yaml)
 
 ## 1. Login api
 
