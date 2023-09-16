@@ -273,13 +273,27 @@ router.put("/live/edit/:matchId", authcheak, async (req, res) => {
   }
 });
 
-router.get("/live/match/:matchId", authcheak, async (req, res) => {
-  try {
-    const doc = await matchPostFirebaseRef.doc(req.params.matchId).get();
-    if (!doc.exists) {
-      res.status(200).send({ msg: "No Such Match", code: "no_match" });
+
+router.get('/live/match', async (req, res) => {
+    try {
+        const page =
+            Number(req.query.page) - 1 <= 0 ? 0 : Number(req.query.page) - 1;
+        const limit = Number(req.query.limit);
+        const docs = await MatchPost.find({  })
+            .sort({ is_live: -1, match_date: -1 })
+            .skip(page * limit)
+            .limit(limit);
+
+        res.status(200).send(docs);
+    } catch (err) {
+        res.status(200).send({ msg: err.message });
     }
-    res.status(200).send({ data:doc.data() , code: "success" });
+});
+
+router.get("/live/match/:matchId", async (req, res) => {
+  try {
+    const doc = await MatchPost.findOne({ firebase_match_id: req.params.matchId })
+    res.status(200).send({ data:doc , code: "success" });
 
   } catch (err) {
     res.status(200).send({ msg: err.message });
@@ -317,7 +331,7 @@ router.get("/live/match/:matchId/timeline", async (req, res) => {
           return -(new Date(a.timeline_date) - new Date(b.timeline_date))
         }
     );
-    res.status(200).send(data);
+    res.status(200).send(data.timeline);
   } catch (err) {
     console.log(err);
     res.status(200).send({ msg: err.message });
@@ -359,7 +373,7 @@ router.post("/live/match/:matchId/timeline", authcheak, async (req, res) => {
 
 router.get("/live/count", async (req, res) => {
     try {
-        const count = await MatchPost.countDocuments();
+        const count = await MatchPost.find({is_live: true}).countDocuments();
         res.status(200).send({ count: count });
     } catch (err) {
         res.status(200).send({ msg: err.message });
