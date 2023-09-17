@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>THE HIT TIMES</title>
+    <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+            crossorigin="anonymous"
+    />
+    <script
+            src="https://cdn.tiny.cloud/1/gy5pjthnlmq41tsazbhlnu4xqc53eu5ad8yk9a4y7i0a0kx6/tinymce/5/tinymce.min.js"
+            referrerpolicy="origin"
+    ></script>
+
+    <script>
+    </script>
+</head>
+
+<style>
+    .roundbth {
+        border-radius: 25px;
+    }
+
+    body {
+        background: linear-gradient(
+                rgba(50, 176, 226, 0.5),
+                rgba(228, 102, 180, 0.5)
+        );
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    .navbercolor {
+    }
+</style>
+
+<body>
+<nav
+        class="navbar navbar-expand-sm navbar-light mb-3"
+        style="color: rgb(16, 97, 247)"
+>
+    <div class="container">
+        <button
+                class="navbar-toggler mr-auto"
+                data-toggle="collapse"
+                data-target="#navbarNav"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="/">THE HIT TIMES</a>
+        <% if(user) { %>
+            <a
+                    class="nav-link ml-auto btn btn-danger text-white roundbth px-3"
+                    href="/auth/logout"
+            >Logout</a
+            >
+        <% } else{ %>
+            <a
+                    class="nav-link ml-auto btn btn-primary text-white roundbth px-3"
+                    href="/pages/login"
+            >Login</a
+            >
+        <% } %>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/"><b>Home</b></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/pages/createpost"
+                    ><b>Create Post</b></a
+                    >
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/pages/sendnotification">
+                        <b>Send Notification</b>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/pages/display"><b>Display</b></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pages/live/create"><b>Go Live</b></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pages/live/all"><b>Manage Live</b></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pages/teams/manage"><b>Manage Teams</b></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/api/posts"><b>JSON</b></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mb-5">
+
+
+
+
+    <div
+            class="card p-1"
+            style="
+          background: linear-gradient(
+            rgba(13, 178, 243, 0.5),
+            rgba(228, 102, 180, 0.5)
+          );
+          border-radius: 0px;
+        "
+    >
+        <div class="card-body shadow-lg">
+            <h3 class="text-white">CREATE TEAM</h3>
+
+            <form action="javascript:createTeam()" method="post">
+
+
+                <div class="form-group">
+                    <label class="text-white" for="team_code"><h4>Department</h4></label>
+                    <select
+                            class="form-control mt-1"
+                            id="team_code"
+                            name="team_code"
+                            aria-label="Default select example"
+                    >
+                        <% teams.forEach(
+                        (team) => { %>
+                            <option value="<%= team.team_code %>"><%= team.team_name %></option>
+                        <% }
+                        ) %>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <h6 style="color: white">FOOTBALL</h6>
+                    <input
+                            class="form-control mt-1"
+                            required
+                            placeholder="Team Name"
+                            id="team_name"
+                            type="text"
+                            name="team_name"
+                    />
+                    <input
+                            class="form-control mt-1"
+                            required
+                            placeholder="Team Logo"
+                            id="team_logo"
+                            type="text"
+                            name="team_logo"
+                    />
+                </div>
+
+                <button type="submit" class="btn text-white btn-primary roundbth">
+                    Submit
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+    const createTeam = () => {
+        const team_name = $('#team_name').val();
+        const team_logo = $('#team_logo').val();
+        const team_code = $('#team_code').val();
+        const dept_name = $('#team_code option:selected').text();
+
+
+        fetch('/api/team/create',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    team_code,
+                    dept_name,
+                    football: {
+                        team_name,
+                        team_logo
+                    }
+                })
+            }
+        ).then(res => res.json())
+            .then(data => {
+                        window.location.href = '/pages/teams/manage'
+                }
+            )
+
+
+    }
+
+</script>
+
+<script
+        src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"
+></script>
+<script
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"
+></script>
+<script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"
+></script>
+</html>

@@ -92,6 +92,15 @@
               <a class="nav-link" href="/pages/display"><b>Display</b></a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="/pages/live/create"><b>Go Live</b></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/live/all"><b>Manage Live</b></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/teams/manage"><b>Manage Teams</b></a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="/api/posts"><b>JSON</b></a>
             </li>
           </ul>
@@ -255,11 +264,14 @@
           "Content-type": "application/json; charset=UTF-8",
         },
       });
+
       if (res.ok) {
+        const resResult = await res.json();
+
         const notifyRes = await fetch("/api/sendnotification", {
           method: "POST",
           redirect: "follow",
-          body: JSON.stringify({ title, description: body, link }),
+          body: JSON.stringify({ title, description: body, link, postId: resResult.postId}),
           headers: {
             "Content-type": "application/json; charset=UTF-8",
           },
