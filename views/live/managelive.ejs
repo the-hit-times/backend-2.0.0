@@ -161,16 +161,19 @@
                 // format date to MONDAY, \nSeptember 23, 2023 10:00 AM
                 const weekday = new Date(post.match_date).toLocaleString("en-US", {
                   weekday: "long",
+                  timeZone: 'Asia/Kolkata',
                 });
                 const date = new Date(post.match_date).toLocaleString("en-US", {
                   month: "long",
                   day: "numeric",
                   year: "numeric",
+                  timeZone: 'Asia/Kolkata',
                 });
                 const time = new Date(post.match_date).toLocaleString("en-US", {
                   hour: "numeric",
                   minute: "numeric",
                   hour12: true,
+                  timeZone: 'Asia/Kolkata',
                 });
               %>
               <%= team1%> vs <%=team2%>
