@@ -247,6 +247,12 @@
                     <div class="col-10">
                         <h4 class="mb-0"><%= player.player_name %></h4>
                         <p class="mt-0"><%= player.player_description %></p>
+                        <button class="btn btn-primary" onclick="editPlayer(
+                                '<%= player._id %>',
+                                '<%= player.player_name %>',
+                                '<%= player.player_description %>',
+                                '<%= player.player_image %>'
+                                )">Edit</button>
                         <button class="btn btn-danger" onclick="deletePlayer('<%= player._id %>')">Delete</button>
                     </div>
                   </div>
@@ -258,7 +264,68 @@
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+
+    <div class="modal fade" id="processingModal" tabindex="-1" role="dialog" aria-labelledby="processingModalTitleLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="processingModalTitleLabel">Updating Team</h5>
+          </div>
+          <div  class="modal-body">
+            <div id="replaceBody">
+              <center>
+                <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="64px" height="64px" viewBox="0 0 128 128" xml:space="preserve"><rect x="0" y="0" width="100%" height="100%" fill="#FFFFFF"/><g><circle cx="16" cy="64" r="16" fill="#000000"/><circle cx="16" cy="64" r="16" fill="#555555" transform="rotate(45,64,64)"/><circle cx="16" cy="64" r="16" fill="#949494" transform="rotate(90,64,64)"/><circle cx="16" cy="64" r="16" fill="#cccccc" transform="rotate(135,64,64)"/><animateTransform attributeName="transform" type="rotate" values="0 64 64;315 64 64;270 64 64;225 64 64;180 64 64;135 64 64;90 64 64;45 64 64" calcMode="discrete" dur="720ms" repeatCount="indefinite"/></g></svg>
+              </center>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="editPlayerModal" tabindex="-1" role="dialog" aria-labelledby="editPlayerModalTitleLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editPlayerModalTitleLabel">Updating Team</h5>
+          </div>
+          <div  class="modal-body">
+            <form action="javascript:updatePlayer()" method="post" >
+              <div class="form-group mt-2">
+                <input hidden="hidden" id="edit_modal_player_id" value="">
+                <div class="form-group mt-3">
+                  <label class="" for="player_name"><h5>Player Name</h5></label>
+                  <input class="form-control" required type="text" id="edit_modal_player_name" name="player_name"
+                  >
+                </div>
+
+                <div class="form-group mt-3">
+                  <label class="" for="player_name"><h5>Player Description</h5></label>
+                  <input class="form-control" required type="text" id="edit_modal_player_description" name="player_description"
+                  >
+                </div>
+
+                <div class="form-group mt-3">
+                  <label class="" for="player_name"><h5>Player Image</h5></label>
+                  <input class="form-control" required type="url" id="edit_modal_player_image" name="player_image"
+                  >
+                </div>
+
+                <button
+                        type="submit"
+                        class="btn text-white btn-primary roundbth mt-2"
+                        data-toggle="modal"
+                        data-target="#createTimelineModal"
+                >
+                  Edit
+                </button>
+                <button TYPE="button" class="btn text-white btn-danger roundbth mt-2" data-dismiss="modal">Close</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
   </body>
@@ -266,6 +333,45 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="/imageUpload.js"></script>
   <script>
+
+    const editPlayer = (playerId, playerName, playerDescription, playerPhotoURL) => {
+        $('#edit_modal_player_id').val(playerId)
+        $('#edit_modal_player_name').val(playerName)
+        $('#edit_modal_player_description').val(playerDescription)
+        $('#edit_modal_player_image').val(playerPhotoURL)
+        $('#editPlayerModal').modal({
+            backdrop: 'static',
+            keyboard: false
+        }, 'show');
+    }
+
+    const updatePlayer = () => {
+        const playerId = $('#edit_modal_player_id').val();
+        const playerName = $('#edit_modal_player_name').val();
+        const playerDescription = $('#edit_modal_player_description').val();
+        const playerImage = $('#edit_modal_player_image').val();
+
+        fetch(`/api/teams/<%= teamData.team_code %>/football/player/${playerId}/edit`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                player_name: playerName,
+                player_description: playerDescription,
+                player_image: playerImage
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+
+                window.location.reload();
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
 
     const updateData = ()=> {
             const teamName = $('#team_name').val();
@@ -295,6 +401,12 @@
     }
 
     const addPlayer = ()=> {
+
+        $('#processingModal').modal({
+          backdrop: 'static',
+          keyboard: false
+        }, 'show');
+
         const playerName = $('#player_name').val();
         const playerDescription = $('#player_description').val();
         const playerImage = $('#player_image').val();

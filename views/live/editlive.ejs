@@ -302,21 +302,20 @@ const teamToCode = {
         "
       >
         <div class="card-body shadow-lg">
-          <form action="javascript:createTimeline(null)" method="post" >
+          <form action="javascript:createTimeline(null)" >
             <h3 class="text-white">Match Timeline</h3>
             <div class="form-group mt-2">
-        <textarea
-                id="mytextarea"
-                name="body"
-                rows="10"
-                cols="5"
-                placeholder="Body"
-        ></textarea>
+              <textarea
+                      id="mytextarea"
+                      required
+                      name="mytextarea"
+                      rows="10"
+                      cols="5"
+                      placeholder="Body"
+              ></textarea>
               <button
                       type="submit"
                       class="btn text-white btn-primary roundbth mt-2"
-                      data-toggle="modal"
-                      data-target="#createTimelineModal"
               >
                 Create a Timeline
               </button>
@@ -350,7 +349,25 @@ const teamToCode = {
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+
+    <!-- Loading Modal -->
+    <div class="modal fade" id="processingModal" tabindex="-1" role="dialog" aria-labelledby="processingModalTitleLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="processingModalTitleLabel">Updating Timeline</h5>
+          </div>
+          <div  class="modal-body">
+            <div id="replaceBody">
+              <center>
+                <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="64px" height="64px" viewBox="0 0 128 128" xml:space="preserve"><rect x="0" y="0" width="100%" height="100%" fill="#FFFFFF"/><g><circle cx="16" cy="64" r="16" fill="#000000"/><circle cx="16" cy="64" r="16" fill="#555555" transform="rotate(45,64,64)"/><circle cx="16" cy="64" r="16" fill="#949494" transform="rotate(90,64,64)"/><circle cx="16" cy="64" r="16" fill="#cccccc" transform="rotate(135,64,64)"/><animateTransform attributeName="transform" type="rotate" values="0 64 64;315 64 64;270 64 64;225 64 64;180 64 64;135 64 64;90 64 64;45 64 64" calcMode="discrete" dur="720ms" repeatCount="indefinite"/></g></svg>
+              </center>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
   </body>
@@ -360,6 +377,7 @@ const teamToCode = {
   <script>
 
     const updateData = async (timelineMessage) => {
+
       const team1Code = document.getElementById("team1_code").value;
       const team1Score = document.getElementById("team1_score").value.trim();
       const team2Code = document.getElementById("team2_code").value;
@@ -417,6 +435,8 @@ const teamToCode = {
     };
 
     const createTimeline = ()=> {
+        $("#processingModal").modal({backdrop: 'static', keyboard: false}, "show");
+
         const msgHtml = tinymce.get('mytextarea').getContent();
         const msgBody = tinymce.get('mytextarea').getContent({format: 'text'});
         const data = {

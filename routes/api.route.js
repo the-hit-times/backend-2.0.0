@@ -451,7 +451,26 @@ router.post("/team/edit/:teamCode/football/player/add", authcheak, async (req, r
   }
 });
 
-router.delete('/teams/:teamCode/football/player/:playerId/del', authcheak, async (req, res) => {
+router.put('/teams/:teamCode/football/player/:playerId/edit', authcheak, async (req, res) => {
+    try {
+         await Team.findOneAndUpdate(
+              { team_code: req.params.teamCode, "football.players._id": req.params.playerId },
+              {
+                $set: {
+                     "football.players.$": {
+                          ...req.body
+                     }
+                }
+              },
+         )
+         res.status(200).send({ msg: "success" });
+    } catch (e) {
+        console.log(e);
+         res.status(200).send({ msg: e.message });
+    }
+});
+
+    router.delete('/teams/:teamCode/football/player/:playerId/del', authcheak, async (req, res) => {
    try {
          await Team.findOneAndUpdate(
               { team_code: req.params.teamCode },
