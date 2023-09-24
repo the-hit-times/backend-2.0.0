@@ -305,6 +305,8 @@ const teamToCode = {
           <form action="javascript:createTimeline(null)" >
             <h3 class="text-white">Match Timeline</h3>
             <div class="form-group mt-2">
+              <input class="form-control mb-2" type="datetime-local" id="timeline_date" name="timeline_date"
+              >
               <textarea
                       id="mytextarea"
                       required
@@ -330,6 +332,27 @@ const teamToCode = {
             <div class="card mt-2">
               <div class="card-body">
                   <div class="col-10">
+                    <p style="font-weight: bold">
+                      <%
+                        const timeline_weekday = new Date(timeline.timeline_date).toLocaleString("en-US", {
+                          weekday: "long",
+                          timeZone: 'Asia/Kolkata',
+                        });
+                        const timeline_date = new Date(timeline.timeline_date).toLocaleString("en-US", {
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                          timeZone: 'Asia/Kolkata',
+                        });
+                        const timeline_time = new Date(timeline.timeline_date).toLocaleString("en-US", {
+                          hour: "numeric",
+                          minute: "numeric",
+                          hour12: true,
+                          timeZone: 'Asia/Kolkata',
+                        });
+                      %>
+                      <%= timeline_weekday %> · <%= timeline_date %> · <%= timeline_time%>
+                    </p>
                     <%- timeline.msgHtml %>
                   </div>
                   <div class="col-2">
@@ -467,6 +490,23 @@ const teamToCode = {
             }
           });
     }
+
+
+    var userFixedTimelineDateTime = false;
+    $("#timeline_date").on("click", () => {
+      userFixedTimelineDateTime = true;
+    });
+
+    // update #timeline_date date and time every second to current date and time but when user selects a date and time, it will not update
+    setInterval(() => {
+      const timeline_date = document.getElementById("timeline_date");
+      if (!userFixedTimelineDateTime) {
+        const dt = new Date();
+        const offset = -330; // timezone offset for IST in minutes, it fixes time issues when deploying on render
+        dt.setMinutes(dt.getMinutes() - offset);
+        timeline_date.value = dt.toISOString().slice(0, 16);
+      }
+    }, 1000);
 
   </script>
 
