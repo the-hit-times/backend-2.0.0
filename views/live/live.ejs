@@ -255,7 +255,12 @@
 
     const matchPostData = async () => {
 
-      $('#processingModal').modal('show');
+      $('#processingModal').modal(
+              {
+                backdrop: 'static',
+                keyboard: false
+              },
+              'show');
 
 
       const team1Code = document.getElementById("team1_code").value;

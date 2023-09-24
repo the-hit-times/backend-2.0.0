@@ -302,21 +302,21 @@ const teamToCode = {
         "
       >
         <div class="card-body shadow-lg">
-          <form action="javascript:createTimeline(null)" method="post" >
+          <form action="javascript:createTimeline(null)" >
             <h3 class="text-white">Match Timeline</h3>
             <div class="form-group mt-2">
-        <textarea
-                id="mytextarea"
-                name="body"
-                rows="10"
-                cols="5"
-                placeholder="Body"
-        ></textarea>
+              <input class="form-control mb-2" type="datetime-local" id="timeline_date" name="timeline_date"
+              >
+              <textarea
+                      id="mytextarea"
+                      name="mytextarea"
+                      rows="10"
+                      cols="5"
+                      placeholder="Body"
+              ></textarea>
               <button
                       type="submit"
                       class="btn text-white btn-primary roundbth mt-2"
-                      data-toggle="modal"
-                      data-target="#createTimelineModal"
               >
                 Create a Timeline
               </button>
@@ -331,6 +331,27 @@ const teamToCode = {
             <div class="card mt-2">
               <div class="card-body">
                   <div class="col-10">
+                    <p style="font-weight: bold">
+                      <%
+                        const timeline_weekday = new Date(timeline.timeline_date).toLocaleString("en-US", {
+                          weekday: "long",
+                          timeZone: 'Asia/Kolkata',
+                        });
+                        const timeline_date = new Date(timeline.timeline_date).toLocaleString("en-US", {
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                          timeZone: 'Asia/Kolkata',
+                        });
+                        const timeline_time = new Date(timeline.timeline_date).toLocaleString("en-US", {
+                          hour: "numeric",
+                          minute: "numeric",
+                          hour12: true,
+                          timeZone: 'Asia/Kolkata',
+                        });
+                      %>
+                      <%= timeline_weekday %> · <%= timeline_date %> · <%= timeline_time%>
+                    </p>
                     <%- timeline.msgHtml %>
                   </div>
                   <div class="col-2">
@@ -350,7 +371,25 @@ const teamToCode = {
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+
+    <!-- Loading Modal -->
+    <div class="modal fade" id="processingModal" tabindex="-1" role="dialog" aria-labelledby="processingModalTitleLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="processingModalTitleLabel">Updating Timeline</h5>
+          </div>
+          <div  class="modal-body">
+            <div id="replaceBody">
+              <center>
+                <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="64px" height="64px" viewBox="0 0 128 128" xml:space="preserve"><rect x="0" y="0" width="100%" height="100%" fill="#FFFFFF"/><g><circle cx="16" cy="64" r="16" fill="#000000"/><circle cx="16" cy="64" r="16" fill="#555555" transform="rotate(45,64,64)"/><circle cx="16" cy="64" r="16" fill="#949494" transform="rotate(90,64,64)"/><circle cx="16" cy="64" r="16" fill="#cccccc" transform="rotate(135,64,64)"/><animateTransform attributeName="transform" type="rotate" values="0 64 64;315 64 64;270 64 64;225 64 64;180 64 64;135 64 64;90 64 64;45 64 64" calcMode="discrete" dur="720ms" repeatCount="indefinite"/></g></svg>
+              </center>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
   </body>
@@ -360,6 +399,7 @@ const teamToCode = {
   <script>
 
     const updateData = async (timelineMessage) => {
+
       const team1Code = document.getElementById("team1_code").value;
       const team1Score = document.getElementById("team1_score").value.trim();
       const team2Code = document.getElementById("team2_code").value;
@@ -417,11 +457,14 @@ const teamToCode = {
     };
 
     const createTimeline = ()=> {
+        $("#processingModal").modal({backdrop: 'static', keyboard: false}, "show");
+
         const msgHtml = tinymce.get('mytextarea').getContent();
         const msgBody = tinymce.get('mytextarea').getContent({format: 'text'});
+        const timeline_date = document.getElementById("timeline_date").value;
         const data = {
           msgHtml,
-          timeline_date: new Date(),
+          timeline_date: new Date(timeline_date),
         }
         fetch("/api/live/match/<%= matchData.firebase_match_id %>/timeline", {
             method: "POST",
@@ -447,6 +490,23 @@ const teamToCode = {
             }
           });
     }
+
+
+    var userFixedTimelineDateTime = false;
+    $("#timeline_date").on("click", () => {
+      userFixedTimelineDateTime = true;
+    });
+
+    // update #timeline_date date and time every second to current date and time but when user selects a date and time, it will not update
+    setInterval(() => {
+      const timeline_date = document.getElementById("timeline_date");
+      if (!userFixedTimelineDateTime) {
+        const dt = new Date();
+        const offset = -330; // timezone offset for IST in minutes, it fixes time issues when deploying on render
+        dt.setMinutes(dt.getMinutes() - offset);
+        timeline_date.value = dt.toISOString().slice(0, 16);
+      }
+    }, 1000);
 
   </script>
 
