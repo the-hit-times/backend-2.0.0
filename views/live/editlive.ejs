@@ -1,7 +1,8 @@
 <%
 function datetimeLocal(datetime) {
   const dt = new Date(datetime);
-  dt.setMinutes(dt.getMinutes() - dt.getTimezoneOffset());
+  const offset = -330; // timezone offset for IST in minutes, it fixes time issues when deploying on render
+  dt.setMinutes(dt.getMinutes() - offset);
   return dt.toISOString().slice(0, 16);
 }
 const match_date = datetimeLocal(matchData.match_date);
@@ -265,8 +266,8 @@ const teamToCode = {
                       id="match_live"
                       name="match_live"
               >
-                <option value="true">LIVE</option>
-                <option value="false">NOT LIVE</option>
+                <option value="true" <%= matchData.is_live ? "selected" : "" %>>LIVE</option>
+                <option value="false" <%= !matchData.is_live ? "selected" : "" %>>NOT LIVE</option>
               </select>
             </div>
 
