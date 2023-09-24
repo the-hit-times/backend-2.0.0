@@ -280,7 +280,6 @@ router.put("/live/match/:matchId", authcheak, async (req, res) => {
         { firebase_match_id: req.params.matchId },
         {
             ...data,
-            match_date: match_date
         }
     );
     res.status(200).send({ msg: "success", updateData: matchDocument });
