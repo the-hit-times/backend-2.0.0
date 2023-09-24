@@ -309,7 +309,6 @@ const teamToCode = {
               >
               <textarea
                       id="mytextarea"
-                      required
                       name="mytextarea"
                       rows="10"
                       cols="5"
@@ -462,9 +461,10 @@ const teamToCode = {
 
         const msgHtml = tinymce.get('mytextarea').getContent();
         const msgBody = tinymce.get('mytextarea').getContent({format: 'text'});
+        const timeline_date = document.getElementById("timeline_date").value;
         const data = {
           msgHtml,
-          timeline_date: new Date(),
+          timeline_date: new Date(timeline_date),
         }
         fetch("/api/live/match/<%= matchData.firebase_match_id %>/timeline", {
             method: "POST",
