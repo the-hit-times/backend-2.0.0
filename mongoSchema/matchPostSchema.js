@@ -14,6 +14,10 @@ const matchPostSchema = new mongoose.Schema(
             team_score: {
                 type: String,
                 required: true,
+            },
+            team_penalty: {
+                type: String,
+                default: "0"
             }
         },
         team2: {
@@ -24,6 +28,10 @@ const matchPostSchema = new mongoose.Schema(
             team_score: {
                 type: String,
                 required: true,
+            },
+            team_penalty: {
+                type: String,
+                default: "0"
             }
         },
         is_live: {
