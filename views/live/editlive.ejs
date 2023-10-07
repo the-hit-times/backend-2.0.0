@@ -264,10 +264,19 @@ const teamToCode = {
             </div>
 
             <div>
-              <input type="checkbox" id="enable-penalty" onchange="handlePenaltyInputFields()">
+              <%
+                const isPenalty =
+                        (matchData.team1.team_penalty != null && matchData.team1.team_penalty != null)  &&
+                        (matchData.team1.team_penalty.trim() != "0" || matchData.team2.team_penalty.trim() != "0") &&
+                        (matchData.team1.team_score == matchData.team2.team_score);
+
+                const penaltyChecked = isPenalty ? "checked" : "";
+                const displayPenalty = isPenalty ? "flex" : "none";
+              %>
+              <input type="checkbox" <%= penaltyChecked %> id="enable-penalty" onchange="handlePenaltyInputFields()">
               <label class="text-white" for="mdatetime"><h4>Penality</h4></label>
             </div>
-            <div class="row" style="display: none" id="penalty-editor">
+            <div class="row" style="display: <%= displayPenalty%>" id="penalty-editor">
               <div class="col">
                 <div class="form-group">
                   <label class="text-white" for="team1_penalty"><h5>Team 1</h5></label>
