@@ -226,6 +226,7 @@ const teamToCode = {
                           value="<%= matchData.team1.team_score %>"
                           name="team1_score"
                   />
+
                 </div>
               </div>
               <div class="col">
@@ -262,8 +263,40 @@ const teamToCode = {
               </div>
             </div>
 
-
-
+            <div>
+              <input type="checkbox" id="enable-penalty" onchange="handlePenaltyInputFields()">
+              <label class="text-white" for="mdatetime"><h4>Penality</h4></label>
+            </div>
+            <div class="row" style="display: none" id="penalty-editor">
+              <div class="col">
+                <div class="form-group">
+                  <label class="text-white" for="team1_penalty"><h5>Team 1</h5></label>
+                  <input
+                          class="form-control"
+                          required
+                          placeholder="Penalty"
+                          id="team1_penalty"
+                          type="text"
+                          value="<%= matchData.team1.team_penalty %>"
+                          name="team1_penalty"
+                  />
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label class="text-white" for="team2_penalty"><h5>Team 2</h5></label>
+                  <input
+                          class="form-control"
+                          required
+                          placeholder="Penalty"
+                          id="team2_penalty"
+                          type="text"
+                          value="<%= matchData.team2.team_penalty %>"
+                          name="team1_penalty"
+                  />
+                </div>
+              </div>
+            </div>
 
             <div class="form-group">
               <label class="text-white" for="mdatetime"><h4>Match Date and Time</h4></label>
@@ -411,12 +444,24 @@ const teamToCode = {
   <script src="/imageUpload.js"></script>
   <script>
 
+    const handlePenaltyInputFields = ()=>{
+        const penaltyEditor = document.getElementById("penalty-editor");
+        const enablePenalty = document.getElementById("enable-penalty").checked;
+        if (enablePenalty) {
+            penaltyEditor.style.display = "flex";
+        } else {
+            penaltyEditor.style.display = "none";
+        }
+    }
+
     const updateData = async (timelineMessage) => {
 
       const team1Code = document.getElementById("team1_code").value;
       const team1Score = document.getElementById("team1_score").value.trim();
+      const team1Penalty = document.getElementById("team1_penalty").value.trim();
       const team2Code = document.getElementById("team2_code").value;
       const team2Score = document.getElementById("team2_score").value.trim();
+      const team2Penalty = document.getElementById("team2_penalty").value.trim();
       const match_date = document.getElementById("mdatetime").value;
       const is_live = document.getElementById("match_live").value == "true";
       const match_status = document.getElementById("matchStatus").value.trim();
@@ -426,11 +471,13 @@ const teamToCode = {
       const data = {
         team1: {
           team_score: team1Score,
-          team_code: team1Code
+          team_code: team1Code,
+          team_penalty: team1Penalty,
         },
         team2: {
           team_score: team2Score,
-          team_code: team2Code
+          team_code: team2Code,
+          team_penalty: team2Penalty,
         },
         match_date: new Date(match_date),
         is_live,
