@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>THE HIT TIMES</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.tiny.cloud/1/w6q7m6bspz8sqsc3xf8ogte5se9rmnjz0x84aruqxnvb5jek/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <script>
+      tinymce.init({
+        selector: "#mytextarea",
+        plugins: 'link',
+        default_link_target: '_blank'
+      });
+    </script>
+  </head>
+
+  <style>
+    .roundbth {
+      border-radius: 25px;
+    }
+    body {
+      background: linear-gradient(
+        rgba(50, 176, 226, 0.5),
+        rgba(228, 102, 180, 0.5)
+      );
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    .navbercolor {
+    }
+  </style>
+
+  <body>
+    <nav
+      class="navbar navbar-expand-sm navbar-light mb-3"
+      style="color: rgb(16, 97, 247)"
+    >
+      <div class="container">
+        <button
+          class="navbar-toggler mr-auto"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="/">THE HIT TIMES</a>
+        <% if(user) { %>
+        <a
+          class="nav-link ml-auto btn btn-danger text-white roundbth px-3"
+          href="/auth/logout"
+          >Logout</a
+        >
+        <% } else{ %>
+        <a
+          class="nav-link ml-auto btn btn-primary text-white roundbth px-3"
+          href="/pages/login"
+          >Login</a
+        >
+        <%}%>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/"><b>Home</b></a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/createpost"
+                ><b>Create Post</b></a
+              >
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/sendnotification">
+                <b>Send Notification</b>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/display"><b>Display</b></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/live/create"><b>Go Live</b></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/live/all"><b>Manage Live</b></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/teams/manage"><b>Manage Teams</b></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/api/posts"><b>JSON</b></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mb-1">
+
+    <%
+        if (editResponse == "success") {
+        %>
+        <div class="alert alert-success alert-dismissible fade show" id="successAlert" role="alert">
+          <span id="successAlertText">Updated Successfully</span>
+          <button type="button"
+                  class="close"
+                  data-dismiss="alert"
+                  aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <%
+        } else if (editResponse == "failed") {
+        %>
+        <div class="alert alert-danger alert-dismissible fade show" id="errorAlert" role="alert">
+          <span id="errorAlertText">Error while updating</span>
+          <button type="button"
+                  class="close"
+                  data-dismiss="alert"
+                  aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <%
+        }
+      %>
+
+
+      <div
+              class="card p-1"
+              style="
+          background: linear-gradient(
+            rgba(13, 178, 243, 0.5),
+            rgba(228, 102, 180, 0.5)
+          );
+          border-radius: 0px;
+        "
+      >
+        <div class="card-body shadow-lg">
+          <h3 class="text-white">Team <%= teamData.dept_name%></h3>
+          <h6 class="text-white">CRICKET</h6>
+
+          <form action="javascript:updateData()" method="post">
+
+            <div class="form-group mt-3">
+              <label class="text-white" for="team_name"><h4>Team Name</h4></label>
+              <input class="form-control" required type="text" id="team_name" name="team_name"
+                value="<%= teamData.cricket.team_name %>"
+              >
+            </div>
+
+            <div class="form-group">
+              <label class="text-white" for="team_logo"><h4>Team Logo (Drive only)</h4></label>
+                <input class="form-control" required type="url" id="team_logo" name="team_logo"
+                         value="<%= teamData.cricket.team_logo %>" />
+            </div>
+
+            <button type="submit" class="btn text-white btn-primary roundbth">
+              Update
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container mb-1">
+      <div
+              class="card p-1"
+              style="
+          background: linear-gradient(
+            rgba(13, 178, 243, 0.5),
+            rgba(228, 102, 180, 0.5)
+          );
+          border-radius: 0px;
+        "
+      >
+        <div class="card-body shadow-lg">
+          <form action="javascript:addPlayer()" method="post" >
+            <h3 class="text-white">Players</h3>
+            <div class="form-group mt-2">
+
+              <div class="form-group mt-3">
+                <label class="text-white" for="player_name"><h5>Player Name</h5></label>
+                <input class="form-control" required type="text" id="player_name" name="player_name"
+                >
+              </div>
+
+              <div class="form-group mt-3">
+                <label class="text-white" for="player_name"><h5>Player Description</h5></label>
+                <input class="form-control" type="text" id="player_description" name="player_description"
+                >
+              </div>
+
+              <div class="form-group mt-3">
+                <label class="text-white" for="player_name"><h5>Player Image</h5></label>
+                <input class="form-control" required type="url" id="player_image" name="player_image"
+                >
+              </div>
+
+              <button
+                      type="submit"
+                      class="btn text-white btn-primary roundbth mt-2"
+                      data-toggle="modal"
+                      data-target="#createTimelineModal"
+              >
+                Add
+              </button>
+            </div>
+          </form>
+          <h3 class="text-white">Players</h3>
+          <div id="insertTimeline">
+            <%
+            for (var i = 0; i < teamData.cricket.players.length; i++) {
+              const player = teamData.cricket.players[i];
+            %>
+            <div class="card mt-2">
+              <div class="card-body">
+                  <div class="row">
+                    <div class="col-2">
+                      <%
+                        const  _getImageUrlFromDrive = (driveImageLink) => {
+                          if (!driveImageLink.includes('https://drive.google.com/file')) return driveImageLink;
+                          const fileId = driveImageLink.substring(driveImageLink.indexOf('/d/') + 3, driveImageLink.indexOf('/view'));
+                          const newLink = `https://drive.google.com/uc?export=view&id=${fileId}`;
+                          return newLink;
+                        }
+
+                        const player_image = _getImageUrlFromDrive(player.player_image);
+
+                      %>
+                      <img class="img-thumbnail" src="<%= player_image %>" class="img-fluid" />
+                    </div>
+                    <div class="col-10">
+                        <h4 class="mb-0"><%= player.player_name %></h4>
+                        <p class="mt-0"><%= player.player_description %></p>
+                        <button class="btn btn-primary" onclick="editPlayer(
+                                '<%= player._id %>',
+                                '<%= player.player_name %>',
+                                '<%= player.player_description %>',
+                                '<%= player.player_image %>'
+                                )">Edit</button>
+                        <button class="btn btn-danger" onclick="deletePlayer('<%= player._id %>')">Delete</button>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            <%
+            }
+            %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="processingModal" tabindex="-1" role="dialog" aria-labelledby="processingModalTitleLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="processingModalTitleLabel">Updating Team</h5>
+          </div>
+          <div  class="modal-body">
+            <div id="replaceBody">
+              <center>
+                <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="64px" height="64px" viewBox="0 0 128 128" xml:space="preserve"><rect x="0" y="0" width="100%" height="100%" fill="#FFFFFF"/><g><circle cx="16" cy="64" r="16" fill="#000000"/><circle cx="16" cy="64" r="16" fill="#555555" transform="rotate(45,64,64)"/><circle cx="16" cy="64" r="16" fill="#949494" transform="rotate(90,64,64)"/><circle cx="16" cy="64" r="16" fill="#cccccc" transform="rotate(135,64,64)"/><animateTransform attributeName="transform" type="rotate" values="0 64 64;315 64 64;270 64 64;225 64 64;180 64 64;135 64 64;90 64 64;45 64 64" calcMode="discrete" dur="720ms" repeatCount="indefinite"/></g></svg>
+              </center>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="editPlayerModal" tabindex="-1" role="dialog" aria-labelledby="editPlayerModalTitleLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editPlayerModalTitleLabel">Updating Team</h5>
+          </div>
+          <div  class="modal-body">
+            <form action="javascript:updatePlayer()" method="post" >
+              <div class="form-group mt-2">
+                <input hidden="hidden" id="edit_modal_player_id" value="">
+                <div class="form-group mt-3">
+                  <label class="" for="player_name"><h5>Player Name</h5></label>
+                  <input class="form-control" required type="text" id="edit_modal_player_name" name="player_name"
+                  >
+                </div>
+
+                <div class="form-group mt-3">
+                  <label class="" for="player_name"><h5>Player Description</h5></label>
+                  <input class="form-control" type="text" id="edit_modal_player_description" name="player_description"
+                  >
+                </div>
+
+                <div class="form-group mt-3">
+                  <label class="" for="player_name"><h5>Player Image</h5></label>
+                  <input class="form-control" required type="url" id="edit_modal_player_image" name="player_image"
+                  >
+                </div>
+
+                <button
+                        type="submit"
+                        class="btn text-white btn-primary roundbth mt-2"
+                        data-toggle="modal"
+                        data-target="#createTimelineModal"
+                >
+                  Edit
+                </button>
+                <button TYPE="button" class="btn text-white btn-danger roundbth mt-2" data-dismiss="modal">Close</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </body>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/imageUpload.js"></script>
+  <script>
+
+    const editPlayer = (playerId, playerName, playerDescription, playerPhotoURL) => {
+        $('#edit_modal_player_id').val(playerId)
+        $('#edit_modal_player_name').val(playerName)
+        $('#edit_modal_player_description').val(playerDescription)
+        $('#edit_modal_player_image').val(playerPhotoURL)
+        $('#editPlayerModal').modal({
+            backdrop: 'static',
+            keyboard: false
+        }, 'show');
+    }
+
+    const updatePlayer = () => {
+        const playerId = $('#edit_modal_player_id').val();
+        const playerName = $('#edit_modal_player_name').val();
+        const playerDescription = $('#edit_modal_player_description').val();
+        const playerImage = $('#edit_modal_player_image').val();
+
+        fetch(`/api/teams/<%= teamData.team_code %>/cricket/player/${playerId}/edit`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                player_name: playerName,
+                player_description: playerDescription,
+                player_image: playerImage
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+
+                window.location.reload();
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    const updateData = ()=> {
+            const teamName = $('#team_name').val();
+            const teamLogo = $('#team_logo').val();
+
+            fetch(`/api/team/edit/<%= teamData.team_code %>`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  cricket : {
+                    team_name: teamName,
+                    team_logo: teamLogo
+                  }
+                }),
+            })
+                .then((res) => res.json())
+                .then((data) => {
+
+                window.location.reload();
+
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+    }
+
+    const addPlayer = ()=> {
+
+        $('#processingModal').modal({
+          backdrop: 'static',
+          keyboard: false
+        }, 'show');
+
+        const playerName = $('#player_name').val();
+        const playerDescription = $('#player_description').val();
+        const playerImage = $('#player_image').val();
+
+        fetch(`/api/team/edit/<%= teamData.team_code %>/cricket/player/add`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                player_name: playerName,
+                player_description: playerDescription,
+                player_image: playerImage
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+
+              window.location.reload();
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    const deletePlayer = (playerId)=> {
+        fetch(`/api/teams/<%= teamData.team_code %>/cricket/player/${playerId}/del`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+
+              window.location.reload();
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+  </script>
+
+  <script
+    src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"
+  ></script>
+</html>
