@@ -260,7 +260,7 @@ const teamToCode = {
               </div>
             </div>
 
-            <div>
+            <div id="pen" style="display: <%= matchData.match_type === "cricket" ? "none": "block" %>;">
               <%
                 const isPenalty =
                         (matchData.team1.team_penalty != null && matchData.team1.team_penalty != null)  &&
@@ -320,6 +320,19 @@ const teamToCode = {
               >
                 <option value="true" <%= matchData.is_live ? "selected" : "" %>>LIVE</option>
                 <option value="false" <%= !matchData.is_live ? "selected" : "" %>>NOT LIVE</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="text-white" for="match_type"><h4>Match Type</h4></label>
+              <select
+                      class="form-control "
+                      id="match_type"
+                      name="match_type"
+                      onchange="handleChange()"
+              >
+                <option value="football" <%= matchData.match_type === "football" ? "selected": "" %>>football</option>
+                <option value="cricket" <%= matchData.match_type === "cricket" ? "selected": "" %>>cricket</option>
               </select>
             </div>
 
@@ -460,6 +473,18 @@ const teamToCode = {
         }
     }
 
+    const handleChange =()=>{
+        const mtype= document.getElementById("match_type").value;
+        const pen=document.getElementById("pen");
+        console.log(mtype);
+        if(mtype=="cricket"){
+          pen.style.display="none";
+        }
+        else{
+          pen.style.display="block";
+        }
+    }
+
     const updateData = async (timelineMessage) => {
 
       const team1Code = document.getElementById("team1_code").value;
@@ -471,7 +496,7 @@ const teamToCode = {
       const match_date = document.getElementById("mdatetime").value;
       const is_live = document.getElementById("match_live").value == "true";
       const match_status = document.getElementById("matchStatus").value.trim();
-      const match_type = "football";
+      const match_type = document.getElementById("match_type").value;
       const sendNotification = document.getElementById("sendNotification").checked;
 
       const data = {

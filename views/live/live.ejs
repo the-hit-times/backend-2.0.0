@@ -213,6 +213,18 @@
             </div>
 
             <div class="form-group">
+              <label class="text-white" for="match_type"><h4>Match Type</h4></label>
+              <select
+                      class="form-control "
+                      id="match_type"
+                      name="match_type"
+              >
+                <option value="football">football</option>
+                <option value="cricket">cricket</option>
+              </select>
+            </div>
+
+            <div class="form-group">
               <label class="text-white" for="matchStatus"><h4>Match Status</h4></label>
               <textarea
                       required
@@ -279,7 +291,7 @@
       const match_date = document.getElementById("mdatetime").value;
       const is_live = document.getElementById("match_live").value == "true";
       const match_status = document.getElementById("matchStatus").value.trim();
-      const match_type = "football";
+      const match_type = document.getElementById("match_type").value;
       const sendNotification = document.getElementById("sendNotification").checked;
 
       const data = {
