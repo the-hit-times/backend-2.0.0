@@ -41,6 +41,7 @@ const teamToCode = {
       crossorigin="anonymous"
     />
     <script src="https://cdn.tiny.cloud/1/w6q7m6bspz8sqsc3xf8ogte5se9rmnjz0x84aruqxnvb5jek/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
     <script>
       tinymce.init({
         selector: "#mytextarea",
@@ -259,7 +260,7 @@ const teamToCode = {
               </div>
             </div>
 
-            <div>
+            <div id="pen" style="display: <%= matchData.match_type === "cricket" ? "none": "block" %>;">
               <%
                 const isPenalty =
                         (matchData.team1.team_penalty != null && matchData.team1.team_penalty != null)  &&
@@ -328,6 +329,7 @@ const teamToCode = {
                       class="form-control "
                       id="match_type"
                       name="match_type"
+                      onchange="handleChange()"
               >
                 <option value="football" <%= matchData.match_type === "football" ? "selected": "" %>>football</option>
                 <option value="cricket" <%= matchData.match_type === "cricket" ? "selected": "" %>>cricket</option>
@@ -468,6 +470,18 @@ const teamToCode = {
             penaltyEditor.style.display = "flex";
         } else {
             penaltyEditor.style.display = "none";
+        }
+    }
+
+    const handleChange =()=>{
+        const mtype= document.getElementById("match_type").value;
+        const pen=document.getElementById("pen");
+        console.log(mtype);
+        if(mtype=="cricket"){
+          pen.style.display="none";
+        }
+        else{
+          pen.style.display="block";
         }
     }
 

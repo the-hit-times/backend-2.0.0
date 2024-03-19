@@ -107,7 +107,13 @@ router.get("/teams/manage", async (req, res) => {
 router.get("/teams/edit/:teamId/football", authcheak, async (req, res) => {
     const team = await Team.findOne({ team_code: req.params.teamId });
     if (team) {
-        res.render("teams/edit_team", { teamData: team, editResponse: req.flash('editmsg') })
+        res.render("teams/edit_team_football", { teamData: team, editResponse: req.flash('editmsg') })
+    }
+});
+router.get("/teams/edit/:teamId/cricket", authcheak, async (req, res) => {
+    const team = await Team.findOne({ team_code: req.params.teamId });
+    if (team) {
+        res.render("teams/edit_team_cricket", { teamData: team, editResponse: req.flash('editmsg') })
     }
 });
 

@@ -35,6 +35,32 @@ const teamSchema = new mongoose.Schema(
                     }
                 }
             ]
+        },
+        cricket: {
+            team_name: {
+                type: String,
+                required: true,
+            },
+            team_logo: {
+                type: String,
+                required: true,
+            },
+            players: [
+                {
+                    player_name: {
+                        type: String,
+                        required: true,
+                    },
+                    player_description: {
+                        type: String,
+                        required: true,
+                    },
+                    player_image: {
+                        type: String,
+                        required: true,
+                    }
+                }
+            ]
         }
     }, {timestamps: true}
 );
