@@ -148,7 +148,7 @@
                             class="form-control mt-1"
                             required
                             placeholder="Team Name"
-                            id="team_name"
+                            id="football_team_name"
                             type="text"
                             name="team_name"
                     />
@@ -156,7 +156,27 @@
                             class="form-control mt-1"
                             required
                             placeholder="Team Logo"
-                            id="team_logo"
+                            id="football_team_logo"
+                            type="text"
+                            name="team_logo"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <h6 style="color: white">CRICKET</h6>
+                    <input
+                            class="form-control mt-1"
+                            required
+                            placeholder="Team Name"
+                            id="cricket_team_name"
+                            type="text"
+                            name="team_name"
+                    />
+                    <input
+                            class="form-control mt-1"
+                            required
+                            placeholder="Team Logo"
+                            id="cricket_team_logo"
                             type="text"
                             name="team_logo"
                     />
@@ -176,8 +196,10 @@
 <script>
 
     const createTeam = () => {
-        const team_name = $('#team_name').val();
-        const team_logo = $('#team_logo').val();
+        const football_team_name = $('#football_team_name').val();
+        const football_team_logo = $('#football_team_logo').val();
+        const cricket_team_name = $('#cricket_team_name').val();
+        const cricket_team_logo = $('#cricket_team_logo').val();
         const team_code = $('#team_code').val();
         const dept_name = $('#team_code option:selected').text();
 
@@ -192,8 +214,12 @@
                     team_code,
                     dept_name,
                     football: {
-                        team_name,
-                        team_logo
+                        team_name: football_team_name,
+                        team_logo: football_team_logo
+                    },
+                    cricket: {
+                        team_name: cricket_team_name,
+                        team_logo: cricket_team_logo
                     }
                 })
             }
